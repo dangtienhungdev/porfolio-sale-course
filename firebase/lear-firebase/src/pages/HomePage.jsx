@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	getDocs,
+	serverTimestamp,
+} from 'firebase/firestore';
 
 import { db } from '../firebase/config-firebse';
 
@@ -29,9 +36,15 @@ const HomePage = () => {
 			// addDoc -> thêm 1 dữ liệu vào bản ghi
 			title,
 			author,
+			createdAt: serverTimestamp(),
 		})
 			.then(() => console.log('success'))
 			.catch(() => console.log('error'));
+	};
+	const handleRemovePost = async (id) => {
+		console.log(id);
+		const colRef = doc(db, 'posts', id); // doc -> lấy ra 1 bản ghi cụ thể
+		await deleteDoc(colRef);
 	};
 	return (
 		<>
@@ -42,6 +55,14 @@ const HomePage = () => {
 						<div key={post.id} className="p-4 bg-gray-300">
 							<h2>{post.title}</h2>
 							<h3>{post.author}</h3>
+							<div className="mt-4">
+								<button
+									className="bg-red-500 p-2"
+									onClick={() => handleRemovePost(post.id)}
+								>
+									Xóa
+								</button>
+							</div>
 						</div>
 					))}
 			</div>
