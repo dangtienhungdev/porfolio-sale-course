@@ -7,6 +7,7 @@ import {
 	getDocs,
 	onSnapshot,
 	serverTimestamp,
+	updateDoc,
 } from 'firebase/firestore';
 
 import { db } from '../firebase/config-firebse';
@@ -58,6 +59,13 @@ const HomePage = () => {
 		const colRef = doc(db, 'posts', id); // doc -> lấy ra 1 bản ghi cụ thể
 		await deleteDoc(colRef);
 	};
+	const handleUpdatePost = async (post) => {
+		const colRefUpdate = doc(db, 'posts', post.id);
+		await updateDoc(colRefUpdate, {
+			title: 'This is a new update post',
+			author: 'Cô giáo hưng',
+		});
+	};
 	return (
 		<>
 			<div className="grid grid-cols-4 gap-4 m-4 transition-all duration-100">
@@ -76,6 +84,12 @@ const HomePage = () => {
 									onClick={() => handleRemovePost(post.id)}
 								>
 									Xóa
+								</button>
+								<button
+									className="bg-blue-500 p-2"
+									onClick={() => handleUpdatePost(post)}
+								>
+									Update
 								</button>
 							</div>
 						</div>
