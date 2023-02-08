@@ -5,6 +5,7 @@ import {
 	deleteDoc,
 	doc,
 	getDocs,
+	onSnapshot,
 	serverTimestamp,
 } from 'firebase/firestore';
 
@@ -16,16 +17,27 @@ const HomePage = () => {
 	const [author, setAuthor] = useState('');
 	useEffect(() => {
 		const colRef = collection(db, 'posts'); // collection -> dùng để kết nối với db
-		getDocs(colRef).then((snapshot) => {
-			// getDocs -> lấy ra toàn bộ dữ liệu trong firebase
+		// getDocs(colRef).then((snapshot) => {
+		// 	// getDocs -> lấy ra toàn bộ dữ liệu trong firebase
+		// 	const posts = [];
+		// 	snapshot.docs.forEach((doc) => {
+		// 		posts.push({
+		// 			id: doc.id,
+		// 			...doc.data(),
+		// 		});
+		// 	});
+		// 	setPosts(posts);
+		// });
+		// 2. Get document in realtime
+		onSnapshot(colRef, (snapshot) => {
 			const posts = [];
 			snapshot.docs.forEach((doc) => {
 				posts.push({
 					id: doc.id,
 					...doc.data(),
 				});
+				setPosts(posts);
 			});
-			setPosts(posts);
 		});
 	}, []);
 	const handleAddPost = (e) => {
@@ -48,11 +60,14 @@ const HomePage = () => {
 	};
 	return (
 		<>
-			<div className="grid grid-cols-4 gap-4 m-4">
+			<div className="grid grid-cols-4 gap-4 m-4 transition-all duration-100">
 				{posts &&
 					posts.length > 0 &&
 					posts.map((post) => (
-						<div key={post.id} className="p-4 bg-gray-300">
+						<div
+							key={post.id}
+							className="p-4 bg-gray-300 transition-all duration-100"
+						>
 							<h2>{post.title}</h2>
 							<h3>{post.author}</h3>
 							<div className="mt-4">
