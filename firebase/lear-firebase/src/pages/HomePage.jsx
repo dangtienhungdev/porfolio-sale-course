@@ -4,6 +4,7 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	getDoc,
 	getDocs,
 	onSnapshot,
 	serverTimestamp,
@@ -16,6 +17,7 @@ const HomePage = () => {
 	const [posts, setPosts] = useState([]);
 	const [title, setTitle] = useState('');
 	const [author, setAuthor] = useState('');
+	const [detailPost, setDetailPost] = useState({});
 	useEffect(() => {
 		const colRef = collection(db, 'posts'); // collection -> dùng để kết nối với db
 		// getDocs(colRef).then((snapshot) => {
@@ -66,6 +68,12 @@ const HomePage = () => {
 			author: 'Cô giáo hưng',
 		});
 	};
+	const handleDetail = (post) => {
+		const detailPost = doc(db, 'posts', post.id);
+		onSnapshot(detailPost, (doc) => {
+			console.log(doc.id, doc.data());
+		});
+	};
 	return (
 		<>
 			<div className="grid grid-cols-4 gap-4 m-4 transition-all duration-100">
@@ -75,6 +83,7 @@ const HomePage = () => {
 						<div
 							key={post.id}
 							className="p-4 bg-gray-300 transition-all duration-100"
+							onClick={() => handleDetail(post)}
 						>
 							<h2>{post.title}</h2>
 							<h3>{post.author}</h3>
