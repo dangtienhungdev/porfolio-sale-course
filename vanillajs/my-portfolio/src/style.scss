@@ -8,4 +8,23 @@
   html {
     font-family: 'Open Sans', sans-serif;
   }
+
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ct = custom */
+  .ct-header-link {
+    @apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-400 focus:bg-blue-400 w-full transition-all duration-200;
+  }
 }
