@@ -6,9 +6,13 @@ import {
 	doc,
 	getDoc,
 	getDocs,
+	limit,
 	onSnapshot,
+	orderBy,
+	query,
 	serverTimestamp,
 	updateDoc,
+	where,
 } from 'firebase/firestore';
 
 import { db } from '../firebase/config-firebse';
@@ -74,6 +78,25 @@ const HomePage = () => {
 			console.log(doc.id, doc.data());
 		});
 	};
+	useEffect(() => {
+		const colRefQuery = collection(db, 'posts');
+		const q = query(
+			colRefQuery,
+			limit(1),
+			orderBy('createAt'),
+			where('author', '==', 'hưng')
+		);
+		onSnapshot(q, (snap) => {
+			const postQueries = [];
+			snap.docs.forEach((doc) => {
+				postQueries.push({
+					id: doc.id,
+					...doc.data(),
+				});
+			});
+			console.log(postQueries);
+		});
+	}, []);
 	return (
 		<>
 			<div className="grid grid-cols-4 gap-4 m-4 transition-all duration-100">

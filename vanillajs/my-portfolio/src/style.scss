@@ -27,4 +27,26 @@
   .ct-header-link {
     @apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-400 focus:bg-blue-400 w-full transition-all duration-200;
   }
+
+  .test::before {
+    content: '';
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: #4d4d4d;
+    border-left: 2px solid #4070f4;
+    animation: anitemeTextLoad 4s steps(12) infinite;
+    -webkit-animation: anitemeTextLoad 4s steps(12) infinite;
+}
+
+  @keyframes anitemeTextLoad{
+    40%, 60% {
+      left: calc(100% + 4px);
+    }
+    100% {
+      left: 0%;
+    }
+  }
 }

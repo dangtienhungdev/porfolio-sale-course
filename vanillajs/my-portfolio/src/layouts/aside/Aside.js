@@ -4,27 +4,27 @@ import { useEffect } from '../../config/config';
 
 const links = [
 	{
-		name: 'trang chủ',
+		name: 'Home',
 		to: '/',
 	},
 	{
-		name: 'giới thiệu',
+		name: 'About',
 		to: '/about',
 	},
 	{
-		name: 'Giáo dục',
+		name: 'Education',
 		to: '/education',
 	},
 	{
-		name: 'kỹ năng',
+		name: 'skills',
 		to: '/skills',
 	},
 	{
-		name: 'kinh nghiệm',
+		name: 'EXPERIENCE',
 		to: '/experience',
 	},
 	{
-		name: 'contact',
+		name: 'Contact',
 		to: '/contact',
 	},
 ];
