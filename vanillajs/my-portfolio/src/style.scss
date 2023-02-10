@@ -56,4 +56,12 @@
 	.ct-about-skill {
 		@apply bg-white border-b-2 border-b-black p-6 drop-shadow-lg shadow-lg shadow-inherit flex flex-col;
 	}
+
+	/* contact */
+	.ct-input {
+		&::placeholder {
+			font-family: 'Open Sans', sans-serif;
+		}
+		@apply transition-all duration-700 border bg-lightMode text-base resize-none p-5 rounded-sm w-full outline-none focus:bg-white;
+	}
 }
