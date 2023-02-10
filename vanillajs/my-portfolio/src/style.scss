@@ -5,48 +5,55 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    font-family: 'Open Sans', sans-serif;
-  }
+	html {
+		font-family: 'Open Sans', sans-serif;
+	}
 
-  *::-webkit-scrollbar {
-    width: 4px;
-  }
+	*::-webkit-scrollbar {
+		width: 4px;
+	}
 
-  *::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-  }
+	*::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		border-radius: 10px;
+	}
 
-  *::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-  }
+	*::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+	}
 
-  /* ct = custom */
-  .ct-header-link {
-    @apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-400 focus:bg-blue-400 w-full transition-all duration-200;
-  }
+	/* ct = custom */
+	.ct-header-link {
+		@apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-400 focus:bg-blue-400 w-full transition-all duration-200;
+	}
 
-  .test::before {
-    content: '';
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    position: absolute;
-    background-color: #4d4d4d;
-    border-left: 2px solid #4070f4;
-    animation: anitemeTextLoad 4s steps(12) infinite;
-    -webkit-animation: anitemeTextLoad 4s steps(12) infinite;
-}
+	.test::before {
+		content: '';
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+		position: absolute;
+		background-color: #4d4d4d;
+		border-left: 2px solid #4070f4;
+		animation: anitemeTextLoad 4s steps(12) infinite;
+		-webkit-animation: anitemeTextLoad 4s steps(12) infinite;
+	}
 
-  @keyframes anitemeTextLoad{
-    40%, 60% {
-      left: calc(100% + 4px);
-    }
-    100% {
-      left: 0%;
-    }
-  }
+	@keyframes anitemeTextLoad {
+		40%,
+		60% {
+			left: calc(100% + 4px);
+		}
+
+		100% {
+			left: 0%;
+		}
+	}
+
+	/* about us */
+	.ct-about-skill {
+		@apply bg-white border-b-2 border-b-black p-6 drop-shadow-lg shadow-lg shadow-inherit flex flex-col;
+	}
 }
