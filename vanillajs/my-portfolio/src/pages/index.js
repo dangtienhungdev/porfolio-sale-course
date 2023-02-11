@@ -4,3 +4,4 @@ export { default as AboutPage } from './about/AboutPage';
 export { default as EducationPage } from './education/EducationPage';
 export { default as SkillPage } from './skills/SkillPage';
 export { default as Contact } from './contact/Contact';
+export { default as Experiance } from './experiance/Experiance';
