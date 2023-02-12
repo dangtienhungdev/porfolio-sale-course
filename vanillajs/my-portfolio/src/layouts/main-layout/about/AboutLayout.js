@@ -29,7 +29,7 @@ const AboutLayout = () => {
 	}, []);
 	return /* html */ `
 	<div class='flex-1 bg-white'>
-		<div class="h-screen overflow-y-scroll">
+		<div class="h-screen xl:overflow-y-scroll">
 			<div class='flex overflow-x-auto justify-end'>
 				<section class='px-[4%] py-20 min-h-screen '>
 					<h4 class="uppercase text-sm text-gray-400 onscrool-text transition-all duration-500 -translate-x-[150%]">About us</h4>
@@ -43,7 +43,7 @@ const AboutLayout = () => {
 							<span class='mt-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, eveniet adipisci impedit quos, sit debitis eligendi quasi consectetur minima velit accusamus vel voluptatum cupiditate aliquid earum quod ea inventore optio dignissimos recusandae voluptate deleniti iusto, fugiat vitae. Quo, dolore nulla.</span>
 						</p>
 					</div>
-					<div class="mt-20 grid grid-cols-4 gap-12">
+					<div class="xl:mt-16 mt-12 grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-12">
 						<div class='ct-about-skill !border-b-blue-600'>
 							<a href="/skills" className="inline-block">
 								<img src="/public/assets/images/idea.gif" alt="" class='h-10 w-10'/>

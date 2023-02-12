@@ -29,7 +29,7 @@ const ContactLayout = () => {
 	}, []);
 	return /* html */ `
   <div class='flex-1 bg-white'>
-    <div class="h-screen overflow-y-scroll">
+    <div class="h-screen xl:overflow-y-scroll">
       <div class='flex overflow-x-auto justify-end'>
         <section class='px-[4%] py-20 min-h-screen'>
           <h4 class="uppercase text-sm text-gray-400 onscrool-text transition-all duration-1000 -translate-x-[150%]">GET IN TOUCH</h4>
@@ -69,7 +69,7 @@ const ContactLayout = () => {
               </div>
 
               <div
-                class='flex justify-between items-center gap-x-4 bg-white mb-10 shadow-lg'
+                class='xl:flex justify-between items-center gap-x-4 bg-white mb-10 shadow-lg hidden'
               >
                 <div class='p-4 bg-lightMode'>
                   <img src="/public/assets/images/facebook-removebg-preview.png" alt="" class='h-8 w-8 object-cover'/>

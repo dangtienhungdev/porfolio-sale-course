@@ -34,8 +34,8 @@ const EducationLayout = () => {
 			item.addEventListener('click', (e) => {
 				e.preventDefault();
 				abcd[index].classList.toggle('hidden');
-				item.classList.toggle('bg-blue-500');
-				item.classList.toggle('text-white');
+				item.classList.toggle('!bg-blue-500');
+				item.classList.toggle('!text-white');
 				if (!abcd[index].classList.contains('hidden')) {
 					abcd[index].classList.remove('-translate-y-10');
 				}
@@ -44,7 +44,7 @@ const EducationLayout = () => {
 	}, []);
 	return /* html */ `
     <div class='flex-1 bg-white'>
-      <div class="h-screen overflow-y-scroll">
+      <div class="h-screen xl:overflow-y-scroll">
         <div class='flex overflow-x-auto justify-end'>
           <section class='px-[4%] py-20 min-h-screen'>
             <h4 class="uppercase text-sm text-gray-400 onscrool-text transition-all duration-1000 -translate-x-[150%]">Education</h4>

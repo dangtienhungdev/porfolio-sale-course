@@ -5,6 +5,27 @@
 @tailwind utilities;
 
 @layer base {
+	*,
+	*:before,
+	*:after {
+		box-sizing: border-box;
+	}
+	* {
+		margin: 0;
+		padding: 0;
+		font: inherit;
+	}
+	img,
+	picture,
+	svg,
+	video {
+		display: block;
+		max-width: 100%;
+	}
+	body {
+		min-height: 100vh;
+	}
+
 	html {
 		font-family: 'Open Sans', sans-serif;
 	}
@@ -24,8 +45,13 @@
 	}
 
 	/* ct = custom */
+	ul.text-center {
+		li.active {
+			@apply text-white bg-blue-500;
+		}
+	}
 	.ct-header-link {
-		@apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-400 focus:bg-blue-400 w-full transition-all duration-200;
+		@apply p-2 inline-block uppercase text-base hover:text-white rounded-sm hover:bg-blue-500 focus:bg-blue-400 w-full transition-all duration-200;
 	}
 
 	.test::before {
@@ -35,7 +61,7 @@
 		top: 0;
 		left: 0;
 		position: absolute;
-		background-color: #4d4d4d;
+		background-color: #808080;
 		border-left: 2px solid #4070f4;
 		animation: anitemeTextLoad 4s steps(12) infinite;
 		-webkit-animation: anitemeTextLoad 4s steps(12) infinite;
@@ -63,5 +89,17 @@
 			font-family: 'Open Sans', sans-serif;
 		}
 		@apply transition-all duration-700 border bg-lightMode text-base resize-none p-5 rounded-sm w-full outline-none focus:bg-white;
+	}
+
+	/* responsive */
+	.active {
+		@apply hidden;
+	}
+
+	.btn-modal.active ~ .modal-overlay {
+		display: block;
+	}
+	.btn-modal.active ~ .modal-active {
+		display: block;
 	}
 }
