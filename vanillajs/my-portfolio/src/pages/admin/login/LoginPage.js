@@ -1,9 +1,5 @@
-import {
-	createUserWithEmailAndPassword,
-	onAuthStateChanged,
-	updateProfile,
-} from 'firebase/auth';
-import { useEffect, useState } from '../../../config/config';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { router, useEffect, useState } from '../../../config/config';
 
 import { auth } from '../../../firebase/firebase-config';
 
@@ -20,7 +16,51 @@ const LoginPage = () => {
 	}, []);
 	console.log('🚀 ~ file: LoginPage.js:21 ~ LoginPage ~ userInfo', userInfo);
 	useEffect(() => {
-		// const form =
+		const form = document.querySelector('.login-form');
+		const regextEmail =
+			/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		form.addEventListener('submit', async (e) => {
+			let email = form.elements.email.value;
+			let password = form.elements.password.value;
+			e.preventDefault();
+			if (password.trim().length < 6) {
+				Toastify({
+					text: 'Mật khẩu tối thiểu phải là 6 ký tự!',
+					duration: 3000,
+					backgroundColor: 'orange',
+				}).showToast();
+				return false;
+			}
+			if (email.trim() === '' || password.trim() === '') {
+				Toastify({
+					text: 'Bạn đang để trống!',
+					duration: 3000,
+					backgroundColor: 'orange',
+				}).showToast();
+				return false;
+			}
+			if (regextEmail.test(email)) {
+				const userLogin = await signInWithEmailAndPassword(
+					auth,
+					email,
+					password
+				);
+				setUserInfo(userLogin);
+				router.navigate('/admin/dashboard');
+				Toastify({
+					text: 'Đăng nhập thành công!',
+					duration: 3000,
+					backgroundColor: 'rgb(59 130 246)',
+				}).showToast();
+			} else {
+				Toastify({
+					text: 'Bạn nhập chưa đúng định dạng email!',
+					duration: 3000,
+					backgroundColor: 'orange',
+				}).showToast();
+				return false;
+			}
+		});
 	});
 	return /* html */ `
   <div
