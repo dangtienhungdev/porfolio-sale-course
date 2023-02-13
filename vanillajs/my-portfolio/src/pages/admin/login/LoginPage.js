@@ -1,6 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css';
-
-import { ToastContainer, toast } from 'react-toastify';
 import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
@@ -8,66 +5,22 @@ import {
 } from 'firebase/auth';
 import { useEffect, useState } from '../../../config/config';
 
-import { async } from '@firebase/util';
 import { auth } from '../../../firebase/firebase-config';
 
 const LoginPage = () => {
-	const [user, setUser] = useState({});
+	const [userInfo, setUserInfo] = useState({});
 	useEffect(() => {
 		onAuthStateChanged(auth, (currentUser) => {
-			console.log(
-				'🚀 ~ file: LoginPage.js:12 ~ onAuthStateChanged ~ currentUser',
-				currentUser
-			);
-			currentUser ? setUser(currentUser) : setUser({});
-			const handleUser = async (currentUser) => {
-				if (currentUser) {
-					const displayName = currentUser?.email.split('@')[0];
-					await updateProfile(auth.currentUser, {
-						displayName,
-					});
-				}
-			};
-			handleUser();
-		});
-	}, []);
-	useEffect(() => {
-		const form = document.querySelector('.login-form');
-		form.addEventListener('submit', async (event) => {
-			event.preventDefault();
-			let email = form.elements.email.value;
-			let password = form.elements.password.value;
-			// Đăng nhập bằng email và mật khẩu
-			// nếu để trống
-			if (email.trim() === '' || password.trim() === '') {
-				Toastify({
-					text: 'Bạn đang để trống!',
-					duration: 3000,
-					backgroundColor: 'orange',
-				}).showToast();
-				return false;
+			if (currentUser) {
+				setUserInfo(currentUser);
 			} else {
-				const data = {
-					email,
-					password,
-				};
-				console.log(
-					'🚀 ~ file: LoginPage.js:11 ~ form.addEventListener ~ data',
-					data
-				);
-				const user = await createUserWithEmailAndPassword(
-					auth,
-					email,
-					password
-				);
-				setUser(user);
-				Toastify({
-					text: 'Đăng nhập thành công!',
-					duration: 3000,
-					backgroundColor: 'rgb(59 130 246)',
-				}).showToast();
+				setUserInfo({});
 			}
 		});
+	}, []);
+	console.log('🚀 ~ file: LoginPage.js:21 ~ LoginPage ~ userInfo', userInfo);
+	useEffect(() => {
+		// const form =
 	});
 	return /* html */ `
   <div
@@ -93,7 +46,7 @@ const LoginPage = () => {
           <button class='p-2 rounded bg-blue-500 text-white w-full'>Login</button>
         </form>
         <p class='capitalize text-black cursor-pointer hover:text-blue-900 mt-10'>forgot password?</p>
-        <p class='capitalize text-black mt-2'>dont't have account? <a href="" class='capitalize cursor-pointer text-blue-900 mt-10'>Sign up</a></p>
+        <p class='capitalize text-black mt-2'>dont't have account? <a href="/admin/sign-up" class='capitalize cursor-pointer text-blue-900 mt-10'>Sign up</a></p>
       </div>
       <div class='flex items-center justify-center flex-col h-full w-full'>
         <div class='flex gap-x-4'>
@@ -105,7 +58,7 @@ const LoginPage = () => {
           <h1 class='capitalize text-4xl'>MyCv Creator</h1>
         </div>
         <p class='mt-10 md:w-1/2 w-3/2 mx-auto text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel tempore id consequatur, minus quae necessitatibus veritatis pariatur. Incidunt optio velit aliquid voluptas quae quos quo! Fuga dolorem porro necessitatibus quis!</p>
-        <a href="" class='mt-10 inline-block py-2 px-8 rounded bg-blue-500 text-white capitalize text-base'>register</a>
+        <a href="/admin/sign-up" class='mt-10 inline-block py-2 px-8 rounded bg-blue-500 text-white capitalize text-base'>register</a>
       </div>
     </div>
   </div>
