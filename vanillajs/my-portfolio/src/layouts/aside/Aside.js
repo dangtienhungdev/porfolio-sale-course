@@ -46,13 +46,10 @@ const Aside = () => {
 		const OpenModal = document.querySelector('.btn-modal');
 		const ModalOverlay = document.querySelector('.modal-overlay');
 		const CloseModal = document.querySelector('.btn-close');
-		OpenModal.addEventListener('click', () => {
+		CloseModal?.addEventListener('click', () => {
 			OpenModal.classList.toggle('active');
 		});
-		CloseModal.addEventListener('click', () => {
-			OpenModal.classList.toggle('active');
-		});
-		ModalOverlay.addEventListener('click', () => {
+		ModalOverlay?.addEventListener('click', () => {
 			OpenModal.classList.remove('active');
 		});
 	}, []);

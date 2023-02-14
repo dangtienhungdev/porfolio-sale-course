@@ -14,7 +14,7 @@ const ProjectAddPage = () => {
 	return /* html */ `
     <div class="flex flex-col">
       ${Navigation()}
-      <div class='flex justify-between bg-white gap-x-6 px-4 my-4'>
+      <div class='mt-[120px] flex justify-between bg-white gap-x-6 px-4 my-4'>
         ${AsideAdmin()}
         ${AddProject()}
       </div>
