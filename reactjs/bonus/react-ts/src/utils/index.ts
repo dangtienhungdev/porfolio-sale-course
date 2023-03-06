@@ -19,3 +19,15 @@ function
   2. hàm xử lí công việc không trả về gì cả
   ex: function total(a: number, b: number): void {}
 */
+
+/* unknow */
+let aNumber: unknown;
+aNumber = 100;
+if (typeof aNumber === 'number') {
+	aNumber.toFixed(2);
+}
+
+/* never -> được sử dụng khi trả về 1 lỗi nào đó */
+function raiseError(error: string): never {
+	throw new Error(error);
+}
