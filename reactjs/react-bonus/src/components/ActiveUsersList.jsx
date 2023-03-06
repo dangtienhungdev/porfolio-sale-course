@@ -1,30 +1,25 @@
+import { useStateUser } from '../hooks/useStateUser';
+
 const ActiveUsersList = () => {
-	const [users, setUsers] = useState([]);
-
-	useEffect(() => {
-		const loadUsers = async () => {
-			const response = await fetch('/some-api');
-			const data = await response.json();
-			setUsers(data);
-		};
-
-		loadUsers();
-	}, []);
-
-	const weekAgo = new Date();
-	weekAgo.setDate(weekAgo.getDate() - 7);
+	const { users } = useStateUser();
 
 	return (
 		<ul>
-			{users
-				.filter((user) => !user.isBanned && user.lastActivityAt >= weekAgo)
-				.map((user) => (
-					<li key={user.id}>
-						<img src={user.avatarUrl} />
-						<p>{user.fullName}</p>
-						<small>{user.role}</small>
-					</li>
-				))}
+			{getActiveUser(users).map((user) => (
+				<UserItem key={user.id} user={user} />
+			))}
 		</ul>
 	);
 };
+
+const getActiveUser = (users) => {
+	if (!Array.isArray(users)) return;
+	const weekAgo = new Date();
+	weekAgo.setDate(weekAgo.getDate() - 7);
+	const filterUsers = users.filter(
+		(user) => !user.isBanned && user.lastActivityAt >= weekAgo
+	);
+	return filterUsers;
+};
+
+export default ActiveUsersList;
