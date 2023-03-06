@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface ICard {
 	title: string;
@@ -8,7 +8,15 @@ interface ICard {
 }
 
 const Card = ({ title, image, description, link }: ICard) => {
-	return <div>Card</div>;
+	useEffect(() => {
+		const input = document.querySelector('input') as HTMLInputElement;
+		console.log('🚀 ~ file: Card.tsx:13 ~ useEffect ~ input:', input);
+	}, []);
+	return (
+		<div>
+			<input type="text" />
+		</div>
+	);
 };
 
 export default Card;
