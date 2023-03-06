@@ -1,5 +1,7 @@
 import './App.css';
 
+import Card from './components/Card';
+
 enum permistion {
 	ADMIN = 'ADMIN',
 	EDITOR = 'EDITOR',
@@ -59,6 +61,12 @@ const user: {
 const App = () => {
 	return (
 		<div>
+			<Card
+				title="dang tien hung"
+				image="https://source.unsplash.com/random"
+				link="link"
+				description="description"
+			/>
 			<div className="review">
 				<div className="review-image">
 					<img src="https://source.unsplash.com/random" alt="" />
