@@ -1,37 +1,9 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  font-family: "Epilogue", sans-serif;
-  font-weight: 400;
-  padding: 20px;
-  line-height: 1.5;
-}
-
-.review {
-  width: 300px;
-  padding: 10px;
-  background-color: white;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  border-radius: 12px;
-}
-
-.review-image {
-  height: 200px;
-}
-
-.review-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.review-info {
-  padding: 20px 0;
-  font-size: 14px;
-  color: #999;
+@layer base {
+  body {
+    @apply p-5
+  }
 }
