@@ -1,7 +1,6 @@
-import { useController, useForm } from 'react-hook-form';
-
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useController } from 'react-hook-form';
 
 const Input = ({
   placeholder = '',

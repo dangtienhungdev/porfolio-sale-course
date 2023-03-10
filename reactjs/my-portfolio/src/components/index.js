@@ -8,3 +8,6 @@ export { default as IconToggle } from './icons/IconToggle';
 /* icon */
 export { default as IconEye } from './icons/IconEye';
 export { default as IconEyeSlash } from './icons/IconEyeSlash';
+export { default as IconArrowDown } from './icons/IconArrowDown';
+export { default as IconBars } from './icons/IconBars';
+export { default as IconUser } from './icons/IconUser';

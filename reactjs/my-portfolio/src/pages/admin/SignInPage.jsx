@@ -8,7 +8,6 @@ import React from 'react';
 import { auth } from '../../firebase/firebase-config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { toast } from 'react-toastify';
-import { useAuth } from 'contexts/auth-context';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -32,7 +31,6 @@ const SignInPage = () => {
     mode: 'onSubmit',
   });
   const navigate = useNavigate();
-  const { userInfo } = useAuth();
   const handleSubmitForm = async (values) => {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);

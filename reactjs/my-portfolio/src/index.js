@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
 import { AuthProvider } from 'contexts/auth-context';
 import { BrowserRouter } from 'react-router-dom';
+import { ProSidebarProvider } from 'react-pro-sidebar';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ToastContainer } from 'react-toastify';
@@ -13,7 +14,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <AuthProvider>
-      <App />
+      <ProSidebarProvider>
+        <App />
+      </ProSidebarProvider>
     </AuthProvider>
     <ToastContainer />
   </BrowserRouter>
