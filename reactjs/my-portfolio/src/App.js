@@ -1,7 +1,15 @@
+import { Route, Routes } from 'react-router-dom';
+
+import LayoutSignin from './layouts/LayoutSignin';
+import { NotFound } from './pages';
+
 const App = () => {
-	return (
-		<h2 className="underline text-red-500">Lorem ipsum dolor sit amet.</h2>
-	);
+  return (
+    <Routes>
+      <Route path="/admin/sign-in" element={<LayoutSignin />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 };
 
 export default App;
