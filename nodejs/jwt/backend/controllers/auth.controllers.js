@@ -22,6 +22,27 @@ export const authControllers = {
 			res.status(500).json(error);
 		}
 	},
+
+	/* generic access token */
+	generateAccessToken: (user) => {
+		return jwt.sign(
+			{ id: user._id, admin: user.admin },
+			process.env.JWT_ACCESS_KEY, // => key để mã hóa token
+			{
+				expiresIn: '30s', // => thời gian tồn tại của token
+			}
+		);
+	},
+
+	/* generate refresh token */
+	generateRefreshToken: (user) => {
+		return jwt.sign(
+			{ id: user._id, admin: user.admin },
+			process.env.JWT_REFRESH_KEY,
+			{ expiresIn: '1d' }
+		);
+	},
+
 	/* login */
 	loginUser: async (req, res) => {
 		try {
@@ -42,16 +63,10 @@ export const authControllers = {
 			}
 			/* nếu username & password đúng thì trả về 200 */
 			if (user && validPassword) {
-				const accessToken = jwt.sign(
-					{
-						id: user._id,
-						admin: user.admin,
-					},
-					process.env.JWT_ACCESS_KEY, // => key để mã hóa token
-					{ expiresIn: '30s' } // => thời gian tồn tại của token
-				);
+				const accessToken = authControllers.generateAccessToken(user);
+				const refreshToken = authControllers.generateRefreshToken(user);
 				const { password, ...other } = user._doc;
-				res.status(200).json({ accessToken, user: other });
+				res.status(200).json({ accessToken, refreshToken, user: other });
 			}
 		} catch (error) {
 			res.status(500).json(error);
