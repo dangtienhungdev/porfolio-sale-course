@@ -123,4 +123,15 @@ export const authControllers = {
 			return res.status(500).json(error);
 		}
 	},
+
+	/* logout */
+	logoutUser: async (req, res) => {
+		/* làm cho access & refresh token biến mất */
+		/* accessToken được lưu trữ bên trong redux clinet nên bên client sẽ xóa accessToken */
+		res.clearCookie('refreshToken'); // => xóa refresh token trong cookie
+		refreshTokens = refreshTokens.filter(
+			(token) => token !== req.cookies.refreshToken
+		); // => xóa refresh token trong db || fake db
+		return res.status(200).json('Logout successfully!');
+	},
 };
