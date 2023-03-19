@@ -1,5 +1,6 @@
 import User from '../models/users.model.js';
 import bcrypt from 'bcrypt'; // => mã hóa mật khẩu
+import jwt from 'jsonwebtoken'; // => tạo token
 
 export const authControllers = {
 	/* register */
@@ -41,7 +42,16 @@ export const authControllers = {
 			}
 			/* nếu username & password đúng thì trả về 200 */
 			if (user && validPassword) {
-				res.status(200).json(user);
+				const accessToken = jwt.sign(
+					{
+						id: user._id,
+						admin: user.admin,
+					},
+					process.env.JWT_ACCESS_KEY, // => key để mã hóa token
+					{ expiresIn: '30s' } // => thời gian tồn tại của token
+				);
+				const { password, ...other } = user._doc;
+				res.status(200).json({ accessToken, user: other });
 			}
 		} catch (error) {
 			res.status(500).json(error);
