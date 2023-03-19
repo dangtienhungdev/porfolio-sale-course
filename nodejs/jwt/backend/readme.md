@@ -7,3 +7,11 @@
   => gọi là json web token
   - muốn tạo jwt -> sign
   - muốn chứng nhận jwt -> verify
+4. các cách lưu trữ
+  1. local storage
+  2. cookie storage
+  3. redux storage -> access token
+    httponly cookie -> refresh token
+  => tóm lại
+    - access token -> gắn vào header khi ta muốn verify token
+    - refresh token -> refresh token lưu trữ ở đâu đó khi nào access token hết hạn thì lấy refresh token ra để tạo 1 access token mới => nếu không có refresh token thì người dùng phải đăng nhập lại thì rất là phiền

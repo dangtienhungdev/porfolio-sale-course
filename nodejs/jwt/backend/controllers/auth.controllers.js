@@ -2,6 +2,9 @@ import User from '../models/users.model.js';
 import bcrypt from 'bcrypt'; // => mã hóa mật khẩu
 import jwt from 'jsonwebtoken'; // => tạo token
 
+/* fake database refresh token */
+let refreshTokens = [];
+
 export const authControllers = {
 	/* register */
 	register: async (req, res) => {
@@ -28,9 +31,7 @@ export const authControllers = {
 		return jwt.sign(
 			{ id: user._id, admin: user.admin },
 			process.env.JWT_ACCESS_KEY, // => key để mã hóa token
-			{
-				expiresIn: '30s', // => thời gian tồn tại của token
-			}
+			{ expiresIn: '30s' } // => thời gian tồn tại của token
 		);
 	},
 
@@ -38,8 +39,8 @@ export const authControllers = {
 	generateRefreshToken: (user) => {
 		return jwt.sign(
 			{ id: user._id, admin: user.admin },
-			process.env.JWT_REFRESH_KEY,
-			{ expiresIn: '1d' }
+			process.env.JWT_REFRESH_TOKEN, // => key để mã hóa token
+			{ expiresIn: '1d' } // => thời gian tồn tại của token
 		);
 	},
 
@@ -50,7 +51,7 @@ export const authControllers = {
 			const user = await User.findOne({ username: req.body.username });
 			if (!user) {
 				/* nếu không có người dùng thì sẽ trả về 404 */
-				res.status(404).json('User not found');
+				return res.status(404).json('User not found');
 			}
 			/* so sánh mật khẩu người dùng gửi lên server với mật khẩu trong database */
 			const validPassword = await bcrypt.compare(
@@ -59,17 +60,67 @@ export const authControllers = {
 			);
 			if (!validPassword) {
 				/* nếu mật khẩu không đúng thì sẽ trả về 404 */
-				res.status(400).json('Wrong password');
+				return res.status(400).json('Wrong password');
 			}
 			/* nếu username & password đúng thì trả về 200 */
 			if (user && validPassword) {
 				const accessToken = authControllers.generateAccessToken(user);
 				const refreshToken = authControllers.generateRefreshToken(user);
+				refreshTokens.push(
+					refreshToken
+				); /* => lưu refresh token lên db, không có sẽ fake để lưu refreshToken */
+				/* trả về user và token => lưu vào cookie */
+				res.cookie('refreshToken', refreshToken, {
+					httpOnly: true,
+					secure: false,
+					path: '/',
+					sameSite: 'strict',
+				});
 				const { password, ...other } = user._doc;
-				res.status(200).json({ accessToken, refreshToken, user: other });
+				return res.status(200).json({ accessToken, user: other });
 			}
 		} catch (error) {
 			res.status(500).json(error);
+		}
+	},
+
+	/* refresh token */
+	requestRefreshToken: async (req, res) => {
+		try {
+			/* take refresh token from user */
+			const refreshToken = req.cookies.refreshToken;
+			/* if refresh token is not exist */
+			if (!refreshToken) {
+				return res.status(401).json('You are not authenticated!');
+			}
+			/* if refresh token is exist, kiểm tra nếu refreshToken này không có refresh của mình thì sẽ báo lỗi */
+			if (!refreshTokens.includes(refreshToken)) {
+				return res.status(403).json('Refresh token is not valid!');
+			}
+			/* verify refresh token */
+			jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (error, user) => {
+				if (error) {
+					return res.status(403).json('Refresh token is not valid!');
+				}
+				refreshTokens = refreshTokens.filter(
+					(token) => token !== refreshToken
+				); /* => xóa refresh token cũ đi */
+				/* if refresh token is valid, create new accessToke & refreshToken */
+				const newAccessToken = authControllers.generateAccessToken(user);
+				const newRefreshToken = authControllers.generateRefreshToken(user);
+				/* => lưu refresh token lên db, không có sẽ fake để lưu refreshToken */
+				refreshTokens.push(newRefreshToken);
+				/* trả về user và token => lưu vào cookie */
+				res.cookie('refreshToken', newRefreshToken, {
+					httpOnly: true,
+					secure: false,
+					path: '/',
+					sameSite: 'strict',
+				});
+				return res.status(200).json({ accessToken: newAccessToken });
+			}); /* verify xem refresh toke này có đúng không? */
+		} catch (error) {
+			return res.status(500).json(error);
 		}
 	},
 };
