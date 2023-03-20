@@ -13,16 +13,18 @@ const HomePage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	/* axios */
-	let axiosJWT = axios.create({});
-
 	/* react-redux */
 	// lấy ra thông tin của người dùng đăng nhập để lấy ra accessToken
 	const userInfo = useSelector((state) => state.auth.login?.currentUser);
 	// lấy ra danh sách user
-	const usersList = useSelector((state) => state.users.users?.allUsers);
+	const usersList = useSelector((state) => {
+		return state.users.users?.allUsers;
+	});
 	// lấy ra message
 	const message = useSelector((state) => state.users?.message);
+
+	/* axios */
+	let axiosJWT = axios.create();
 
 	/* handleDelete */
 	const handleDelete = (id) => {
@@ -40,6 +42,7 @@ const HomePage = () => {
 			const res = await axios.post('/api/v1/auth/refresh', {
 				withCredentials: true, // cho phép truy cập cookie của server
 			});
+			console.log('🚀 ~ file: HomePage.jsx:45 ~ refreshToken ~ res:', res);
 			return res.data;
 		} catch (error) {
 			console.log(error);
@@ -49,24 +52,18 @@ const HomePage = () => {
 	axiosJWT.interceptors.request.use(
 		async (config) => {
 			let date = new Date();
-			const decodeToken = jwt_decode(userInfo?.accessToken, config); // giải mã token
+			const decodeToken = jwt_decode(userInfo?.accessToken); // giải mã token
 			if (decodeToken.exp < date.getTime() / 1000) {
 				// nếu token hết hạn thì sẽ gọi api để lấy ra 1 cái token mới
-				try {
-					const data = await refreshToken(); // lấy ra 1 cái token mới
-					console.log(
-						'🚀 ~ file: HomePage.jsx:65 ~ axiosJWT.interceptors.request.use ~ data:',
-						data
-					);
-					const refreshUser = {
-						...userInfo,
-						accessToken: data.accessToken,
-					};
-					dispatch(loginSuccess(refreshUser));
-					config.headers['token'] = 'Bearer ' + data.accessToken;
-				} catch (error) {
-					console.log(error);
-				}
+				const data = await refreshToken(); // lấy ra 1 cái token mới
+				console.log('🚀 ~ file: HomePage.jsx:59 ~ data:', data);
+				const refreshUser = {
+					...userInfo,
+					accessToken: data.accessToken,
+				};
+				dispatch(loginSuccess(refreshUser));
+				config.headers['token'] = 'Bearer ' + data.accessToken;
+				return config;
 			}
 		},
 		(error) => {

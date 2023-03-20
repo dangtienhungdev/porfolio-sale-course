@@ -53,6 +53,7 @@ export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
 				token: `Bearer ${accessToken}`,
 			},
 		});
+		console.log('🚀 ~ file: apiRequest.js:56 ~ getAllUsers ~ res:', res);
 		dispatch(getUsersSuccess(res.data));
 	} catch (error) {
 		dispatch(getUsersFailure());
