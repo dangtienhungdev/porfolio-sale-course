@@ -1,4 +1,10 @@
-import { getUsersFailure, getUsersStart, getUsersSuccess } from './userSlice';
+import {
+	deleteUserFailure,
+	deleteUserStart,
+	getUsersFailure,
+	getUsersStart,
+	getUsersSuccess,
+} from './userSlice';
 import {
 	loginFailure,
 	loginStart,
@@ -39,10 +45,10 @@ export const registerUser = async (user, dispatch, navigate) => {
 };
 
 /* get all users */
-export const getAllUsers = async (accessToken, dispatch) => {
+export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
 	dispatch(getUsersStart());
 	try {
-		const res = await axios.get('/api/v1/users', {
+		const res = await axiosJWT.get('/api/v1/users', {
 			headers: {
 				token: `Bearer ${accessToken}`,
 			},
@@ -50,5 +56,20 @@ export const getAllUsers = async (accessToken, dispatch) => {
 		dispatch(getUsersSuccess(res.data));
 	} catch (error) {
 		dispatch(getUsersFailure());
+	}
+};
+
+/* delete user */
+export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
+	dispatch(deleteUserStart());
+	try {
+		const res = await axiosJWT.delete(`/api/v1/users/${id}`, {
+			headers: {
+				token: `Bearer ${accessToken}`,
+			},
+		});
+		dispatch(getUsersSuccess(res.data));
+	} catch (error) {
+		dispatch(deleteUserFailure(error.response.data));
 	}
 };
