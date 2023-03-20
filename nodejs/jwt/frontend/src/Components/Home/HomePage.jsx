@@ -4,6 +4,7 @@ import { deleteUser, getAllUsers } from '../../redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios';
+import { createAxios } from '../../createInstance';
 import jwt_decode from 'jwt-decode';
 import { loginSuccess } from '../../redux/authSlice';
 import { useEffect } from 'react';
@@ -24,52 +25,12 @@ const HomePage = () => {
 	const message = useSelector((state) => state.users?.message);
 
 	/* axios */
-	let axiosJWT = axios.create();
+	let axiosJWT = createAxios(userInfo, dispatch, loginSuccess);
 
 	/* handleDelete */
 	const handleDelete = (id) => {
 		deleteUser(userInfo?.accessToken, dispatch, id, axiosJWT);
 	};
-
-	/*
-    trước khi ta gửi 1 request nào đó mà dùng axiosJWT thì nó sẽ check hàm sử lí bên trong
-    intercepter trước khi gọi 1 cái api nào đó
-  */
-
-	/* tạo ra refreshToken */
-	const refreshToken = async () => {
-		try {
-			const res = await axios.post('/api/v1/auth/refresh', {
-				withCredentials: true, // cho phép truy cập cookie của server
-			});
-			console.log('🚀 ~ file: HomePage.jsx:45 ~ refreshToken ~ res:', res);
-			return res.data;
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	axiosJWT.interceptors.request.use(
-		async (config) => {
-			let date = new Date();
-			const decodeToken = jwt_decode(userInfo?.accessToken); // giải mã token
-			if (decodeToken.exp < date.getTime() / 1000) {
-				// nếu token hết hạn thì sẽ gọi api để lấy ra 1 cái token mới
-				const data = await refreshToken(); // lấy ra 1 cái token mới
-				console.log('🚀 ~ file: HomePage.jsx:59 ~ data:', data);
-				const refreshUser = {
-					...userInfo,
-					accessToken: data.accessToken,
-				};
-				dispatch(loginSuccess(refreshUser));
-				config.headers['token'] = 'Bearer ' + data.accessToken;
-				return config;
-			}
-		},
-		(error) => {
-			return Promise.reject(error);
-		}
-	);
 
 	/* useEffect */
 	useEffect(() => {

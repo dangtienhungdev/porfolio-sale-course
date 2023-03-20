@@ -9,6 +9,8 @@ import {
 	loginFailure,
 	loginStart,
 	loginSuccess,
+	logoutFailure,
+	logoutSuccess,
 	registerError,
 	registerStart,
 	registerSuccess,
@@ -72,5 +74,27 @@ export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
 		dispatch(getUsersSuccess(res.data));
 	} catch (error) {
 		dispatch(deleteUserFailure(error.response.data));
+	}
+};
+
+/* logout user */
+export const logoutUser = async (
+	dispatch,
+	id,
+	navigate,
+	accessToken,
+	axiosJWT
+) => {
+	dispatch(loginStart());
+	try {
+		await axiosJWT.post('/api/v1/auth/logout', id, {
+			headers: {
+				token: `Bearer ${accessToken}`,
+			},
+		});
+		dispatch(logoutSuccess());
+		navigate('/login');
+	} catch (error) {
+		dispatch(logoutFailure());
 	}
 };
