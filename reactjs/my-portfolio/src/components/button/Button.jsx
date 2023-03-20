@@ -11,7 +11,7 @@ const Button = (props) => {
       styleBtnClassName += ' bg-blue-500 text-white';
       break;
     default:
-      return styleBtnClassName;
+      break;
   }
   if (rest.to) {
     return (

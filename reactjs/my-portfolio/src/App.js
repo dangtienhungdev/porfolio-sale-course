@@ -1,4 +1,5 @@
-import { NotFound, ProjectsPage, UserPage } from './pages';
+import { AddProjects, ManageProjects } from './modules';
+import { NotFound, UserPage } from './pages';
 import { Route, Routes } from 'react-router-dom';
 
 import LayoutAdmin from './layouts/LayoutAdmin';
@@ -10,7 +11,8 @@ const App = () => {
       <Route path="/admin/sign-in" element={<LayoutSignin />} />
       <Route path="*" element={<NotFound />} />
       <Route element={<LayoutAdmin />}>
-        <Route path="/admin/projects" element={<ProjectsPage />} />
+        <Route path="/admin/projects" element={<ManageProjects />} />
+        <Route path="/admin/projects/add" element={<AddProjects />} />
         <Route path="/admin/user" element={<UserPage />} />
       </Route>
     </Routes>

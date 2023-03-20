@@ -10,15 +10,19 @@ const Sidebar = () => {
     setShow(!show);
   };
   return (
-    <div className="w-full max-w-xs h-screen overflow-y-auto bg-white">
-      <div className="p-5 rounded">
+    <div className="w-full max-w-xs max-h-screen overflow-y-auto">
+      <div className="rounded-lg shadow-md bg-white overflow-hidden min-h-screen">
         {SidebarData.map((sidebar) => {
           return (
-            <div className={`flex flex-col`} key={sidebar.id} onClick={handleShowSubNav}>
+            <div
+              className={`flex flex-col transition-all duration-200`}
+              key={sidebar.id}
+              onClick={handleShowSubNav}
+            >
               <NavLink
                 to={sidebar.to}
-                className={`flex select-none relative gap-x-2 items-center p-2 hover:bg-color10 transition-all duration-200 rounded-sm cursor-pointer ${
-                  show ? 'bg-gray-200' : ''
+                className={`flex select-none relative gap-x-2 items-center p-2 hover:bg-blue-300 hover:text-white transition-all duration-200 rounded-sm cursor-pointer ${
+                  show ? 'bg-gray-100' : ''
                 }`}
               >
                 <span>{sidebar.icon}</span>
