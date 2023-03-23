@@ -26,6 +26,7 @@ const CreatePost = () => {
     dispatch(addPost(formDataWithId))
     setFormData(initialState)
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className='mb-6'>

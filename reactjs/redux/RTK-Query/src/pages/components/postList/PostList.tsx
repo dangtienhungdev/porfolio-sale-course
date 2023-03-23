@@ -1,9 +1,17 @@
+import { useDispatch, useSelector } from 'react-redux'
+
 import PostItem from '../postItem'
 import { RootState } from 'store'
-import { useSelector } from 'react-redux'
+import { removePost } from '../../blog/blog.reducer'
 
 const PostList = () => {
   const postList = useSelector((state: RootState) => state.blog.postList)
+
+  /* redux */
+  const dispatch = useDispatch()
+
+  /* handle Delete */
+  const handleDelete = (postId: string) => dispatch(removePost(postId))
   return (
     <div className='bg-white py-6 sm:py-8 lg:py-12'>
       <div className='mx-auto max-w-screen-xl px-4 md:px-8'>
@@ -15,7 +23,7 @@ const PostList = () => {
         </div>
         <div className='grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-2 xl:grid-cols-2 xl:gap-8'>
           {postList.map((post) => (
-            <PostItem key={post.id} post={post} />
+            <PostItem key={post.id} post={post} handleDelete={handleDelete} />
           ))}
         </div>
       </div>
