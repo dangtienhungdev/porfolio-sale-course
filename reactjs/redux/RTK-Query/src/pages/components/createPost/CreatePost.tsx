@@ -1,6 +1,33 @@
+import { Post } from 'types/blog.type'
+import { addPost } from '../../../pages/blog/blog.reducer'
+import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+
+const initialState: Post = {
+  id: '',
+  title: '',
+  description: '',
+  featuredImage: '',
+  publishDate: '',
+  published: false
+}
+
 const CreatePost = () => {
+  /* state */
+  const [formData, setFormData] = useState<Post>(initialState)
+
+  /* redux */
+  const dispatch = useDispatch()
+
+  /* handle submit form */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formDataWithId = { ...formData, id: new Date().toISOString() }
+    dispatch(addPost(formDataWithId))
+    setFormData(initialState)
+  }
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className='mb-6'>
         <label htmlFor='title' className='mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300'>
           Title
@@ -11,6 +38,8 @@ const CreatePost = () => {
           className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'
           placeholder='Title'
           required
+          value={formData.title}
+          onChange={(e) => setFormData((pre) => ({ ...pre, title: e.target.value }))}
         />
       </div>
       <div className='mb-6'>
@@ -23,6 +52,8 @@ const CreatePost = () => {
           className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'
           placeholder='Url image'
           required
+          value={formData.featuredImage}
+          onChange={(e) => setFormData((pre) => ({ ...pre, featuredImage: e.target.value }))}
         />
       </div>
       <div className='mb-6'>
@@ -35,6 +66,8 @@ const CreatePost = () => {
             rows={3}
             className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'
             placeholder='Your description...'
+            value={formData.description}
+            onChange={(e) => setFormData((pre) => ({ ...pre, description: e.target.value }))}
           />
         </div>
       </div>
@@ -46,12 +79,19 @@ const CreatePost = () => {
           type='datetime-local'
           id='publishDate'
           className='block w-56 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500'
-          placeholder='Title'
           required
+          value={formData.publishDate}
+          onChange={(e) => setFormData((pre) => ({ ...pre, publishDate: e.target.value }))}
         />
       </div>
       <div className='mb-6 flex items-center'>
-        <input id='publish' type='checkbox' className='h-4 w-4 focus:ring-2 focus:ring-blue-500' />
+        <input
+          id='publish'
+          type='checkbox'
+          className='h-4 w-4 focus:ring-2 focus:ring-blue-500'
+          checked={formData.published}
+          onChange={(e) => setFormData((pre) => ({ ...pre, published: e.target.checked }))}
+        />
         <label htmlFor='publish' className='ml-2 text-sm font-medium text-gray-900'>
           Publish
         </label>

@@ -13,6 +13,11 @@ const initialState: BlogState = {
 
 export const addPost = createAction<Post>('blog/addPost')
 
-const blogReducer = createReducer(initialState, (builder) => {})
+const blogReducer = createReducer(initialState, (builder) => {
+  builder.addCase(addPost, (state, action) => {
+    const post = action.payload
+    state.postList.push(post)
+  })
+})
 
 export default blogReducer
