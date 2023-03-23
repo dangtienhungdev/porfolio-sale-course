@@ -1,7 +1,10 @@
+import blogReducer from './pages/blog/blog.reducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
-  reducer: {}
+  reducer: {
+    blog: blogReducer
+  }
 })
 
 /* lấy rootstate và appDispatch từ store */

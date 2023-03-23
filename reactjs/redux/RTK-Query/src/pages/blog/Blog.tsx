@@ -1,11 +1,11 @@
-import CreatePost from '../components/createPost/createPost'
-import PostList from '../components/postList/PostList'
+import CreatePost from '../components/postList/PostList'
+import PostList from '../components/createPost/CreatePost'
 
 const Blog = () => {
   return (
     <div className='p-5'>
-      <CreatePost />
       <PostList />
+      <CreatePost />
     </div>
   )
 }
