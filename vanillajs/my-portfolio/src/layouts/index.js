@@ -12,3 +12,4 @@ export { default as DashboardLayout } from './main-layout/admin/dashboard/Dashbo
 export { default as Navigation } from './aside/admin/Navigation';
 export { default as AddProject } from './main-layout/admin/projects/AddProject';
 export { default as EditProject } from './main-layout/admin/projects/EditProject';
+export { default as UserLayout } from './main-layout/admin/user/UserLayout';

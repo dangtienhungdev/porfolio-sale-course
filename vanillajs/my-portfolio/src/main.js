@@ -16,6 +16,7 @@ import {
 	ProjectEditPage,
 	ProjectPage,
 	SignupPage,
+	UserPage,
 } from './pages/admin';
 import { render, router } from './config/config';
 
@@ -36,6 +37,7 @@ router.on('/admin/project/add-new', () => render(ProjectAddPage, app));
 router.on('/admin/project/edit/:id', (params) =>
 	render(() => ProjectEditPage(params), app)
 );
+router.on('/admin/user', () => render(UserPage, app));
 
 router.notFound(() => render(NotFound, app));
 router.resolve();

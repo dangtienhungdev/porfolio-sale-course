@@ -12,10 +12,6 @@ const ProjectPage = () => {
 			currentUser ? setUserInfo(currentUser) : router.navigate('/admin/login');
 		});
 	}, []);
-	console.log(
-		'🚀 ~ file: ProjectPage.js:10 ~ ProjectPage ~ userInfo',
-		userInfo
-	);
 	return /* html */ `
     <div class="flex flex-col">
       ${Navigation()}

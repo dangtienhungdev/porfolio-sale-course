@@ -11,6 +11,8 @@ const initialState: BlogState = {
   postList: initialPostList
 }
 
+export const addPost = createAction<Post>('blog/addPost')
+
 const blogReducer = createReducer(initialState, (builder) => {})
 
 export default blogReducer
