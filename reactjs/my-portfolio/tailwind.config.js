@@ -15,6 +15,10 @@ module.exports = {
         color9: '#E4E6EB',
         color10: '#E5E5E5',
       },
+      fontFamily: {
+        quicksan: ['Quicksand', 'sans-serif'],
+        'playfair-display': ['Playfair Display', 'sans-serif'],
+      },
     },
   },
   plugins: [],
