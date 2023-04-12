@@ -9,6 +9,7 @@ export const cartSlice = createSlice({
 		totalPrice: 0,
 	},
 	reducers: {
+		/* Thêm sản phẩm vào giỏ hàng */
 		addToCart(state, action) {
 			try {
 				const productId = action.payload;
@@ -32,6 +33,8 @@ export const cartSlice = createSlice({
 					state.cart.push({
 						id: productId.id,
 						amount: 1,
+						img: productId.img,
+						text: productId.text,
 						size: productId.size,
 						color: productId.color,
 						price: productId.price,
@@ -45,8 +48,37 @@ export const cartSlice = createSlice({
 				console.log(error);
 			}
 		},
+		/* Xóa sản phẩm khỏi giỏ hàng */
+		removeFromCart: (state, action) => {
+			const productId = action.payload;
+			try {
+				const exist = state.cart.find(
+					(product) =>
+						product.id === productId.id &&
+						product.size === productId.size &&
+						product.color === productId.color
+				);
+				if (exist.amount === 1) {
+					state.totalAmount--;
+					state.totalPrice -= exist.price;
+					state.cart = state.cart.filter(
+						(product) =>
+							product.id !== productId.id ||
+							product.size !== productId.size ||
+							product.color !== productId.color
+					);
+				} else {
+					exist.amount -= 1;
+					exist.totalPrice -= exist.price;
+					state.totalAmount--;
+					state.totalPrice -= exist.price;
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		},
 	},
 });
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;

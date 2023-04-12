@@ -1,9 +1,16 @@
+import React, { useState } from 'react';
+
+import Cart from '../Cart/Cart';
 import IconHeart from '../icon/IconHeart';
 import IconShopping from '../icon/IconShopping';
-import React from 'react';
 import logo from '../../assets/images/logo.png';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(!open);
+
+	const { totalAmount } = useSelector((state) => state.cart);
 	return (
 		<>
 			<div className="bg-black p-2 w-full">
@@ -23,8 +30,17 @@ const Navbar = () => {
 							Whish List
 						</p>
 					</div>
-					<div className="flex flex-center items-center cursor-pointer">
-						<IconShopping />
+					<div
+						className="flex flex-center items-center cursor-pointer"
+						onClick={() => handleOpen()}
+					>
+						{totalAmount > 0 ? (
+							<span className="bg-gray-300 py-1 px-3 rounded-3xl">
+								{totalAmount}
+							</span>
+						) : (
+							<IconShopping />
+						)}
 						<p className="font-inter capitalize tracking-normal text-center">
 							Shopping Cart
 						</p>
@@ -42,6 +58,7 @@ const Navbar = () => {
 					Diffrent Payment Methods
 				</div>
 			</div>
+			<Cart openModal={open} setOpen={setOpen} />
 		</>
 	);
 };

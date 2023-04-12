@@ -18,7 +18,7 @@ const SingleProduct = () => {
 		<div className="p-4">
 			<div
 				key={product.id}
-				className="flex justify-center items-center py-10 gap-x-10"
+				className="gap-x-10 flex items-center justify-center py-10"
 			>
 				<div className="">
 					<img
@@ -30,10 +30,10 @@ const SingleProduct = () => {
 				<div className="">
 					<div className="max-w-lg">
 						<h1 className="text-3xl font-bold">{product.name}</h1>
-						<p className="text-orange-700 text-xl font-inter font-bold tracking-normal pb-4">
+						<p className="font-inter pb-4 text-xl font-bold tracking-normal text-orange-700">
 							15% OFF
 						</p>
-						<p className="text-gray-500 text-lg font-inter font-normal tracking-normal pb-4">
+						<p className="font-inter pb-4 text-lg font-normal tracking-normal text-gray-500">
 							{product.text}
 						</p>
 						<div className="pb-4">
@@ -41,7 +41,7 @@ const SingleProduct = () => {
 								<div className="">
 									<label
 										htmlFor="size"
-										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+										className="dark:text-white block mb-2 text-sm font-medium text-gray-900"
 									>
 										Pick all size
 									</label>
@@ -63,7 +63,7 @@ const SingleProduct = () => {
 								<div className="">
 									<label
 										htmlFor="size"
-										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+										className="dark:text-white block mb-2 text-sm font-medium text-gray-900"
 									>
 										Pick all size
 									</label>
@@ -88,7 +88,7 @@ const SingleProduct = () => {
 							<div className="">
 								<label
 									htmlFor="color"
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+									className="dark:text-white block mb-2 text-sm font-medium text-gray-900"
 								>
 									Pick all color
 								</label>
@@ -117,6 +117,8 @@ const SingleProduct = () => {
 										addToCart({
 											id: product.id,
 											name: product.name,
+											img: product.img,
+											text: product.text,
 											size: size,
 											color: color,
 											price: product.price,
