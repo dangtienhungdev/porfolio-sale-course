@@ -1,9 +1,11 @@
 import { Button, Tooltip } from '@material-tailwind/react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { addToCart } from '../../features/cartSlice/cartSlice';
 
 const SingleProduct = () => {
+	const dispatch = useDispatch();
 	/* redux */
 	const product = useSelector((state) => state.products.singalProduct);
 
@@ -106,7 +108,24 @@ const SingleProduct = () => {
 							</div>
 						</div>
 						<Tooltip content="Add to cart" placement="bottom">
-							<Button color="gray" size="lg" variant="outlined">
+							<Button
+								color="gray"
+								size="lg"
+								variant="outlined"
+								onClick={() =>
+									dispatch(
+										addToCart({
+											id: product.id,
+											name: product.name,
+											size: size,
+											color: color,
+											price: product.price,
+											amount: 1,
+											totalPrice: product.price,
+										})
+									)
+								}
+							>
 								All to cart
 							</Button>
 						</Tooltip>
