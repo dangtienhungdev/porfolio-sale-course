@@ -13,10 +13,6 @@ import { addToCart } from '../../features/cartSlice/cartSlice';
 import { useDispatch } from 'react-redux';
 
 const ProductSectionItem = ({ product }) => {
-	console.log(
-		'🚀 ~ file: ProductSectionItem.jsx:16 ~ ProductSectionItem ~ product:',
-		product
-	);
 	const dispatch = useDispatch();
 	const defaultSize = product?.size[0];
 	const defaultColor = product?.color[0];
