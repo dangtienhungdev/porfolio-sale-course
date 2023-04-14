@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux';
 
 function App() {
 	const user = useSelector((state) => state.users);
-	console.log('🚀 ~ file: App.js:12 ~ App ~ user:', user);
 	const { authUser } = user;
-	console.log('🚀 ~ file: App.js:14 ~ App ~ authUser:', authUser);
 	return (
 		<div className="App">
 			<Routes>
