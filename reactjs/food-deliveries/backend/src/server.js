@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 
+import categoryRoutes from './routes/categories.routes';
 import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* routes */
 app.use('/api/v1', userRotes);
+app.use('/api/v1', categoryRoutes);
 
 /* database */
 mongoose
