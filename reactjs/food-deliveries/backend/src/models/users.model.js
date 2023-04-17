@@ -27,6 +27,16 @@ const userSchema = new mongoose.Schema(
 		phone: {
 			type: String,
 		},
+		paymentMethodId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Payment',
+		},
+		orders: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Order',
+			},
+		],
 		role: {
 			type: String,
 			enum: ['user', 'admin', 'superadmin'],
