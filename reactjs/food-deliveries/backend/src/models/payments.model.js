@@ -20,10 +20,6 @@ const paymentSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		cardCvv: {
-			type: String,
-			required: true,
-		},
 		is_active: {
 			type: Boolean,
 			default: false,
