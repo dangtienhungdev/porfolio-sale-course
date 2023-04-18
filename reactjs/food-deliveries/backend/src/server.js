@@ -6,6 +6,7 @@ import express from 'express';
 import foodRoutes from './routes/foods.routes';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import paymentRoutes from './routes/payments.routes';
 import reviewRoutes from './routes/reviews.routes';
 import userRotes from './routes/users.routes';
 
@@ -24,6 +25,7 @@ app.use('/api/v1', userRotes);
 app.use('/api/v1', categoryRoutes);
 app.use('/api/v1', foodRoutes);
 app.use('/api/v1', reviewRoutes);
+app.use('/api/v1', paymentRoutes);
 
 /* database */
 mongoose

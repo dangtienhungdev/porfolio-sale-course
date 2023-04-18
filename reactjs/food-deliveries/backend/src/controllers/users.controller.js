@@ -1,3 +1,4 @@
+import Payment from '../models/payments.model';
 import User from '../models/users.model';
 
 export const userController = {
@@ -22,11 +23,12 @@ export const userController = {
 			}
 			const users = await User.paginate({}, options);
 			/* bỏ password khi trả về cho người dùng */
-			const sanitizeUser = users.docs.map((user) => {
+			const { docs, ...others } = users;
+			const sanitizeUser = docs.map((user) => {
 				const { password, ...rest } = user._doc;
 				return rest;
 			});
-			return res.status(200).json({ users: sanitizeUser });
+			return res.status(200).json({ users: sanitizeUser, ...others });
 		} catch (error) {
 			return res.status(500).json({ message: error.message });
 		}
@@ -34,7 +36,9 @@ export const userController = {
 	/* get One */
 	getOne: async (req, res) => {
 		try {
-			const user = await User.findById(req.params.id);
+			const user = await User.findById(req.params.id).populate(
+				'paymentMethodId'
+			);
 			if (!user) {
 				return res.status(404).json({ message: 'User not found' });
 			}
@@ -62,10 +66,12 @@ export const userController = {
 	delete: async (req, res) => {
 		try {
 			const id = req.params.id;
-			const user = await User.findByIdAndDelete(id);
+			const user = await User.findByIdAndDelete(id).populate('paymentMethodId');
 			if (!user) {
 				return res.status(404).json({ message: 'User not found' });
 			}
+			/* xóa tất cả những id trong payment liên quan đến người dùng này */
+			await Payment.deleteMany({ _id: { $in: user.paymentMethodId } });
 			return res.status(200).json({ user });
 		} catch (error) {
 			return res.status(500).json({ message: error.message });

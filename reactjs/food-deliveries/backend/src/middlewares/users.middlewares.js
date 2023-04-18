@@ -42,8 +42,8 @@ export const checkAdmin = (req, res, next) => {
 	try {
 		const user = req.user;
 		/* check role */
-		if (user.role !== 'admin' || user.role !== 'superadmin') {
-			return res.status(401).json({ msg: 'Unauthorized' });
+		if (user.role !== 'admin') {
+			return res.status(401).json({ msg: 'Unauthorized ahihi' });
 		}
 		next();
 	} catch (error) {

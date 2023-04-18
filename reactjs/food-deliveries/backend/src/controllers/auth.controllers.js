@@ -41,7 +41,7 @@ export const authController = {
 	/* generic accessToken  */
 	generateAccessToken: (user) => {
 		return jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: '30s',
+			expiresIn: '1h',
 		});
 	},
 	/* generic refreshToken */
@@ -111,10 +111,6 @@ export const authController = {
 				refreshToken,
 				process.env.REFRESH_TOKEN_SECRET,
 				async (error, decode) => {
-					console.log(
-						'🚀 ~ file: auth.controllers.js:111 ~ jwt.verify ~ decode:',
-						decode
-					);
 					if (error) {
 						return res.status(403).json({ msg: 'Forbidden' });
 					}

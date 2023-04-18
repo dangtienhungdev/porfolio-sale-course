@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const paymentSchema = new mongoose.Schema(
 	{
@@ -22,11 +23,13 @@ const paymentSchema = new mongoose.Schema(
 		},
 		is_active: {
 			type: Boolean,
-			default: false,
+			default: true,
 		},
 	},
 	{ timestamps: true, versionKey: false }
 );
+
+paymentSchema.plugin(mongoosePaginate);
 
 const Payment = mongoose.model('Payment', paymentSchema);
 export default Payment;
