@@ -3,8 +3,10 @@ import * as dotenv from 'dotenv';
 import categoryRoutes from './routes/categories.routes';
 import cors from 'cors';
 import express from 'express';
+import foodRoutes from './routes/foods.routes';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import reviewRoutes from './routes/reviews.routes';
 import userRotes from './routes/users.routes';
 
 /* confign */
@@ -20,6 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 /* routes */
 app.use('/api/v1', userRotes);
 app.use('/api/v1', categoryRoutes);
+app.use('/api/v1', foodRoutes);
+app.use('/api/v1', reviewRoutes);
 
 /* database */
 mongoose

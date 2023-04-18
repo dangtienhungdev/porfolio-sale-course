@@ -1,5 +1,6 @@
 import Category from '../models/categories';
 import Food from '../models/foods.model';
+import { foodSchema } from '../validates/foods.validate';
 
 export const foodController = {
 	/* create */
@@ -16,7 +17,10 @@ export const foodController = {
 			});
 			return res.status(200).json({ foods });
 		} catch (error) {
-			return res.status(500).json({ message: error.errors });
+			if (error.errors) {
+				return res.status(500).json({ message: error.errors });
+			}
+			return res.status(500).json({ message: error.message });
 		}
 	},
 	/* get all */

@@ -147,6 +147,7 @@ export const authController = {
 	/* logout */
 	logout: async (req, res) => {
 		try {
+			const refreshToken = req.cookies;
 			/* remove token */
 			refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
 			/* remove cookie */
