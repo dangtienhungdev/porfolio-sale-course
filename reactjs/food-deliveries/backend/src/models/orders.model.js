@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema(
 			ref: 'User',
 			required: true,
 		},
-		item: [
+		items: [
 			{
 				foodId: {
 					type: mongoose.Schema.Types.ObjectId,
@@ -18,6 +18,7 @@ const orderSchema = new mongoose.Schema(
 				quantity: {
 					type: Number,
 					required: true,
+					default: 1,
 				},
 				price: {
 					type: Number,

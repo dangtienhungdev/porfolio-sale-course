@@ -8,7 +8,6 @@ const router = express.Router();
 router.post(
 	'/payments',
 	userMiddlewares.verifyTokenAdmin,
-	checkAdmin,
 	paymentController.create
 );
 router.get(
@@ -20,19 +19,16 @@ router.get(
 router.get(
 	'/payments/:id',
 	userMiddlewares.verifyTokenAdmin,
-	checkAdmin,
 	paymentController.getOne
 );
 router.put(
 	'/payments/:id',
 	userMiddlewares.verifyTokenAdmin,
-	checkAdmin,
 	paymentController.update
 );
 router.delete(
 	'/payments/:id',
 	userMiddlewares.verifyTokenAdmin,
-	checkAdmin,
 	paymentController.delete
 );
 
