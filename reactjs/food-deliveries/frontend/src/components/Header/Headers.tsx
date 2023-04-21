@@ -1,6 +1,6 @@
-import { Col, Input, Layout, Row } from 'antd';
+import { AutoComplete, Col, Input, Layout, Row } from 'antd';
+import React, { useState } from 'react';
 
-import React from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 
 const styleHeader: React.CSSProperties = {
@@ -12,15 +12,30 @@ const styleHeader: React.CSSProperties = {
 };
 
 const Headers = () => {
+	const [options, setOptions] = useState<{ value: string; label: string }[]>([]);
+	const handleSearch = (value: string) => {
+		let res: { value: string; label: string }[] = [];
+		if (!value || value.indexOf('@') >= 0) {
+			res = [];
+		} else {
+			res = ['gmail.com', '163.com', 'qq.com'].map((domain) => ({
+				value,
+				label: `${value}@${domain}`,
+			}));
+		}
+		setOptions(res);
+	};
 	return (
 		<Layout.Header style={styleHeader}>
 			<Row>
 				<Col span={24} style={{ padding: '0 16px' }}>
-					<Input
-						placeholder="What would you like to eat?"
-						bordered={false}
-						prefix={<SearchOutlined />}
-					/>
+					<AutoComplete style={{ width: '100%' }} onSearch={handleSearch} options={options}>
+						<Input
+							bordered={false}
+							placeholder="What would you like to eat?"
+							prefix={<SearchOutlined />}
+						/>
+					</AutoComplete>
 				</Col>
 			</Row>
 		</Layout.Header>
