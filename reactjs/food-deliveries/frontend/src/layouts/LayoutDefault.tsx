@@ -1,7 +1,7 @@
 import './style.scss';
 
-import { Col, Layout, Row } from 'antd';
-import { Headers, MyOrder } from '../components';
+import { Col, Layout, Row, Tabs, TabsProps } from 'antd';
+import { Headers, Login, MyOrder, Register } from '../components';
 
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebars/Sidebar';
@@ -13,7 +13,21 @@ const styleSider: React.CSSProperties = {
 	width: '100%',
 };
 
+const items: TabsProps['items'] = [
+	{
+		key: 'login',
+		label: 'Đăng nhập',
+		children: <Login />,
+	},
+	{
+		key: 'register',
+		label: 'Đăng ký',
+		children: <Register />,
+	},
+];
+
 const LayoutDefault = () => {
+	const users = 'dangtienhung';
 	return (
 		<Layout>
 			<Layout.Sider width={96} style={styleSider}>
@@ -28,7 +42,7 @@ const LayoutDefault = () => {
 						</Layout.Content>
 					</Col>
 					<Col span={8} style={{ padding: '16px 24px' }}>
-						<MyOrder />
+						{!users ? <MyOrder /> : <Tabs defaultActiveKey="login" items={items} centered />}
 					</Col>
 				</Row>
 			</Layout>

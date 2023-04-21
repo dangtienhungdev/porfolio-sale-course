@@ -1,0 +1,25 @@
+.container {
+	.title,
+	a {
+		color: #ff5c28;
+	}
+	.title {
+		text-align: center;
+	}
+	.btn-primary {
+		width: 100%;
+		background: #ff5c28;
+		&:hover {
+			background: #ff5c28;
+		}
+	}
+}
+
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-tabs .ant-tabs-tab:hover {
+		color: #ff5c28;
+	}
+	.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+		color: #ff5c28;
+	}
+}
