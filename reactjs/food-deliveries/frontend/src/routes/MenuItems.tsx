@@ -1,6 +1,6 @@
 import './style.scss';
 
-import { HeartOutlined, HomeOutlined, ShopOutlined } from '@ant-design/icons';
+import { HeartOutlined, HomeOutlined, ShopOutlined, UserOutlined } from '@ant-design/icons';
 
 import { Link } from 'react-router-dom';
 import { MenuProps } from 'antd';
@@ -57,6 +57,14 @@ const itemsData = [
 			</Link>
 		),
 		key: 'hearts',
+	},
+	{
+		label: (
+			<Link to="/users" style={styleLink}>
+				<UserOutlined style={styleIcon} />
+			</Link>
+		),
+		key: 'users',
 	},
 ];
 

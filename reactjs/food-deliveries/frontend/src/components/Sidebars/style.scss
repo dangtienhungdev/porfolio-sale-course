@@ -1,0 +1,9 @@
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-menu-light .ant-menu-item-selected {
+		color: rgb(255, 92, 40);
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+}

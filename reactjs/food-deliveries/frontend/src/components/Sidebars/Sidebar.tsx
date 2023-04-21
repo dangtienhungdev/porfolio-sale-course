@@ -1,3 +1,5 @@
+import './style.scss';
+
 import { Menu } from 'antd';
 import { items } from '../../routes/MenuItems';
 
