@@ -20,10 +20,10 @@ const LayoutDefault = () => {
 				<Sidebar />
 			</Layout.Sider>
 			<Layout>
-				<Row>
-					<Col span={16} style={{ backgroundColor: '#fff', padding: '32px 36px' }}>
+				<Row style={{ height: '100%' }}>
+					<Col span={16} style={{ backgroundColor: '#fff', padding: '16px 24px' }}>
 						<Headers />
-						<Layout.Content style={{ padding: '20px 50px' }}>
+						<Layout.Content>
 							<Outlet />
 						</Layout.Content>
 					</Col>

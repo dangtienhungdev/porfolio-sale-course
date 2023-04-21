@@ -1,0 +1,21 @@
+.ant-tabs-nav-wrap::before {
+	background-color: red;
+}
+
+.tabs-style {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	color: #000;
+	&:hover {
+		color: #ff5c28;
+	}
+}
+
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-tabs .ant-tabs-ink-bar {
+		background: #ff5c28;
+	}
+}
