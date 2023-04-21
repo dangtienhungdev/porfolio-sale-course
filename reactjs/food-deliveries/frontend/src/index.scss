@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+@layer base {
+	* {
+		font-family: 'DM Sans', sans-serif;
+		scroll-behavior: smooth;
+	}
+
+	body {
+		margin: 0;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	body::-webkit-scrollbar {
+		width: 6px;
+	}
+	body::-webkit-scrollbar-track {
+		box-shadow: inset 10px 10px 10px var(--white-color);
+		border-radius: 10px;
+	}
+
+	body::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		box-shadow: inset 10px 10px 10px var(--primary-color);
+	}
+
+	body::-webkit-scrollbar-thumb:hover {
+		background: #000;
+		box-shadow: inset 10px 10px 10px #333;
+	}
+}

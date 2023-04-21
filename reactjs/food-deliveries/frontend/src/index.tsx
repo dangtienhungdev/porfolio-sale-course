@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 import 'antd/dist/reset.css';
 
 import App from './App';

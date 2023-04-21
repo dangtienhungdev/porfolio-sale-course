@@ -1,8 +1,8 @@
 import './style.scss';
 
 import { Col, Layout, Row } from 'antd';
+import { Headers, MyOrder } from '../components';
 
-import { Headers } from '../components';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebars/Sidebar';
 
@@ -27,7 +27,9 @@ const LayoutDefault = () => {
 							<Outlet />
 						</Layout.Content>
 					</Col>
-					<Col span={8}>Right</Col>
+					<Col span={8} style={{ padding: '16px 24px' }}>
+						<MyOrder />
+					</Col>
 				</Row>
 			</Layout>
 		</Layout>
