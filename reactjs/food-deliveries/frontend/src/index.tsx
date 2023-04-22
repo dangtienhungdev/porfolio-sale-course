@@ -3,14 +3,18 @@ import 'antd/dist/reset.css';
 
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import { store } from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-	<BrowserRouter>
-		<App />
-	</BrowserRouter>
+	<Provider store={store}>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
