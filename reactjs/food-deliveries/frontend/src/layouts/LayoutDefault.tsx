@@ -4,7 +4,9 @@ import { Col, Layout, Row, Tabs, TabsProps } from 'antd';
 import { Headers, Login, MyOrder, Register } from '../components';
 
 import { Outlet } from 'react-router-dom';
+import { RootState } from '../redux/store';
 import Sidebar from '../components/Sidebars/Sidebar';
+import { useAppSelector } from '../redux/hooks';
 
 const styleSider: React.CSSProperties = {
 	backgroundColor: '#F3F3F3',
@@ -27,7 +29,7 @@ const items: TabsProps['items'] = [
 ];
 
 const LayoutDefault = () => {
-	const users = 'dangtienhung';
+	const { currentUser } = useAppSelector((state: RootState) => state.auth.login);
 	return (
 		<Layout>
 			<Layout.Sider width={96} style={styleSider}>
@@ -42,7 +44,7 @@ const LayoutDefault = () => {
 						</Layout.Content>
 					</Col>
 					<Col span={8} style={{ padding: '16px 24px' }}>
-						{!users ? <MyOrder /> : <Tabs defaultActiveKey="login" items={items} centered />}
+						{currentUser ? <MyOrder /> : <Tabs defaultActiveKey="login" items={items} centered />}
 					</Col>
 				</Row>
 			</Layout>

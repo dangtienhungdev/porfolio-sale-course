@@ -1,16 +1,21 @@
 import './style.scss';
 
-import { Button, Col, Form, Input, Row, Typography, message } from 'antd';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, Row, Spin, Typography, message } from 'antd';
+import { LoadingOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 import { IUserLogin } from '../../interfaces/users.type';
+import { RootState } from '../../redux/store';
 import { loginUser } from '../../redux/actions/authAction';
-import { useAppDispatch } from '../../redux/hooks';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+	/* redux */
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+	const { isLoading } = useAppSelector((state: RootState) => state.auth.login);
+
+	/* submit form */
 	const onFinish = async (values: IUserLogin) => {
 		try {
 			await loginUser(values, dispatch, navigate);
@@ -55,7 +60,13 @@ const Login = () => {
 						<Col span={24} style={{ marginTop: '20px' }}>
 							<Form.Item>
 								<Button type="primary" htmlType="submit" className="btn-primary">
-									Đăng nhập
+									{isLoading ? (
+										<Spin
+											indicator={<LoadingOutlined style={{ fontSize: 24, color: '#fff' }} spin />}
+										/>
+									) : (
+										'Đăng nhập'
+									)}
 								</Button>
 							</Form.Item>
 						</Col>

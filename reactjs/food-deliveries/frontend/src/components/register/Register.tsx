@@ -1,9 +1,25 @@
-import { Button, Col, Form, Input, Row, Typography } from 'antd';
-import { MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Input, Row, Spin, Typography, message } from 'antd';
+import { LoadingOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+
+import { IUserRegister } from '../../interfaces/users.type';
+import { RootState } from '../../redux/store';
+import { registerUser } from '../../redux/actions/authAction';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-	const onFinsh = (values: any) => {
-		console.log('🚀 ~ file: Register.tsx:7 ~ onFinsh ~ values:', values);
+	/* redux */
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+	const { isLoading } = useAppSelector((state: RootState) => state.auth.register);
+
+	/* submit form */
+	const onFinsh = async (values: IUserRegister) => {
+		try {
+			await registerUser(values, dispatch, navigate);
+		} catch (error) {
+			message.error('Đăng ký thất bại');
+		}
 	};
 	return (
 		<Row className="container">
@@ -74,7 +90,13 @@ const Register = () => {
 						<Col span={24} style={{ marginTop: '20px' }}>
 							<Form.Item>
 								<Button type="primary" htmlType="submit" className="btn-primary">
-									Đăng ký
+									{isLoading ? (
+										<Spin
+											indicator={<LoadingOutlined style={{ fontSize: 24, color: '#fff' }} spin />}
+										/>
+									) : (
+										'Đăng ký'
+									)}
 								</Button>
 							</Form.Item>
 						</Col>

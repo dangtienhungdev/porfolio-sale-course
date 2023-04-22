@@ -1,10 +1,17 @@
-import { loginFailured, loginStart, loginSuccess } from '../reducers/authSlice';
+import { IUserLogin, IUserRegister } from '../../interfaces/users.type';
+import {
+	loginFailured,
+	loginStart,
+	loginSuccess,
+	registerStart,
+	registerSuccess,
+} from '../reducers/authSlice';
 
 import { Dispatch } from '@reduxjs/toolkit';
-import { IUserLogin } from '../../interfaces/users.type';
 import { NavigateFunction } from 'react-router-dom';
 import instance from '../../config';
 import { message } from 'antd';
+import { useAppDispatch } from '../hooks';
 
 /* login */
 export const loginUser = async (
@@ -23,5 +30,24 @@ export const loginUser = async (
 	} catch (error) {
 		message.error('Đăng nhập thất bại!');
 		dispatch(loginFailured());
+	}
+};
+
+/* register */
+export const registerUser = async (
+	userInfo: IUserRegister,
+	dispatch: Dispatch,
+	navigate: NavigateFunction
+): Promise<void> => {
+	dispatch(registerStart());
+	try {
+		const { data } = await instance.post(`sign-up`, userInfo);
+		if (data) {
+			dispatch(registerSuccess(data));
+			message.success('Đăng ký thành công!');
+			navigate('/');
+		}
+	} catch (error) {
+		message.error('Đăng ký thất bại!');
 	}
 };
