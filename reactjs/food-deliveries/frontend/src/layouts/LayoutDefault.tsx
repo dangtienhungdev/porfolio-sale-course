@@ -2,10 +2,12 @@ import './style.scss';
 
 import { Col, Layout, Row, Tabs, TabsProps } from 'antd';
 import { Headers, Login, MyOrder, Register } from '../components';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Outlet } from 'react-router-dom';
 import { RootState } from '../redux/store';
 import Sidebar from '../components/Sidebars/Sidebar';
+import jwt_decode from 'jwt-decode';
 import { useAppSelector } from '../redux/hooks';
 
 const styleSider: React.CSSProperties = {
@@ -29,10 +31,20 @@ const items: TabsProps['items'] = [
 ];
 
 const LayoutDefault = () => {
-	const { currentUser } = useAppSelector((state: RootState) => state.auth.login);
+	const { currentUser }: any = useAppSelector((state: RootState) => state.auth.login);
+	/* xứ lí logout */
 	const handleLogout = () => {
 		console.log('ahiih');
 	};
+	/* axios interceptor */
+	let axiosJwt = axios.create();
+	axiosJwt.interceptors.request.use(async (config) => {
+		const date = new Date();
+		const decodedToken = jwt_decode(currentUser.accessToken) as { exp: number };
+		if (decodedToken.exp < date.getTime() / 1000) {
+		}
+		return config;
+	});
 	return (
 		<Layout>
 			<Layout.Sider width={96} style={styleSider}>

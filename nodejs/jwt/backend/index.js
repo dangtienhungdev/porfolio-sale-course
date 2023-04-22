@@ -21,7 +21,8 @@ app.use('/api/v1', routerUser);
 
 /* connect */
 mongoose
-	.connect(process.env.MONGODB_URL)
+	// .connect(process.env.MONGODB_URL)
+	.connect('mongodb://127.0.0.1:27017/JWT')
 	.then(() => {
 		console.log('Connected to MongoDB');
 	})

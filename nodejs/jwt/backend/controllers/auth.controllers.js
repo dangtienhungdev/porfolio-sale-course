@@ -89,6 +89,10 @@ export const authControllers = {
 		try {
 			/* take refresh token from user */
 			const refreshToken = req.cookies.refreshToken;
+			console.log(
+				'🚀 ~ file: auth.controllers.js:92 ~ requestRefreshToken: ~ req.cookies.refreshToken:',
+				req
+			);
 			/* if refresh token is not exist */
 			if (!refreshToken) {
 				return res.status(401).json('You are not authenticated!');
@@ -120,7 +124,7 @@ export const authControllers = {
 				return res.status(200).json({ accessToken: newAccessToken });
 			}); /* verify xem refresh toke này có đúng không? */
 		} catch (error) {
-			return res.status(500).json(error);
+			return res.status(500).json('Refresh token thất bại!');
 		}
 	},
 

@@ -10,6 +10,8 @@ const router = express.Router();
 router.post('/sign-up', authController.register);
 /* đăng nhập */
 router.post('/sign-in', authController.login);
+/* refresh token */
+router.post('/refresh', authController.requestRefreshToken);
 /* đăng xuất */
 router.post('/logout', authController.logout);
 /* lấy tất cả người dùng */

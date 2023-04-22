@@ -41,7 +41,7 @@ export const authController = {
 	/* generic accessToken  */
 	generateAccessToken: (user) => {
 		return jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: '1h',
+			expiresIn: '30s',
 		});
 	},
 	/* generic refreshToken */
@@ -97,47 +97,53 @@ export const authController = {
 	/* refresh token */
 	requestRefreshToken: async (req, res) => {
 		try {
+			console.log(req.cookies);
 			const refreshToken = req.cookies.refreshToken;
-			/* check token */
-			if (!refreshToken) {
-				return res.status(401).json({ msg: 'Not authorized' });
-			}
-			/* check token in array */
-			if (!refreshTokens.includes(refreshToken)) {
-				return res.status(403).json({ msg: 'Forbidden' });
-			}
-			/* verify token */
-			jwt.verify(
-				refreshToken,
-				process.env.REFRESH_TOKEN_SECRET,
-				async (error, decode) => {
-					if (error) {
-						return res.status(403).json({ msg: 'Forbidden' });
-					}
-					refreshTokens = refreshTokens.filter(
-						(token) => token !== refreshToken
-					);
-					/* create token */
-					const user = await User.findById(decode._id);
-					if (!user) {
-						return res.status(403).json({ msg: 'Forbidden' });
-					}
-					const newAccessToken = authController.generateAccessToken(user);
-					const newRefreshToken = authController.generateRefreshToken(user);
-					/* save token */
-					refreshTokens.push(newRefreshToken);
-					/* trả về user và token => lưu token vào cookie */
-					res.cookies('refreshToken', newRefreshToken, {
-						httpOnly: true,
-						path: '/',
-						sameSite: 'none',
-						secure: false,
-					});
-					return res.status(200).json({ accessToken: newAccessToken });
-				}
+			console.log(
+				'🚀 ~ file: auth.controllers.js:101 ~ requestRefreshToken: ~ refreshToken:',
+				refreshToken
 			);
+			return res.status(200).json({ refreshToken });
+			// /* check token */
+			// if (!refreshToken) {
+			// 	return res.status(401).json({ msg: 'Not authorized' });
+			// }
+			// /* check token in array */
+			// if (!refreshTokens.includes(refreshToken)) {
+			// 	return res.status(403).json({ msg: 'Forbidden' });
+			// }
+			// /* verify token */
+			// jwt.verify(
+			// 	refreshToken,
+			// 	process.env.REFRESH_TOKEN_SECRET,
+			// 	async (error, decode) => {
+			// 		if (error) {
+			// 			return res.status(403).json({ msg: 'Forbidden' });
+			// 		}
+			// 		refreshTokens = refreshTokens.filter(
+			// 			(token) => token !== refreshToken
+			// 		);
+			// 		/* create token */
+			// 		const user = await User.findById(decode._id);
+			// 		if (!user) {
+			// 			return res.status(403).json({ msg: 'Forbidden' });
+			// 		}
+			// 		const newAccessToken = authController.generateAccessToken(user);
+			// 		const newRefreshToken = authController.generateRefreshToken(user);
+			// 		/* save token */
+			// 		refreshTokens.push(newRefreshToken);
+			// 		/* trả về user và token => lưu token vào cookie */
+			// 		res.cookies('refreshToken', newRefreshToken, {
+			// 			httpOnly: true,
+			// 			path: '/',
+			// 			sameSite: 'none',
+			// 			secure: false,
+			// 		});
+			// 		return res.status(200).json({ accessToken: newAccessToken });
+			// 	}
+			// );
 		} catch (error) {
-			return res.status(500).json({ msg: error.errors });
+			return res.status(500).json({ msg: 'Lỗi refresh token' });
 		}
 	},
 	/* logout */
