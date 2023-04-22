@@ -1,8 +1,14 @@
 import './style.scss';
 
-import { HeartOutlined, HomeOutlined, ShopOutlined, UserOutlined } from '@ant-design/icons';
+import {
+	HeartOutlined,
+	HomeOutlined,
+	LogoutOutlined,
+	ShopOutlined,
+	UserOutlined,
+} from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
 import { MenuProps } from 'antd';
 
 interface MenuItemProps {
@@ -50,22 +56,6 @@ const itemsData = [
 		),
 		key: 'products',
 	},
-	{
-		label: (
-			<Link to="/hearts" style={styleLink}>
-				<HeartOutlined style={styleIcon} />
-			</Link>
-		),
-		key: 'hearts',
-	},
-	{
-		label: (
-			<Link to="/users" style={styleLink}>
-				<UserOutlined style={styleIcon} />
-			</Link>
-		),
-		key: 'users',
-	},
 ];
 
-export const items: MenuItem[] = itemsData.map((item) => getItem(item));
+export const itemsNoUser: MenuItem[] = itemsData.map((item) => getItem(item));

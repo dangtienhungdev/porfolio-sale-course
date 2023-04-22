@@ -5,3 +5,6 @@ const instance = axios.create({
 });
 
 export { instance };
+
+/* interceptor */
+export const createAxios = (userInfo: any, dispatch: any, stateSuccess: any) => {};

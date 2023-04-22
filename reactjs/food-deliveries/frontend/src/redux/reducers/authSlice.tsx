@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { error } from 'console';
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -27,7 +28,7 @@ const authSlice = createSlice({
 		},
 		loginFailured: (state) => {
 			state.login.error = true;
-			state.login.isLoading = true;
+			state.login.isLoading = false;
 		},
 		/* register */
 		registerStart: (state) => {
@@ -40,8 +41,18 @@ const authSlice = createSlice({
 		},
 		registerFailure: (state) => {
 			state.register.error = true;
-			state.register.isLoading = true;
+			state.register.isLoading = false;
 			state.register.success = false;
+		},
+		/* logout */
+		logoutSuccess: (state) => {
+			state.login.error = false;
+			state.login.isLoading = false;
+			state.login.currentUser = null;
+		},
+		logoutFailure: (state) => {
+			state.login.error = true;
+			state.login.isLoading = false;
 		},
 	},
 });
@@ -53,5 +64,7 @@ export const {
 	registerStart,
 	registerSuccess,
 	registerFailure,
+	logoutSuccess,
+	logoutFailure,
 } = authSlice.actions;
 export default authSlice.reducer;

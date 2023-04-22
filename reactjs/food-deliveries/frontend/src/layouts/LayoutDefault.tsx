@@ -30,10 +30,13 @@ const items: TabsProps['items'] = [
 
 const LayoutDefault = () => {
 	const { currentUser } = useAppSelector((state: RootState) => state.auth.login);
+	const handleLogout = () => {
+		console.log('ahiih');
+	};
 	return (
 		<Layout>
 			<Layout.Sider width={96} style={styleSider}>
-				<Sidebar />
+				<Sidebar handleLogout={handleLogout} />
 			</Layout.Sider>
 			<Layout>
 				<Row style={{ height: '100%' }}>
