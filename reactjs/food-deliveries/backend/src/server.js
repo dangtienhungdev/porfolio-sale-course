@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 
 import categoryRoutes from './routes/categories.routes';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import foodRoutes from './routes/foods.routes';
@@ -14,6 +15,7 @@ import userRotes from './routes/users.routes';
 /* confign */
 const app = express();
 dotenv.config();
+app.use(cookieParser()); // => tạo cookie cho client
 
 /* middlewares */
 app.use(express.json());
