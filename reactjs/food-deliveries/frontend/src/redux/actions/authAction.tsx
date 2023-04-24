@@ -3,15 +3,17 @@ import {
 	loginFailured,
 	loginStart,
 	loginSuccess,
+	logoutFailure,
+	logoutSuccess,
 	registerStart,
 	registerSuccess,
 } from '../reducers/authSlice';
 
 import { Dispatch } from '@reduxjs/toolkit';
 import { NavigateFunction } from 'react-router-dom';
+import axios from 'axios';
 import instance from '../../config';
 import { message } from 'antd';
-import { useAppDispatch } from '../hooks';
 
 /* login */
 export const loginUser = async (
@@ -49,5 +51,27 @@ export const registerUser = async (
 		}
 	} catch (error) {
 		message.error('Đăng ký thất bại!');
+	}
+};
+
+/* logout */
+export const logoutUser = async (
+	dispatch: Dispatch,
+	id: string,
+	navigate: NavigateFunction,
+	accessToken: string,
+	axiosJWT: any
+) => {
+	try {
+		await axiosJWT.post(`http://localhost:8080/api/v1/logout`, id, {
+			headers: {
+				token: `Bearer ${accessToken}`,
+			},
+		});
+		dispatch(logoutSuccess());
+		navigate('/');
+		message.success('Logout success!');
+	} catch (error) {
+		dispatch(logoutFailure());
 	}
 };

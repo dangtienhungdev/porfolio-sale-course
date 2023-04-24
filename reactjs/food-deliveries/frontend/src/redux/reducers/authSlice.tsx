@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { error } from 'console';
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -45,6 +44,9 @@ const authSlice = createSlice({
 			state.register.success = false;
 		},
 		/* logout */
+		logoutStart: (state) => {
+			state.login.isLoading = true;
+		},
 		logoutSuccess: (state) => {
 			state.login.error = false;
 			state.login.isLoading = false;
@@ -64,6 +66,7 @@ export const {
 	registerStart,
 	registerSuccess,
 	registerFailure,
+	logoutStart,
 	logoutSuccess,
 	logoutFailure,
 } = authSlice.actions;
