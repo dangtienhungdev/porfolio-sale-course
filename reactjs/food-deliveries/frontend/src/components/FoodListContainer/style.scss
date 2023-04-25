@@ -1,0 +1,40 @@
+.food-lists {
+	.food-container {
+		.food-item {
+			border-top-right-radius: 20px;
+			border-top-left-radius: 20px;
+		}
+		.food-price,
+		.food-heading {
+			font-size: 24px;
+			font-weight: 500;
+		}
+		.food-price {
+			font-size: 20px;
+		}
+		.food-category {
+			color: #797575;
+			font-size: 20px;
+		}
+		.food-footer {
+			display: flex;
+			justify-content: space-between;
+			align-content: center;
+		}
+		.food-btn {
+			background-color: #ff5c28;
+			width: 100%;
+			border-radius: 8px;
+			margin-top: 16px;
+		}
+	}
+}
+
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-card {
+		border-radius: 20px;
+		.ant-card-body {
+			padding: 0;
+		}
+	}
+}

@@ -1,14 +1,8 @@
 import './style.scss';
 
-import {
-	HeartOutlined,
-	HomeOutlined,
-	LogoutOutlined,
-	ShopOutlined,
-	UserOutlined,
-} from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { HomeOutlined, ShopOutlined } from '@ant-design/icons';
 
+import { Link } from 'react-router-dom';
 import { MenuProps } from 'antd';
 
 interface MenuItemProps {

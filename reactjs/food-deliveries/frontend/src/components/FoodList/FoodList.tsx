@@ -2,6 +2,7 @@ import './style.scss';
 
 import { Tabs, TabsProps } from 'antd';
 
+import FoodListContainer from '../FoodListContainer/FoodListContainer';
 import IconAll from '../icons/IconAll';
 import IconPromotion from '../icons/IconPromotion';
 import IconSales from '../icons/IconSales';
@@ -16,7 +17,7 @@ const items: TabsProps['items'] = [
 				All Foods
 			</span>
 		),
-		children: `Content of Tab Pane 1`,
+		children: <FoodListContainer />,
 	},
 	{
 		key: '2',
@@ -26,7 +27,7 @@ const items: TabsProps['items'] = [
 				Best Seller
 			</span>
 		),
-		children: `Content of Tab Pane 2`,
+		children: <FoodListContainer />,
 	},
 	{
 		key: '3',
@@ -36,7 +37,7 @@ const items: TabsProps['items'] = [
 				Promotion
 			</span>
 		),
-		children: `Content of Tab Pane 3`,
+		children: <FoodListContainer />,
 	},
 	{
 		key: '4',
@@ -46,7 +47,7 @@ const items: TabsProps['items'] = [
 				Top Rated
 			</span>
 		),
-		children: `Content of Tab Pane 4`,
+		children: <FoodListContainer />,
 	},
 ];
 
