@@ -63,7 +63,7 @@ export const logoutUser = async (
 	axiosJWT: any
 ) => {
 	try {
-		await axiosJWT.post(`http://localhost:8080/api/v1/logout`, id, {
+		await axios.post(`http://localhost:8080/api/v1/logout`, id, {
 			headers: {
 				token: `Bearer ${accessToken}`,
 			},
