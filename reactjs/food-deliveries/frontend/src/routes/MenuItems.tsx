@@ -1,6 +1,6 @@
 import './style.scss';
 
-import { HomeOutlined, ShopOutlined } from '@ant-design/icons';
+import { DashOutlined, HomeOutlined, ShopOutlined } from '@ant-design/icons';
 
 import { Link } from 'react-router-dom';
 import { MenuProps } from 'antd';
@@ -52,4 +52,13 @@ const itemsData = [
 	},
 ];
 
+const itemsMenuAdmin = [
+	{
+		label: <Link to="/admin/dashboard">Dashboard</Link>,
+		icon: <DashOutlined />,
+		key: 'dashboard',
+	},
+];
+
 export const itemsNoUser: MenuItem[] = itemsData.map((item) => getItem(item));
+export const itemsMenu: MenuItem[] = itemsMenuAdmin.map((item) => getItem(item));

@@ -1,6 +1,8 @@
 import { FoodPage, Hearts, HomePage } from '../views';
 import { Route, Routes } from 'react-router-dom';
 
+import { Dashboard } from '../components';
+import LayoutAdmin from '../layouts/LayoutAdmin';
 import LayoutDefault from '../layouts/LayoutDefault';
 
 const index = () => {
@@ -11,6 +13,9 @@ const index = () => {
 				<Route path="/foods" element={<FoodPage />} />
 				<Route path="/hearts" element={<Hearts />} />
 				<Route path="/users" element={'users'} />
+			</Route>
+			<Route path="/admin" element={<LayoutAdmin />}>
+				<Route path="dashboard" element={<Dashboard />} />
 			</Route>
 			<Route path="*" element={'Not Found 404'} />
 		</Routes>
