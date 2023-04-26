@@ -14,8 +14,6 @@ import { RootState } from '../../redux/store';
 import { itemsNoUser } from '../../routes/MenuItems';
 import { useAppSelector } from '../../redux/hooks';
 
-// import { items } from '../../routes/MenuItems';
-
 const styleMenu: React.CSSProperties = {
 	display: 'flex',
 	flexDirection: 'column',
