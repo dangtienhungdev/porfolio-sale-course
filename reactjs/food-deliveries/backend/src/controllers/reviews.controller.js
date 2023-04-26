@@ -24,7 +24,15 @@ export const reviewControllers = {
 	getAllReviews: async (req, res) => {
 		try {
 			const { _page = 1, _limit = 10, q } = req.query;
-			const options = { page: _page, limit: _limit, sort: { createdAt: -1 } };
+			const options = {
+				page: _page,
+				limit: _limit,
+				sort: { createdAt: -1 },
+				populate: [
+					{ path: 'userId', select: 'name' },
+					{ path: 'foodId', select: 'name' },
+				],
+			};
 			/* nếu có tìm tiếm */
 			if (q) {
 				const reviews = await Review.paginate(
@@ -33,9 +41,7 @@ export const reviewControllers = {
 				);
 				return res.status(200).json({ reviews });
 			}
-			const reviews = await Review.paginate({}, options)
-				.populate('userId')
-				.populate('foodId');
+			const reviews = await Review.paginate({}, options);
 			return res.status(200).json({ reviews });
 		} catch (error) {
 			return res.status(500).json({ message: error.message });

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const foodSchema = new mongoose.Schema(
 	{
@@ -6,9 +7,12 @@ const foodSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		price: {
+		priceOriginal: {
 			type: Number,
 			required: true,
+		},
+		price: {
+			type: Number,
 		},
 		images: [
 			{
@@ -16,6 +20,14 @@ const foodSchema = new mongoose.Schema(
 				required: true,
 			},
 		],
+		hearts: {
+			type: Number,
+			default: 0,
+		},
+		topRated: {
+			type: Number,
+			default: 0,
+		},
 		description: {
 			type: String,
 			required: true,
@@ -43,6 +55,8 @@ const foodSchema = new mongoose.Schema(
 	},
 	{ timestamps: true, versionKey: false }
 );
+
+foodSchema.plugin(mongoosePaginate);
 
 const Food = mongoose.model('Food', foodSchema);
 export default Food;

@@ -27,7 +27,11 @@ export const foodController = {
 	getAll: async (req, res) => {
 		try {
 			const { _page = 1, _limit = 10, q } = req.query;
-			const options = { page: _page, limit: _limit };
+			const options = {
+				page: _page,
+				limit: _limit,
+				populate: [{ path: 'categoryId', select: 'name' }],
+			};
 			if (q) {
 				const foods = await Food.paginate(
 					{
@@ -46,7 +50,10 @@ export const foodController = {
 			}
 			return res.status(200).json({ foods });
 		} catch (error) {
-			return res.status(500).json({ message: error.errors });
+			if (error.errors) {
+				return res.status(500).json({ message: error.errors });
+			}
+			return res.status(500).json({ message: 'Server error' });
 		}
 	},
 	/* get one */
