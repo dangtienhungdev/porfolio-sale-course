@@ -10,6 +10,6 @@ export { default as FoodItem } from './FoodListContainer/FoodItem';
 /* admin */
 export { default as SidebarAdmin } from './Sidebars/Admin/SidebarAdmin';
 export { default as Dashboard } from './Admin/Dashboard/Dashboard';
-export { default as Header } from './Sidebars/Admin/Header';
+export { default as Header } from './Sidebars/Admin/Header/Header';
 export { default as ManagerFoods } from './Admin/Food/ManagerFoods';
 export { default as ManagerCategories } from './Admin/Categories/ManagerCategories';
