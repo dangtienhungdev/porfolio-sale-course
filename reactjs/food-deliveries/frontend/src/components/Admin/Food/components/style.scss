@@ -1,0 +1,19 @@
+.btn-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+	.btn-primary {
+		background-color: #ff5c28;
+		&:hover {
+			background-color: #ff5c28;
+		}
+	}
+}
+
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-btn-default:not(:disabled):hover {
+		color: #ff5c28;
+		border-color: #ff5c28;
+	}
+}

@@ -1,0 +1,18 @@
+.layout-container {
+	padding: 16px;
+	background-color: #fff;
+	height: 100%;
+	/* space */
+	.layout-space {
+		&-sm {
+			margin: 16px 0;
+		}
+	}
+	/* button */
+	.btn-primary {
+		background: #ff5c28;
+		&:hover {
+			background: #ff5c28;
+		}
+	}
+}

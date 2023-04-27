@@ -1,10 +1,20 @@
 :where(.css-dev-only-do-not-override-1mqg3i0) {
 	a {
-		color: rgb(255, 92, 40);
+		color: #000;
 	}
 	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover,
-	.ant-menu-light > .ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
-		background-color: rgba(255, 92, 40, 0.1);
+	.ant-menu-light {
+		& > .ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
+			background-color: rgba(255, 92, 40, 0.1);
+		}
+		& .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected) {
+			background-color: rgba(255, 92, 40, 0.1);
+		}
+		& .ant-menu-submenu-selected > .ant-menu-submenu-title,
+		& > .ant-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+			color: rgb(255, 92, 40);
+			background-color: rgba(255, 92, 40, 0.1);
+		}
 	}
 }
 

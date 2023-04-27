@@ -10,7 +10,9 @@ const LayoutAdmin = () => {
 			<Layout>
 				<Header />
 				<Layout.Content>
-					<Outlet />
+					<div style={{ height: '100%' }}>
+						<Outlet />
+					</div>
 				</Layout.Content>
 			</Layout>
 		</Layout>

@@ -78,7 +78,7 @@ const itemsMenuAdmin = [
 		key: 'dashboard',
 	},
 	{
-		label: <Link to="/admin/foods">Foods</Link>,
+		label: 'Foods',
 		icon: <AppstoreOutlined />,
 		key: 'foods',
 		children: [
@@ -95,7 +95,7 @@ const itemsMenuAdmin = [
 		],
 	},
 	{
-		label: <Link to="/admin/orders">Orders</Link>,
+		label: 'Orders',
 		icon: <AppstoreOutlined />,
 		key: 'Orders',
 		children: [
@@ -107,7 +107,7 @@ const itemsMenuAdmin = [
 		],
 	},
 	{
-		label: <Link to="/admin/category">Categories</Link>,
+		label: 'Categories',
 		icon: <AppstoreOutlined />,
 		key: 'categories',
 		children: [
@@ -124,7 +124,7 @@ const itemsMenuAdmin = [
 		],
 	},
 	{
-		label: <Link to="/admin/users">Users</Link>,
+		label: 'Users',
 		icon: <AppstoreOutlined />,
 		key: 'Users',
 		children: [
@@ -141,7 +141,7 @@ const itemsMenuAdmin = [
 		],
 	},
 	{
-		label: <Link to="/admin/reviews">Reviews</Link>,
+		label: 'Reviews',
 		icon: <AppstoreOutlined />,
 		key: 'Reviews',
 		children: [
@@ -158,7 +158,7 @@ const itemsMenuAdmin = [
 		],
 	},
 	{
-		label: <Link to="/admin/payments">Payments</Link>,
+		label: 'Payments',
 		icon: <AppstoreOutlined />,
 		key: 'Payments',
 		children: [
