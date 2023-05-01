@@ -6,9 +6,10 @@ interface PropTypes {
 	dataSource: any;
 	columns: any;
 	setIsOpenAdd: () => void;
+	scroll?: { x?: number; y?: number };
 }
 
-const LayoutModule = ({ heading, dataSource, columns, setIsOpenAdd }: PropTypes) => {
+const LayoutModule = ({ heading, dataSource, columns, setIsOpenAdd, scroll }: PropTypes) => {
 	return (
 		<div className="layout-container">
 			<Row>
@@ -29,7 +30,7 @@ const LayoutModule = ({ heading, dataSource, columns, setIsOpenAdd }: PropTypes)
 					</Row>
 				</Col>
 				<Col span={24} className="layout-space-sm">
-					<Table dataSource={dataSource} columns={columns} />
+					<Table dataSource={dataSource} columns={columns} scroll={scroll} />
 				</Col>
 			</Row>
 		</div>

@@ -42,13 +42,13 @@ export const foodController = {
 					},
 					options
 				);
-				return res.status(200).json({ foods });
+				return res.status(200).json({ ...foods });
 			}
 			const foods = await Food.paginate({}, options);
 			if (!foods) {
 				return res.status(404).json({ message: 'Not found' });
 			}
-			return res.status(200).json({ foods });
+			return res.status(200).json({ ...foods });
 		} catch (error) {
 			if (error.errors) {
 				return res.status(500).json({ message: error.errors });

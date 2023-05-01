@@ -15,4 +15,14 @@
 			background: #ff5c28;
 		}
 	}
+	/* image */
+	.image-container {
+		height: 100%;
+		width: 100%;
+		.image {
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
+	}
 }

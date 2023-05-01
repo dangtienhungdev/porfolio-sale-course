@@ -12,12 +12,23 @@ import {
 	RadioChangeEvent,
 	Row,
 	Select,
+	message,
 } from 'antd';
+import {
+	CLOUD_NAME,
+	FOLDER_NAME,
+	UPLOAD_PRESET,
+	uploadImage,
+} from '../../../../config/clouddinary';
 import Upload, { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
+import { useEffect, useState } from 'react';
 
+import { ICategories } from '../../../../interfaces/categories.type';
+import { IFood } from '../../../../interfaces/foods.type';
 import { PlusOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
-import { useState } from 'react';
+import { createFood } from '../../../../API/foods';
+import { getAllCategories } from '../../../../API/category';
 
 interface ModalPropType {
 	isOpenModalAdd: boolean;
@@ -33,7 +44,9 @@ const getBase64 = (file: RcFile): Promise<string> =>
 const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	/* useState */
 	const [checked, setChecked] = useState('active');
+	const [categories, setCategories] = useState<ICategories[]>();
 	const [description, setDescription] = useState<string>('');
+	const [images, setImages] = useState<string[]>([]);
 	/* handleChecked */
 	const onChangeChecked = (e: RadioChangeEvent) => {
 		setChecked(e.target.value);
@@ -42,26 +55,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
-	const [fileList, setFileList] = useState<UploadFile[]>([
-		{
-			uid: '-1',
-			name: 'image.png',
-			status: 'done',
-			url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-		},
-		{
-			uid: '-2',
-			name: 'image.png',
-			status: 'done',
-			url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-		},
-		{
-			uid: '-3',
-			name: 'image.png',
-			status: 'done',
-			url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-		},
-	]);
+	const [fileList, setFileList] = useState<UploadFile[]>([]);
 	const handleCancel = () => setPreviewOpen(false);
 	const handlePreview = async (file: UploadFile) => {
 		if (!file.url && !file.preview) {
@@ -71,8 +65,9 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 		setPreviewOpen(true);
 		setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
 	};
-	const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+	const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
 		setFileList(newFileList);
+	};
 	const uploadButton = (
 		<div>
 			<PlusOutlined />
@@ -83,6 +78,67 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	const handleCancelBtn = () => {
 		setIsOpenAdd();
 	};
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await getAllCategories();
+				if (response && response.data) {
+					setCategories(response.data.docs);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		fetchData();
+	}, []);
+	/* submit form */
+	const onFinish = async (values: IFood) => {
+		try {
+			const dataValue = {
+				...values,
+				images: images,
+				is_active: checked === 'active' ? true : false,
+			};
+			const data = await createFood(dataValue);
+			if (data) {
+				message.success('Thêm món ăn thành công!');
+				handleCancelBtn();
+			}
+		} catch (error) {
+			message.error('Thêm món ăn thất bại!');
+		}
+	};
+	const handleUpload = async (file: RcFile) => {
+		if (file) {
+			try {
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('upload_preset', UPLOAD_PRESET);
+				formData.append('folder', FOLDER_NAME);
+				const data = await uploadImage(formData);
+				if (data) {
+					setImages((pre: any) => [...pre, data.url]);
+				}
+			} catch (error) {
+				message.error('Upload hình ảnh thất bại!');
+			}
+		}
+	};
+	const handleBeforeUpload = (file: RcFile) => {
+		const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+		if (!isJpgOrPng) {
+			message.error('Chỉ hỗ trợ upload file JPG/PNG');
+			return false;
+		}
+		const isLt2M = file.size / 1024 / 1024 < 2;
+		if (!isLt2M) {
+			message.error('Kích thước ảnh phải nhỏ hơn 2MB');
+			return false;
+		}
+		handleUpload(file);
+		return false;
+	};
+	if (!categories) return <div>loading</div>;
 	return (
 		<Modal
 			title="Thêm món ăn"
@@ -92,7 +148,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 			footer={null}
 			width={960}
 		>
-			<Form layout="vertical" autoComplete="off">
+			<Form layout="vertical" autoComplete="off" onFinish={onFinish}>
 				<Row gutter={50}>
 					<Col span={8}>
 						<Form.Item
@@ -106,7 +162,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 					<Col span={8}>
 						<Form.Item
 							label="Giá gốc"
-							name="namepriceOriginal"
+							name="priceOriginal"
 							rules={[{ required: true, message: 'Không được bỏ trống' }]}
 						>
 							<InputNumber placeholder="Giá gốc" style={{ width: '100%' }} />
@@ -116,7 +172,18 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 						<Form.Item
 							label="Giá khuyến mại"
 							name="price"
-							rules={[{ required: true, message: 'Không được bỏ trống' }]}
+							rules={[
+								{ required: true, message: 'Không được bỏ trống' },
+								({ getFieldValue }) => ({
+									validator(_, value) {
+										const priceOriginal = getFieldValue('priceOriginal');
+										if (value && priceOriginal && value >= priceOriginal) {
+											return Promise.reject(new Error('Giá khuyến mại phải nhỏ hơn giá gốc'));
+										}
+										return Promise.resolve();
+									},
+								}),
+							]}
 						>
 							<InputNumber placeholder="Giá khuyến mại" style={{ width: '100%' }} />
 						</Form.Item>
@@ -127,14 +194,19 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 							name="categoryId"
 							rules={[{ required: true, message: 'Không được bỏ trống' }]}
 						>
-							<Select>
-								<Select.Option value="1">1</Select.Option>
+							<Select placeholder="Chọn menu món ăn">
+								{categories.length > 0 &&
+									categories.map((category: ICategories) => (
+										<Select.Option key={category._id} value={category._id}>
+											{category.name}
+										</Select.Option>
+									))}
 							</Select>
 						</Form.Item>
 					</Col>
 					<Col span={8}>
 						<Form.Item label="Active">
-							<Radio.Group value={checked} onChange={onChangeChecked}>
+							<Radio.Group value={checked} name="is_active" onChange={onChangeChecked}>
 								<Radio value={'active'}>Active</Radio>
 								<Radio value={'inactive'}>InActive</Radio>
 							</Radio.Group>
@@ -147,11 +219,13 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 							rules={[{ required: true, message: 'Không được để trống' }]}
 						>
 							<Upload
-								action="http://localhost:8080/api/v1/uploads"
+								action={`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`}
 								listType="picture-card"
 								fileList={fileList}
 								onPreview={handlePreview}
-								onChange={handleChange}
+								multiple={true}
+								beforeUpload={handleBeforeUpload}
+								onChange={(info) => handleChange(info)}
 							>
 								{fileList.length >= 8 ? null : uploadButton}
 							</Upload>
@@ -172,7 +246,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 					<Col span={24}>
 						<div className="btn-container">
 							<Form.Item>
-								<Button onClick={() => handleCancel()}>Hủy</Button>
+								<Button onClick={() => handleCancelBtn()}>Hủy</Button>
 							</Form.Item>
 							<Form.Item>
 								<Button type="primary" className="btn-primary" htmlType="submit">
