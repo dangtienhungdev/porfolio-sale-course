@@ -26,9 +26,33 @@ export const createFood = async (food: IFood) => {
 };
 
 /* update */
-export const updateFood = async (food: IFood) => {
+export const updateFood = async (food: IFood | any) => {
 	try {
 		const response = await instance.put(`/foods/${food._id}`, food);
+		if (response && response.data) {
+			return response.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+/* delete */
+export const deleteFood = async (id: string) => {
+	try {
+		const response = await instance.delete(`/foods/${id}`);
+		if (response && response.data) {
+			return response.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+/* search */
+export const searchFood = async (keyword: string) => {
+	try {
+		const response = await instance.get(`/foods?q=${keyword}`);
 		if (response && response.data) {
 			return response.data;
 		}

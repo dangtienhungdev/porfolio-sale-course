@@ -21,18 +21,30 @@ import {
 	uploadImage,
 } from '../../../../config/clouddinary';
 import Upload, { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
+import { createFood, updateFood } from '../../../../API/foods';
 import { useEffect, useState } from 'react';
 
 import { ICategories } from '../../../../interfaces/categories.type';
 import { IFood } from '../../../../interfaces/foods.type';
 import { PlusOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
-import { createFood } from '../../../../API/foods';
 import { getAllCategories } from '../../../../API/category';
 
 interface ModalPropType {
-	isOpenModalAdd: boolean;
-	setIsOpenAdd: () => void;
+	openModal: {
+		isOpenModalAdd: boolean;
+		isOpenModalEdit: boolean;
+		isOpenModalView: boolean;
+	};
+	setOpenModal: React.Dispatch<
+		React.SetStateAction<{
+			isOpenModalAdd: boolean;
+			isOpenModalEdit: boolean;
+			isOpenModalView: boolean;
+		}>
+	>;
+	foodEdit?: IFood | null;
+	foodView?: IFood | null;
 }
 const getBase64 = (file: RcFile): Promise<string> =>
 	new Promise((resolve, reject) => {
@@ -41,12 +53,23 @@ const getBase64 = (file: RcFile): Promise<string> =>
 		reader.onload = () => resolve(reader.result as string);
 		reader.onerror = (error) => reject(error);
 	});
-const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
+const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropType) => {
 	/* useState */
 	const [checked, setChecked] = useState('active');
 	const [categories, setCategories] = useState<ICategories[]>();
 	const [description, setDescription] = useState<string>('');
 	const [images, setImages] = useState<string[]>([]);
+	const [form] = Form.useForm();
+	// Đặt giá trị mặc định cho các trường trong form
+	useEffect(() => {
+		form.setFieldsValue({
+			name: foodEdit?.name,
+			price: foodEdit?.price,
+			priceOriginal: foodEdit?.priceOriginal,
+			categoryId: foodEdit?.categoryId?._id,
+			description: foodEdit?.description,
+		});
+	}, [form, foodEdit]);
 	/* handleChecked */
 	const onChangeChecked = (e: RadioChangeEvent) => {
 		setChecked(e.target.value);
@@ -55,7 +78,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const [previewTitle, setPreviewTitle] = useState('');
-	const [fileList, setFileList] = useState<UploadFile[]>([]);
+	const [fileList, setFileList] = useState<UploadFile[]>((foodEdit?.images as any) || []);
 	const handleCancel = () => setPreviewOpen(false);
 	const handlePreview = async (file: UploadFile) => {
 		if (!file.url && !file.preview) {
@@ -76,7 +99,11 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	);
 	/* handle Cancel */
 	const handleCancelBtn = () => {
-		setIsOpenAdd();
+		setOpenModal({
+			isOpenModalAdd: false,
+			isOpenModalEdit: false,
+			isOpenModalView: false,
+		});
 	};
 	useEffect(() => {
 		const fetchData = async () => {
@@ -106,6 +133,34 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 			}
 		} catch (error) {
 			message.error('Thêm món ăn thất bại!');
+		}
+	};
+	const onFinishEdit = async (values: IFood) => {
+		try {
+			if (!foodEdit?._id) return message.error('Edit món ăn thất bại!');
+			let dataValue: IFood;
+			if (values.images !== undefined) {
+				dataValue = {
+					...values,
+					_id: foodEdit?._id,
+					images: images,
+					is_active: checked === 'active' ? true : false,
+				};
+			} else {
+				dataValue = {
+					...values,
+					_id: foodEdit?._id,
+					images: foodEdit?.images,
+					is_active: checked === 'active' ? true : false,
+				};
+			}
+			const data = await updateFood(dataValue);
+			if (data) {
+				message.success('Edit món ăn thành công!');
+				handleCancelBtn();
+			}
+		} catch (error) {
+			message.error('Edit món ăn thất bại!');
 		}
 	};
 	const handleUpload = async (file: RcFile) => {
@@ -139,16 +194,150 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 		return false;
 	};
 	if (!categories) return <div>loading</div>;
+	if (openModal.isOpenModalAdd) {
+		return (
+			<Modal
+				title="Thêm món ăn"
+				open={openModal.isOpenModalAdd}
+				onCancel={() => handleCancelBtn()}
+				style={{ top: '20px' }}
+				footer={null}
+				width={960}
+			>
+				<Form layout="vertical" autoComplete="off" onFinish={onFinish}>
+					<Row gutter={50}>
+						<Col span={8}>
+							<Form.Item
+								label="Tên sản phẩm"
+								name="name"
+								rules={[{ required: true, message: 'Không được bỏ trống' }]}
+							>
+								<Input placeholder="Tên sản phẩm" />
+							</Form.Item>
+						</Col>
+						<Col span={8}>
+							<Form.Item
+								label="Giá gốc"
+								name="priceOriginal"
+								rules={[{ required: true, message: 'Không được bỏ trống' }]}
+							>
+								<InputNumber placeholder="Giá gốc" style={{ width: '100%' }} />
+							</Form.Item>
+						</Col>
+						<Col span={8}>
+							<Form.Item
+								label="Giá khuyến mại"
+								name="price"
+								rules={[
+									{ required: true, message: 'Không được bỏ trống' },
+									({ getFieldValue }) => ({
+										validator(_, value) {
+											const priceOriginal = getFieldValue('priceOriginal');
+											if (value && priceOriginal && value >= priceOriginal) {
+												return Promise.reject(new Error('Giá khuyến mại phải nhỏ hơn giá gốc'));
+											}
+											return Promise.resolve();
+										},
+									}),
+								]}
+							>
+								<InputNumber placeholder="Giá khuyến mại" style={{ width: '100%' }} />
+							</Form.Item>
+						</Col>
+						<Col span={8}>
+							<Form.Item
+								label="Category"
+								name="categoryId"
+								rules={[{ required: true, message: 'Không được bỏ trống' }]}
+							>
+								<Select placeholder="Chọn menu món ăn">
+									{categories.length > 0 &&
+										categories.map((category: ICategories) => (
+											<Select.Option key={category._id} value={category._id}>
+												{category.name}
+											</Select.Option>
+										))}
+								</Select>
+							</Form.Item>
+						</Col>
+						<Col span={8}>
+							<Form.Item label="Active">
+								<Radio.Group value={checked} name="is_active" onChange={onChangeChecked}>
+									<Radio value={'active'}>Active</Radio>
+									<Radio value={'inactive'}>InActive</Radio>
+								</Radio.Group>
+							</Form.Item>
+						</Col>
+						<Col span={24}>
+							<Form.Item
+								label="Hình ảnh"
+								name="images"
+								rules={[{ required: true, message: 'Không được để trống' }]}
+							>
+								<Upload
+									action={`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`}
+									listType="picture-card"
+									fileList={fileList}
+									onPreview={handlePreview}
+									multiple={true}
+									beforeUpload={handleBeforeUpload}
+									onChange={(info) => handleChange(info)}
+								>
+									{fileList.length >= 8 ? null : uploadButton}
+								</Upload>
+							</Form.Item>
+							<Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+								<img alt="example" style={{ width: '100%' }} src={previewImage} />
+							</Modal>
+						</Col>
+						<Col span={24}>
+							<Form.Item
+								label="Mô tả sản phẩm"
+								name="description"
+								rules={[{ required: true, message: 'Không được để trống' }]}
+							>
+								<ReactQuill theme="snow" value={description} onChange={setDescription} />
+							</Form.Item>
+						</Col>
+						<Col span={24}>
+							<div className="btn-container">
+								<Form.Item>
+									<Button onClick={() => handleCancelBtn()}>Hủy</Button>
+								</Form.Item>
+								<Form.Item>
+									<Button type="primary" className="btn-primary" htmlType="submit">
+										Thêm
+									</Button>
+								</Form.Item>
+							</div>
+						</Col>
+					</Row>
+				</Form>
+			</Modal>
+		);
+	}
+	if (openModal.isOpenModalView) {
+		return (
+			<Modal
+				title="Xem chi tiết món ăn"
+				open={openModal.isOpenModalView}
+				onCancel={() => handleCancelBtn()}
+				style={{ top: '20px' }}
+				footer={null}
+				width={'100%'}
+			></Modal>
+		);
+	}
 	return (
 		<Modal
-			title="Thêm món ăn"
-			open={isOpenModalAdd}
+			title="Sửa món ăn"
+			open={openModal.isOpenModalEdit}
 			onCancel={() => handleCancelBtn()}
 			style={{ top: '20px' }}
 			footer={null}
 			width={960}
 		>
-			<Form layout="vertical" autoComplete="off" onFinish={onFinish}>
+			<Form layout="vertical" form={form} autoComplete="off" onFinish={onFinishEdit}>
 				<Row gutter={50}>
 					<Col span={8}>
 						<Form.Item
@@ -213,11 +402,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 						</Form.Item>
 					</Col>
 					<Col span={24}>
-						<Form.Item
-							label="Hình ảnh"
-							name="images"
-							rules={[{ required: true, message: 'Không được để trống' }]}
-						>
+						<Form.Item label="Hình ảnh" name="images">
 							<Upload
 								action={`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`}
 								listType="picture-card"
@@ -250,7 +435,7 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 							</Form.Item>
 							<Form.Item>
 								<Button type="primary" className="btn-primary" htmlType="submit">
-									Thêm
+									Sửa
 								</Button>
 							</Form.Item>
 						</div>
@@ -261,4 +446,4 @@ const ModalAdd = ({ isOpenModalAdd, setIsOpenAdd }: ModalPropType) => {
 	);
 };
 
-export default ModalAdd;
+export default ModalFood;

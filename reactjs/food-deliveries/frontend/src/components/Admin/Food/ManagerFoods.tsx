@@ -1,25 +1,57 @@
 import '../style.scss';
 
-import { Button, Carousel, Form, Image, Select, Space, Tag, Typography, message } from 'antd';
+import {
+	Button,
+	Carousel,
+	Form,
+	Image,
+	Popconfirm,
+	Select,
+	Space,
+	Tag,
+	Typography,
+	message,
+} from 'antd';
 import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { deleteFood, getAllFoods, searchFood, updateFood } from '../../../API/foods';
 import { useEffect, useState } from 'react';
 
 import { ColumnsType } from 'antd/es/table';
 import { IFood } from '../../../interfaces/foods.type';
 import LayoutModule from '../../../modules/LayoutModule';
-import { Link } from 'react-router-dom';
-import ModalAdd from './components/ModalAdd';
+import ModalFood from './components/Modal';
 import { fomatCurrent } from '../../../utils/fomatterCurrent';
-import { getAllFoods } from '../../../API/foods';
-import { useToggleValue } from '../../../hooks/useToggleValue';
 
 const ManagerFoods = () => {
+	/* useState */
+	const [foods, setFoods] = useState<IFood[]>([]);
+	const [openModal, setOpenModal] = useState({
+		isOpenModalAdd: false,
+		isOpenModalEdit: false,
+		isOpenModalView: false,
+	});
+	const [foodEdit, setFoodEdit] = useState<IFood | null>(null);
+	const [foodView, setFoodView] = useState<IFood | null>(null);
+	const [search, setSearch] = useState<string>('');
 	const options = [
 		{ value: 'active', label: 'active' },
 		{ value: 'in-active', label: 'in-active' },
 	];
-	const handleChange = (value: { value: string; label: React.ReactNode }) => {
+	const handleChange = async ({ food, value }: { food: IFood; value: any }) => {
 		try {
+			const newActive = { is_active: value.value === 'active' ? true : false };
+			const newFood = { ...food, ...newActive, categoryId: food.categoryId._id };
+			const foodUpdate = await updateFood(newFood);
+			if (foodUpdate) {
+				const newFoods = foods.map((item) => {
+					if (item._id === food._id) {
+						return { ...item, is_active: newActive.is_active };
+					}
+					return item;
+				});
+				setFoods(newFoods);
+				message.success('Cập nhập thông tin món ăn thành công!');
+			}
 		} catch (error) {
 			message.error('Cập nhập thông tin món ăn thành công!');
 		}
@@ -41,8 +73,17 @@ const ManagerFoods = () => {
 				return (
 					<Carousel autoplay>
 						{images.map((image: string) => (
-							<div key={image} className="image-container">
-								<Image src={image} alt="images" className="image" />
+							<div
+								key={image}
+								className="image-container"
+								style={{ height: '160px', width: '100%' }}
+							>
+								<Image
+									src={image}
+									alt="images"
+									className="image"
+									style={{ height: '160px', width: '100%' }}
+								/>
 							</div>
 						))}
 					</Carousel>
@@ -87,8 +128,8 @@ const ManagerFoods = () => {
 							<Select
 								labelInValue
 								options={options}
-								onChange={handleChange}
-								defaultValue={{ value: 'active', label: 'active' }}
+								onChange={(value) => handleChange({ value, food: record })}
+								placeholder="Tình trạng món ăn"
 							/>
 						</Form.Item>
 					</Form>
@@ -96,60 +137,93 @@ const ManagerFoods = () => {
 			),
 		},
 		{
-			title: 'Description',
-			dataIndex: 'description',
-			key: 'description',
-		},
-		{
 			title: 'Action',
 			dataIndex: 'action',
 			key: 'action',
 			fixed: 'right',
 			width: 100,
-			render: (_: string, recored: IFood) => (
-				<Space>
-					<Button>
-						<EyeOutlined />
-					</Button>
-					<Link to={`/admin/foods/edit/${recored._id}`}>
-						<Button type="primary">
+			render: (_: string, recored: IFood) => {
+				return (
+					<Space>
+						<Button type="primary" onClick={() => handlePreview(recored)}>
+							<EyeOutlined />
+						</Button>
+						<Button type="primary" onClick={() => handleEditFood(recored)}>
 							<EditOutlined />
 						</Button>
-					</Link>
-					<Button>
-						<DeleteOutlined />
-					</Button>
-				</Space>
-			),
+						<Popconfirm
+							placement="topLeft"
+							title={'Are you sure to delete this food?'}
+							onConfirm={() => handleDelete(recored._id)}
+							okText="Yes"
+							cancelText="No"
+						>
+							<Button>
+								<DeleteOutlined />
+							</Button>
+						</Popconfirm>
+					</Space>
+				);
+			},
 		},
 	];
-	/* useState */
-	const [foods, setFoods] = useState<IFood[]>([]);
-	const { toggleValue: isOpenModalAdd, handleToggleValue: setIsOpenAdd } = useToggleValue();
-
+	const handleEditFood = (food: IFood) => {
+		setOpenModal({ ...openModal, isOpenModalEdit: true });
+		setFoodEdit(food);
+	};
+	const handlePreview = (food: IFood) => {
+		setOpenModal({ ...openModal, isOpenModalView: true });
+		setFoodView(food);
+	};
+	const handleDelete = async (id: string) => {
+		try {
+			const data = await deleteFood(id);
+			if (data) {
+				const newFoods = foods.filter((item) => item._id !== id);
+				setFoods(newFoods);
+				message.success('Xóa món ăn thành công!');
+			}
+		} catch (error) {
+			message.error('Xóa món ăn thất bại!');
+		}
+	};
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await getAllFoods();
-				if (response) {
-					setFoods(response.docs?.map((item: IFood) => ({ ...item, key: item._id })));
+				if (search) {
+					const data = await searchFood(search);
+					if (data) {
+						setFoods(data.docs?.map((item: IFood) => ({ ...item, key: item._id })));
+					}
+				} else {
+					const response = await getAllFoods();
+					if (response) {
+						setFoods(response.docs?.map((item: IFood) => ({ ...item, key: item._id })));
+					}
 				}
 			} catch (error) {
 				message.error('Lấy sản phẩm thất bại');
 			}
 		};
 		fetchData();
-	}, []);
+	}, [search]);
 	return (
 		<>
 			<LayoutModule
 				heading="sản phẩm"
 				dataSource={foods}
 				columns={columns}
-				setIsOpenAdd={setIsOpenAdd}
+				setOpenModal={setOpenModal}
+				setSearch={setSearch}
 				scroll={{ x: 1500 }}
+				pageSize={5}
 			/>
-			<ModalAdd isOpenModalAdd={isOpenModalAdd} setIsOpenAdd={setIsOpenAdd} />
+			<ModalFood
+				openModal={openModal}
+				setOpenModal={setOpenModal}
+				foodEdit={foodEdit}
+				foodView={foodView}
+			/>
 		</>
 	);
 };

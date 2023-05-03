@@ -39,12 +39,12 @@ const ManagerCategories = () => {
 	];
 	return (
 		<>
-			<LayoutModule
+			{/* <LayoutModule
 				heading="category"
 				columns={columns}
 				dataSource={dataSource}
 				setIsOpenAdd={setIsOpenAdd}
-			/>
+			/> */}
 		</>
 	);
 };
