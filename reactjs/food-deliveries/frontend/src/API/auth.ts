@@ -1,6 +1,6 @@
 import instance from '../config';
 
-/* login */
+/* get all */
 export const getAllUser = async () => {
 	try {
 		const { data } = await instance.get(`/users`);

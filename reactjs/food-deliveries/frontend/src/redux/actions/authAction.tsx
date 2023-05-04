@@ -25,8 +25,13 @@ export const loginUser = async (
 	try {
 		const response = await instance.post(`/sign-in`, userInfo);
 		if (response && response.data) {
+			console.log('🚀 ~ file: authAction.tsx:28 ~ response:', response);
 			dispatch(loginSuccess(response.data));
 			message.success('Đăng nhập thành công!');
+			if (response.data.user.role === 'admin') {
+				navigate('/admin/dashboard');
+				return;
+			}
 			navigate('/');
 		}
 	} catch (error) {

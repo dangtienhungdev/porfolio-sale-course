@@ -13,3 +13,4 @@ export { default as Dashboard } from './Admin/Dashboard/Dashboard';
 export { default as Header } from './Sidebars/Admin/Header/Header';
 export { default as ManagerFoods } from './Admin/Food/ManagerFoods';
 export { default as ManagerCategories } from './Admin/Categories/ManagerCategories';
+export { default as LoginAdmin } from './Admin/Login/LoginAdmin';
