@@ -28,7 +28,7 @@ export const categoryController = {
 	/* get all */
 	getAll: async (req, res) => {
 		try {
-			const { _page = 1, _limit = 2, q } = req.query;
+			const { _page = 1, _limit = 10, q } = req.query;
 			const options = { page: _page, limit: _limit };
 			if (q) {
 				const categories = await Category.paginate(

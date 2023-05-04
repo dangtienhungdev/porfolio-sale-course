@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
+$primary-color: #ff5c28;
+$black-color: #000;
+$white-color: #fff;
+
 @layer base {
 	* {
 		font-family: 'DM Sans', sans-serif;
@@ -28,5 +32,25 @@
 	body::-webkit-scrollbar-thumb:hover {
 		background: #000;
 		box-shadow: inset 10px 10px 10px #333;
+	}
+}
+/* custom color buttn */
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-btn-primary {
+		background-color: $primary-color;
+		&:hover {
+			background-color: $primary-color;
+		}
+	}
+	.ant-btn-primary:not(:disabled):hover {
+		background-color: $primary-color;
+	}
+	/* input */
+	.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+		border-color: $primary-color;
+	}
+	.ant-input-affix-wrapper:focus,
+	.ant-input-affix-wrapper-focused {
+		box-shadow: 0 0 0 2px rgba(250, 88, 34, 0.2);
 	}
 }
