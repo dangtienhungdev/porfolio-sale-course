@@ -54,3 +54,57 @@ $white-color: #fff;
 		box-shadow: 0 0 0 2px rgba(250, 88, 34, 0.2);
 	}
 }
+
+:where(.css-1mqg3i0) {
+	.ant-card {
+		.ant-card-body {
+			padding: 0;
+		}
+	}
+	.ant-menu-light {
+		.ant-menu-item-selected {
+			color: $primary-color;
+			background-color: transparent;
+		}
+		& > .ant-menu .ant-menu-item-selected {
+			color: $primary-color;
+		}
+	}
+	.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+		color: $primary-color;
+	}
+	.ant-tabs .ant-tabs-tab:hover {
+		color: #ff5c28;
+	}
+	.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+		color: #ff5c28;
+	}
+}
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-menu-light .ant-menu-item-selected {
+		color: rgb(255, 92, 40);
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+}
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	a {
+		color: #000;
+	}
+	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover,
+	.ant-menu-light {
+		& > .ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
+			background-color: rgba(255, 92, 40, 0.1);
+		}
+		& .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected) {
+			background-color: rgba(255, 92, 40, 0.1);
+		}
+		& .ant-menu-submenu-selected > .ant-menu-submenu-title,
+		& > .ant-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+			color: rgb(255, 92, 40);
+			background-color: rgba(255, 92, 40, 0.1);
+		}
+	}
+}
