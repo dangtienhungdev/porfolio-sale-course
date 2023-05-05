@@ -1,10 +1,19 @@
-import { Button, Card, Col, Image, Row, Typography } from 'antd';
+import { Button, Card, Col, Image, Rate, Row, Typography } from 'antd';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 
 import { IFood } from '../../interfaces/foods.type';
 import { NotFound } from '../../views';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
+import { useState } from 'react';
 
-const FoodItem = ({ foodList }: any) => {
+const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+const FoodItem = ({ foodList, onClose, setFoodItem }: any) => {
+	const [isCheck, setIsCheck] = useState<boolean>(false);
+	const handleFoodItem = (item: IFood) => {
+		setFoodItem(item);
+		onClose();
+	};
+	const [value, setValue] = useState(6);
 	if (!foodList) return <NotFound />;
 	return (
 		<>
@@ -20,10 +29,13 @@ const FoodItem = ({ foodList }: any) => {
 									preview={false}
 									className="food-item"
 									style={{ width: '100%' }}
+									onClick={() => handleFoodItem(item)}
 								/>
 								<Row style={{ padding: '15px' }}>
 									<Col span={24}>
-										<Typography.Text className="food-heading">{item.name}</Typography.Text>
+										<Typography.Text className="food-heading" onClick={() => handleFoodItem(item)}>
+											{item.name}
+										</Typography.Text>
 									</Col>
 									<Col span={24}>
 										<div className="food-footer">
@@ -49,17 +61,37 @@ const FoodItem = ({ foodList }: any) => {
 										</div>
 									</Col>
 									<Col span={24}>
+										<span>
+											<Rate
+												tooltips={desc}
+												onChange={setValue}
+												value={value}
+												style={{ fontSize: '14px' }}
+											/>
+										</span>
+									</Col>
+									<Col span={24}>
 										<Button type="primary" className="food-btn">
 											Add To Cart
 										</Button>
 									</Col>
 								</Row>
+								<div
+									className={`food-heart ${isCheck ? 'active' : ''}`}
+									onClick={() => setIsCheck(!isCheck)}
+								>
+									{isCheck ? <HeartFilled /> : <HeartOutlined />}
+								</div>
 							</Card>
 						</Col>
 					);
 				})}
 		</>
 	);
+};
+
+const currentPercent = (price: number, priceOriginal: number) => {
+	return ((priceOriginal - price) / priceOriginal) * 100;
 };
 
 export default FoodItem;

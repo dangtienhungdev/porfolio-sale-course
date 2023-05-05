@@ -1,0 +1,42 @@
+.food-item-container {
+	position: relative;
+	height: 100%;
+	.food-img-container {
+		.food-img-item {
+			width: 100%;
+			height: 250px;
+			object-fit: cover;
+			border-radius: 20px;
+		}
+	}
+	.food-body-heading {
+		font-size: 20px;
+		font-weight: 600;
+		margin: 10px 0;
+	}
+	.food-price.food-price-line-throungh {
+		color: #797575;
+		text-decoration: line-through;
+	}
+	.food-price-sale.none {
+		display: none;
+	}
+	.food-price-sale,
+	.food-price {
+		font-size: 14px;
+		color: #ff5c28;
+	}
+	.food-price-sale {
+		color: #ff5c28;
+		margin-left: 8px;
+	}
+	.food-item-footer {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		button {
+			width: 100%;
+		}
+	}
+}
