@@ -6,7 +6,7 @@ export { default as Login } from './Login/Login';
 export { default as Register } from './register/Register';
 export { default as FoodListContainer } from './FoodListContainer/FoodListContainer';
 export { default as FoodItem } from './FoodListContainer/FoodItem';
-
+export { default as DrawerFood } from './DrawerFood/DrawerFood';
 /* admin */
 export { default as SidebarAdmin } from './Sidebars/Admin/SidebarAdmin';
 export { default as Dashboard } from './Admin/Dashboard/Dashboard';
