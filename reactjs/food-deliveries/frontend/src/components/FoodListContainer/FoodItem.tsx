@@ -1,12 +1,15 @@
 import { Button, Card, Col, Image, Row, Typography } from 'antd';
 
 import { IFood } from '../../interfaces/foods.type';
+import { NotFound } from '../../views';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
 
 const FoodItem = ({ foodList }: any) => {
+	if (!foodList) return <NotFound />;
 	return (
 		<>
-			{foodList.length > 0 &&
+			{foodList &&
+				foodList.length > 0 &&
 				foodList.map((item: IFood) => {
 					return (
 						<Col span={8} key={item._id}>
