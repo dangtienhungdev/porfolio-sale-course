@@ -26,6 +26,7 @@ const FormCategory = ({ onCancel, categoryEdit, setCategories }: PropTypes) => {
 	const handleSuccess = () => {
 		message.success(categoryEdit ? 'Sửa danh mục thành công' : 'Thêm danh mục thành công');
 		fetchCategories();
+		form.resetFields();
 		onCancel();
 	};
 	const handleFailure = () => {
@@ -51,6 +52,7 @@ const FormCategory = ({ onCancel, categoryEdit, setCategories }: PropTypes) => {
 			handleFailure();
 		} finally {
 			onCancel();
+			form.resetFields();
 		}
 	};
 	return (

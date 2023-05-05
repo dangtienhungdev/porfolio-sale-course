@@ -1,12 +1,13 @@
 import './style.scss';
 
-import { Col, Layout, Row, Tabs, TabsProps } from 'antd';
+import { Col, FloatButton, Layout, Row, Tabs, TabsProps } from 'antd';
 import { Headers, Login, MyOrder, Register } from '../components';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 import { RootState } from '../redux/store';
 import Sidebar from '../components/Sidebars/Sidebar';
+import { UserSwitchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { createAxios } from '../config/intance';
 import jwt_decode from 'jwt-decode';
@@ -78,6 +79,11 @@ const LayoutDefault = () => {
 					</Col>
 				</Row>
 			</Layout>
+			{currentUser.user.role === 'admin' && (
+				<Link to={'/admin/dashboard'}>
+					<FloatButton icon={<UserSwitchOutlined />} type="primary" style={{ right: 50 }} />
+				</Link>
+			)}
 		</Layout>
 	);
 };

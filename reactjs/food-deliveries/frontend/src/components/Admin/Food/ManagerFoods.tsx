@@ -94,16 +94,16 @@ const ManagerFoods = () => {
 			title: 'Price Original',
 			dataIndex: 'priceOriginal',
 			key: 'priceOriginal',
-			render: (_: number, record: IFood) => (
-				<Typography.Text>{fomatCurrent(record.priceOriginal)}đ</Typography.Text>
+			render: (priceOriginal: number) => (
+				<Typography.Text>{fomatCurrent(priceOriginal)}đ</Typography.Text>
 			),
 		},
 		{
 			title: 'Price Sales',
 			dataIndex: 'price',
 			key: 'price',
-			render: (_: number, record: IFood) => (
-				<Typography.Text>{fomatCurrent(record.price)}đ</Typography.Text>
+			render: (priceSale: number) => (
+				<Typography.Text>{fomatCurrent(priceSale) || 0}đ</Typography.Text>
 			),
 		},
 		{
@@ -223,6 +223,7 @@ const ManagerFoods = () => {
 				setOpenModal={setOpenModal}
 				foodEdit={foodEdit}
 				foodView={foodView}
+				setFoods={setFoods}
 			/>
 		</>
 	);

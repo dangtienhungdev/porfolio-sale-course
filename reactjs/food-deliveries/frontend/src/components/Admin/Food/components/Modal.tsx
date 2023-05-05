@@ -21,7 +21,7 @@ import {
 	uploadImage,
 } from '../../../../config/clouddinary';
 import Upload, { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
-import { createFood, updateFood } from '../../../../API/foods';
+import { createFood, getAllFoods, updateFood } from '../../../../API/foods';
 import { useEffect, useState } from 'react';
 
 import { ICategories } from '../../../../interfaces/categories.type';
@@ -43,6 +43,7 @@ interface ModalPropType {
 			isOpenModalView: boolean;
 		}>
 	>;
+	setFoods: React.Dispatch<React.SetStateAction<IFood[]>>;
 	foodEdit?: IFood | null;
 	foodView?: IFood | null;
 }
@@ -53,7 +54,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
 		reader.onload = () => resolve(reader.result as string);
 		reader.onerror = (error) => reject(error);
 	});
-const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropType) => {
+const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView, setFoods }: ModalPropType) => {
 	/* useState */
 	const [checked, setChecked] = useState('active');
 	const [categories, setCategories] = useState<ICategories[]>();
@@ -129,6 +130,10 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 			const data = await createFood(dataValue);
 			if (data) {
 				message.success('Thêm món ăn thành công!');
+				const response = await getAllFoods();
+				if (response) {
+					setFoods(response.docs?.map((item: IFood) => ({ ...item, key: item._id })));
+				}
 				handleCancelBtn();
 			}
 		} catch (error) {
@@ -159,6 +164,7 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 				message.success('Edit món ăn thành công!');
 				handleCancelBtn();
 			}
+			form.resetFields();
 		} catch (error) {
 			message.error('Edit món ăn thất bại!');
 		}
@@ -204,7 +210,7 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 				footer={null}
 				width={960}
 			>
-				<Form layout="vertical" autoComplete="off" onFinish={onFinish}>
+				<Form layout="vertical" form={form} autoComplete="off" onFinish={onFinish}>
 					<Row gutter={50}>
 						<Col span={8}>
 							<Form.Item
@@ -229,7 +235,6 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 								label="Giá khuyến mại"
 								name="price"
 								rules={[
-									{ required: true, message: 'Không được bỏ trống' },
 									({ getFieldValue }) => ({
 										validator(_, value) {
 											const priceOriginal = getFieldValue('priceOriginal');
@@ -291,11 +296,7 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 							</Modal>
 						</Col>
 						<Col span={24}>
-							<Form.Item
-								label="Mô tả sản phẩm"
-								name="description"
-								rules={[{ required: true, message: 'Không được để trống' }]}
-							>
+							<Form.Item label="Mô tả sản phẩm" name="description">
 								<ReactQuill theme="snow" value={description} onChange={setDescription} />
 							</Form.Item>
 						</Col>
@@ -362,7 +363,6 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView }: ModalPropTyp
 							label="Giá khuyến mại"
 							name="price"
 							rules={[
-								{ required: true, message: 'Không được bỏ trống' },
 								({ getFieldValue }) => ({
 									validator(_, value) {
 										const priceOriginal = getFieldValue('priceOriginal');
