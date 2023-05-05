@@ -1,14 +1,30 @@
 import './style.scss';
 
 import { Button, Card, Col, Divider, Image, Row, Space, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 
 import IconLocation from '../icons/IconLocation';
+import { caculatorDistance } from '../../utils/caculatorDistance';
 
 const styleMyOrder = {
 	backgroundColor: '#F5F5F5',
 };
 
 const MyOrder = () => {
+	const [distance, setDistance] = useState<any>(0);
+	useEffect(() => {
+		const fetchLocation = async () => {
+			try {
+				const response = await caculatorDistance();
+				if (response) {
+					setDistance(response);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		fetchLocation();
+	}, []);
 	return (
 		<Row style={styleMyOrder} className="container">
 			<Col span={24}>
@@ -24,7 +40,8 @@ const MyOrder = () => {
 					</Col>
 					<Col span={8}>
 						<div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#FF5C28' }}>
-							<IconLocation /> <span style={{ fontSize: '20px', color: '#FF5C28' }}>5km</span>
+							<IconLocation />{' '}
+							<span style={{ fontSize: '20px', color: '#FF5C28' }}>{distance.toFixed(1)}km</span>
 						</div>
 					</Col>
 				</Row>
