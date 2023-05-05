@@ -420,11 +420,7 @@ const ModalFood = ({ openModal, setOpenModal, foodEdit, foodView, setFoods }: Mo
 						</Modal>
 					</Col>
 					<Col span={24}>
-						<Form.Item
-							label="Mô tả sản phẩm"
-							name="description"
-							rules={[{ required: true, message: 'Không được để trống' }]}
-						>
+						<Form.Item label="Mô tả sản phẩm" name="description">
 							<ReactQuill theme="snow" value={description} onChange={setDescription} />
 						</Form.Item>
 					</Col>

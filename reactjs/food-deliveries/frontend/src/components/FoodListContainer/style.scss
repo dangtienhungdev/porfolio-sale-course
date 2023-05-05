@@ -3,18 +3,43 @@
 		.food-item {
 			border-top-right-radius: 20px;
 			border-top-left-radius: 20px;
+			width: 100%;
+			height: 130px;
+			object-fit: cover;
 		}
+		.food-price-sale,
 		.food-price,
 		.food-heading {
-			font-size: 24px;
+			font-size: 16px;
 			font-weight: 500;
+			text-transform: capitalize;
 		}
+		.food-heading {
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+		}
+		.food-price.food-price-line-throungh {
+			color: #797575;
+			text-decoration: line-through;
+		}
+		.food-price-sale.none {
+			display: none;
+		}
+		.food-price-sale,
 		.food-price {
-			font-size: 20px;
+			font-size: 14px;
+			color: #ff5c28;
+		}
+		.food-price-sale {
+			color: #ff5c28;
+			margin-left: 8px;
 		}
 		.food-category {
 			color: #797575;
-			font-size: 20px;
+			font-size: 14px;
+			text-transform: capitalize;
 		}
 		.food-footer {
 			display: flex;
@@ -36,5 +61,8 @@
 		.ant-card-body {
 			padding: 0;
 		}
+	}
+	.ant-image {
+		width: 100%;
 	}
 }

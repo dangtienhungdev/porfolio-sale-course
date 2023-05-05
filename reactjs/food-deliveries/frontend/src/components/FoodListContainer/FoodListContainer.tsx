@@ -3,10 +3,10 @@ import './style.scss';
 import FoodItem from './FoodItem';
 import { Row } from 'antd';
 
-const FoodListContainer = () => {
+const FoodListContainer = ({ foods }: any) => {
 	return (
 		<Row gutter={[48, 24]} className="food-lists">
-			<FoodItem />
+			<FoodItem foodList={foods.docs} />
 		</Row>
 	);
 };

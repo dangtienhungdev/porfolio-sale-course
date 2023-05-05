@@ -14,3 +14,7 @@ export interface IFood {
 	orderDetails: any;
 	reviews: any;
 }
+
+export interface IFoodProps {
+	docs: IFood[];
+}

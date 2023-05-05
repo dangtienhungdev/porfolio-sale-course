@@ -79,7 +79,7 @@ const LayoutDefault = () => {
 					</Col>
 				</Row>
 			</Layout>
-			{currentUser.user.role === 'admin' && (
+			{currentUser && currentUser.user.role === 'admin' && (
 				<Link to={'/admin/dashboard'}>
 					<FloatButton icon={<UserSwitchOutlined />} type="primary" style={{ right: 50 }} />
 				</Link>
