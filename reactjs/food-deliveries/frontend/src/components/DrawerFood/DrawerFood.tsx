@@ -15,7 +15,6 @@ interface Props {
 
 const DrawerFood = ({ open, onClose, foodItem }: Props) => {
 	if (!foodItem) return <NotFound />;
-	console.log('🚀 ~ file: DrawerFood.tsx:11 ~ DrawerFood ~ foodItem:', foodItem);
 	return (
 		<Drawer
 			width={640}

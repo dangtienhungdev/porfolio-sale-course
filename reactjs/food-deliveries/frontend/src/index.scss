@@ -35,26 +35,6 @@ $white-color: #fff;
 	}
 }
 /* custom color buttn */
-:where(.css-dev-only-do-not-override-1mqg3i0) {
-	.ant-btn-primary {
-		background-color: $primary-color;
-		&:hover {
-			background-color: $primary-color;
-		}
-	}
-	.ant-btn-primary:not(:disabled):hover {
-		background-color: $primary-color;
-	}
-	/* input */
-	.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
-		border-color: $primary-color;
-	}
-	.ant-input-affix-wrapper:focus,
-	.ant-input-affix-wrapper-focused {
-		box-shadow: 0 0 0 2px rgba(250, 88, 34, 0.2);
-	}
-}
-
 :where(.css-1mqg3i0) {
 	.ant-card {
 		.ant-card-body {
@@ -75,6 +55,15 @@ $white-color: #fff;
 	}
 	.ant-tabs .ant-tabs-tab:hover {
 		color: #ff5c28;
+	}
+	.ant-image {
+		width: 100%;
+	}
+	.ant-btn-primary {
+		background-color: $primary-color;
+		&:hover {
+			background-color: $primary-color;
+		}
 	}
 }
 :where(.css-dev-only-do-not-override-1mqg3i0) {
@@ -110,5 +99,31 @@ $white-color: #fff;
 	}
 	.ant-image {
 		width: 100%;
+	}
+	.ant-btn-primary {
+		background-color: $primary-color;
+		&:hover {
+			background-color: $primary-color;
+		}
+	}
+	.ant-btn-primary:not(:disabled):hover {
+		background-color: $primary-color;
+	}
+	/* input */
+	.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+		border-color: $primary-color;
+	}
+	.ant-input-affix-wrapper:focus,
+	.ant-input-affix-wrapper-focused {
+		box-shadow: 0 0 0 2px rgba(250, 88, 34, 0.2);
+	}
+}
+@media (max-width: 900px) {
+	/* Điều kiện khi kích thước màn hình nhỏ hơn 900px */
+	.rotate-message {
+		display: block; /* Hiển thị dòng chữ xoay màn hình */
+	}
+	.loading {
+		display: none; /* Ẩn phần loading */
 	}
 }
