@@ -13,6 +13,7 @@ export interface IFood {
 	is_active?: boolean;
 	orderDetails: any;
 	reviews: any;
+	amount: number;
 }
 
 export interface IFoodProps {

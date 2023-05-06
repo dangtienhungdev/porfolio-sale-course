@@ -1,17 +1,40 @@
 import './style.scss';
 
 import { Button, Card, Col, Divider, Image, Row, Space, Typography } from 'antd';
+import { decreaseAmount, increaseAmount, removeFood } from '../../redux/reducers/orderSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect, useState } from 'react';
 
+import { DeleteOutlined } from '@ant-design/icons';
 import IconLocation from '../icons/IconLocation';
+import { RootState } from '../../redux/store';
 import { caculatorDistance } from '../../utils/caculatorDistance';
+import { fomatCurrent } from '../../utils/fomatterCurrent';
+import { v4 as uuidv4 } from 'uuid';
 
 const styleMyOrder = {
 	backgroundColor: '#F5F5F5',
 };
 
 const MyOrder = () => {
+	/* dispatch */
+	const dispatch = useAppDispatch();
+	/* useState */
 	const [distance, setDistance] = useState<any>(0);
+	/* redux */
+	/* redux */
+	const { order, totalAmount, totalPrice } = useAppSelector((state: RootState) => state.order);
+	console.log('🚀 ~ file: MyOrder.tsx:27 ~ MyOrder ~ totalPrice:', typeof fomatCurrent(totalPrice));
+	const handleDeleteFood = (id: string) => {
+		dispatch(removeFood(id));
+	};
+	const handleIncrease = (id: string) => {
+		dispatch(increaseAmount(id));
+	};
+	const handleDecrease = (id: string) => {
+		dispatch(decreaseAmount(id));
+	};
+	/* useEffect */
 	useEffect(() => {
 		const fetchLocation = async () => {
 			try {
@@ -48,36 +71,43 @@ const MyOrder = () => {
 			</Col>
 			<Col span={24} style={{ margin: '26px 0', height: '100%' }}>
 				<Row gutter={[16, 16]}>
-					<Col span={24}>
-						<Card hoverable className="card-container">
-							<Row gutter={16}>
-								<Col span={10}>
-									<Image
-										className="image"
-										preview={false}
-										src="https://daylambanh.edu.vn/wp-content/uploads/2017/08/cach-lam-banh-hamburger-bo-600x400.jpg"
-									/>
+					{order &&
+						order.length > 0 &&
+						order.map((item: any) => {
+							return (
+								<Col span={24} key={uuidv4()}>
+									<Card hoverable className="card-container">
+										<Row gutter={16}>
+											<Col span={10}>
+												<Image className="image" preview={false} src={item.images[0]} />
+											</Col>
+											<Col span={14}>
+												<div className="card-body">
+													<div className="card-body__heading">
+														<Typography.Text ellipsis className="card-title">
+															{item.name}
+														</Typography.Text>
+														<p>
+															{item.amount} x {fomatCurrent(item.price)}đ
+														</p>
+													</div>
+													<div className="card-body__quantity">
+														<Space>
+															<Button onClick={() => handleDecrease(item._id)}>-</Button>
+															<Button type="primary">{item.amount}</Button>
+															<Button onClick={() => handleIncrease(item._id)}>+</Button>
+															<Button onClick={() => handleDeleteFood(item._id)}>
+																<DeleteOutlined />
+															</Button>
+														</Space>
+													</div>
+												</div>
+											</Col>
+										</Row>
+									</Card>
 								</Col>
-								<Col span={14}>
-									<div className="card-body">
-										<div className="card-body__heading">
-											<Typography.Text ellipsis className="card-title">
-												Burger Mozza XL
-											</Typography.Text>
-											<p>1 x $ 100</p>
-										</div>
-										<div className="card-body__quantity">
-											<Space>
-												<Button>-</Button>
-												<Button>1</Button>
-												<Button>+</Button>
-											</Space>
-										</div>
-									</div>
-								</Col>
-							</Row>
-						</Card>
-					</Col>
+							);
+						})}
 				</Row>
 			</Col>
 			<Divider />
@@ -85,35 +115,56 @@ const MyOrder = () => {
 				<Row>
 					<Col span={16}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
-							Sub Total
+							Tổng số lượng
 						</Typography.Text>
 					</Col>
 					<Col span={8}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
-							<span style={{ fontSize: '20px', color: '#FF5C28' }}>$ 100</span>
+							<span style={{ fontSize: '20px', color: '#FF5C28' }}>{totalAmount}</span>
 						</Typography.Text>
 					</Col>
 				</Row>
 				<Row>
 					<Col span={16}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
-							Delivery Fee
+							Tổng tiền
 						</Typography.Text>
 					</Col>
 					<Col span={8}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
-							<span style={{ fontSize: '20px', color: '#FF5C28' }}>$ 100</span>
+							<span style={{ fontSize: '20px', color: '#FF5C28' }}>
+								{fomatCurrent(totalPrice)}đ
+							</span>
+						</Typography.Text>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={16}>
+						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
+							Phí giao hàng
+						</Typography.Text>
+					</Col>
+					<Col span={8}>
+						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
+							<span style={{ fontSize: '20px', color: '#FF5C28' }}>
+								{totalPrice === 0 ? 0 : fomatCurrent(Math.ceil(distance.toFixed(1) * 1000))}đ
+							</span>
 						</Typography.Text>
 					</Col>
 				</Row>
 				<Divider />
 				<Row>
 					<Col span={16}>
-						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>Total</Typography.Text>
+						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>Tổng</Typography.Text>
 					</Col>
 					<Col span={8}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
-							<span style={{ fontSize: '20px', color: '#FF5C28' }}>$ 200</span>
+							<span style={{ fontSize: '20px', color: '#FF5C28' }}>
+								{totalPrice === 0
+									? 0
+									: fomatCurrent(totalPrice + Math.ceil(distance.toFixed(1) * 1000))}
+								đ
+							</span>
 						</Typography.Text>
 					</Col>
 				</Row>

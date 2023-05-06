@@ -3,17 +3,32 @@ import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 
 import { IFood } from '../../interfaces/foods.type';
 import { NotFound } from '../../views';
+import { addOrderFood } from '../../redux/reducers/orderSlice';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
+import { useAppDispatch } from '../../redux/hooks';
 import { useState } from 'react';
 
 const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 const FoodItem = ({ foodList, onClose, setFoodItem }: any) => {
+	const dispatch = useAppDispatch();
+	/* useState */
 	const [isCheck, setIsCheck] = useState<boolean>(false);
+
 	const handleFoodItem = (item: IFood) => {
 		setFoodItem(item);
 		onClose();
 	};
+	/* rating */
 	const [value, setValue] = useState(6);
+	/* add to cart */
+	const handleAddCart = (item: IFood) => {
+		if (item.price === 0 || item.price === undefined) {
+			item = { ...item, price: item.priceOriginal };
+		} else {
+			item = { ...item, price: item.price };
+		}
+		dispatch(addOrderFood({ ...item, amount: 1, totalPrice: item.price }));
+	};
 	if (!foodList) return <NotFound />;
 	return (
 		<>
@@ -71,7 +86,7 @@ const FoodItem = ({ foodList, onClose, setFoodItem }: any) => {
 										</span>
 									</Col>
 									<Col span={24}>
-										<Button type="primary" className="food-btn">
+										<Button type="primary" className="food-btn" onClick={() => handleAddCart(item)}>
 											Add To Cart
 										</Button>
 									</Col>
