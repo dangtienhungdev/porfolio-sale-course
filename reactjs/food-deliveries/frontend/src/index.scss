@@ -127,3 +127,12 @@ $white-color: #fff;
 		display: none; /* Ẩn phần loading */
 	}
 }
+@media (max-width: 900px) {
+	/* Điều kiện khi kích thước màn hình nhỏ hơn 900px */
+	.rotate-message {
+		display: block; /* Hiển thị dòng chữ xoay màn hình */
+	}
+	.loading {
+		display: none; /* Ẩn phần loading */
+	}
+}
