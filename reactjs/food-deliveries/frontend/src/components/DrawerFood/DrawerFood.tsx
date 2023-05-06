@@ -4,8 +4,10 @@ import { Button, Carousel, Col, Drawer, Image, Row, Typography } from 'antd';
 
 import { IFood } from '../../interfaces/foods.type';
 import { NotFound } from '../../views';
+import { addOrderFood } from '../../redux/reducers/orderSlice';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
 import parse from 'html-react-parser';
+import { useAppDispatch } from '../../redux/hooks';
 
 interface Props {
 	open: boolean;
@@ -14,6 +16,16 @@ interface Props {
 }
 
 const DrawerFood = ({ open, onClose, foodItem }: Props) => {
+	const dispatch = useAppDispatch();
+	const handleAddToCart = (foodItem: IFood) => {
+		if (foodItem.price === 0 || foodItem.price === undefined) {
+			foodItem = { ...foodItem, price: foodItem.priceOriginal };
+		} else {
+			foodItem = { ...foodItem, price: foodItem.price };
+		}
+		dispatch(addOrderFood({ ...foodItem, amount: 1, totalPrice: foodItem.price }));
+		onClose();
+	};
 	if (!foodItem) return <NotFound />;
 	return (
 		<Drawer
@@ -66,11 +78,10 @@ const DrawerFood = ({ open, onClose, foodItem }: Props) => {
 					</Col>
 					<div className="food-item-footer">
 						<Row gutter={16}>
-							<Col span={12}>
-								<Button type="primary">Mua ngay</Button>
-							</Col>
-							<Col span={12}>
-								<Button type="primary">Giỏ hàng</Button>
+							<Col span={24}>
+								<Button type="primary" onClick={() => handleAddToCart(foodItem)}>
+									Giỏ hàng
+								</Button>
 							</Col>
 						</Row>
 					</div>

@@ -1,7 +1,7 @@
-// export const myLat = 20.4142167;
-// export const myLon = 106.1228214;
-export const myLat = 21.4142167;
-export const myLon = 104.1228214;
+export const myLat = 20.4142167;
+export const myLon = 106.1228214;
+// export const myLat = 21.4142167;
+// export const myLon = 104.1228214;
 
 export const caculatorDistance = () => {
 	return new Promise((resolve, reject) => {
