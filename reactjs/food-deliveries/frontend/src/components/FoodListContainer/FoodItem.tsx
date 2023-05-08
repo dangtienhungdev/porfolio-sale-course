@@ -1,16 +1,18 @@
-import { Button, Card, Col, Image, Rate, Row, Typography } from 'antd';
+import { Button, Card, Col, Image, Rate, Row, Typography, message } from 'antd';
 import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 import { IFood } from '../../interfaces/foods.type';
 import { NotFound } from '../../views';
+import { RootState } from '../../redux/store';
 import { addOrderFood } from '../../redux/reducers/orderSlice';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
-import { useAppDispatch } from '../../redux/hooks';
 import { useState } from 'react';
 
 const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 const FoodItem = ({ foodList, onClose, setFoodItem }: any) => {
 	const dispatch = useAppDispatch();
+	const { currentUser }: any = useAppSelector((state: RootState) => state.auth.login);
 	/* useState */
 	const [isCheck, setIsCheck] = useState<boolean>(false);
 
@@ -22,12 +24,16 @@ const FoodItem = ({ foodList, onClose, setFoodItem }: any) => {
 	const [value, setValue] = useState(6);
 	/* add to cart */
 	const handleAddCart = (item: IFood) => {
-		if (item.price === 0 || item.price === undefined) {
-			item = { ...item, price: item.priceOriginal };
+		if (!currentUser) {
+			message.error('Bạn cần đăng nhập để thực hiện chức năng này');
 		} else {
-			item = { ...item, price: item.price };
+			if (item.price === 0 || item.price === undefined) {
+				item = { ...item, price: item.priceOriginal };
+			} else {
+				item = { ...item, price: item.price };
+			}
+			dispatch(addOrderFood({ ...item, amount: 1, totalPrice: item.price }));
 		}
-		dispatch(addOrderFood({ ...item, amount: 1, totalPrice: item.price }));
 	};
 	if (!foodList) return <NotFound />;
 	return (

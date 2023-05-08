@@ -1,13 +1,14 @@
 import './style.scss';
 
-import { Button, Carousel, Col, Drawer, Image, Row, Typography } from 'antd';
+import { Button, Carousel, Col, Drawer, Image, Row, Typography, message } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 import { IFood } from '../../interfaces/foods.type';
 import { NotFound } from '../../views';
+import { RootState } from '../../redux/store';
 import { addOrderFood } from '../../redux/reducers/orderSlice';
 import { fomatCurrent } from '../../utils/fomatterCurrent';
 import parse from 'html-react-parser';
-import { useAppDispatch } from '../../redux/hooks';
 
 interface Props {
 	open: boolean;
@@ -17,14 +18,19 @@ interface Props {
 
 const DrawerFood = ({ open, onClose, foodItem }: Props) => {
 	const dispatch = useAppDispatch();
+	const { currentUser }: any = useAppSelector((state: RootState) => state.auth.login);
 	const handleAddToCart = (foodItem: IFood) => {
-		if (foodItem.price === 0 || foodItem.price === undefined) {
-			foodItem = { ...foodItem, price: foodItem.priceOriginal };
+		if (!currentUser) {
+			message.error('Bạn cần đăng nhập để thực hiện chức năng này');
 		} else {
-			foodItem = { ...foodItem, price: foodItem.price };
+			if (foodItem.price === 0 || foodItem.price === undefined) {
+				foodItem = { ...foodItem, price: foodItem.priceOriginal };
+			} else {
+				foodItem = { ...foodItem, price: foodItem.price };
+			}
+			dispatch(addOrderFood({ ...foodItem, amount: 1, totalPrice: foodItem.price }));
+			onClose();
 		}
-		dispatch(addOrderFood({ ...foodItem, amount: 1, totalPrice: foodItem.price }));
-		onClose();
 	};
 	if (!foodItem) return <NotFound />;
 	return (

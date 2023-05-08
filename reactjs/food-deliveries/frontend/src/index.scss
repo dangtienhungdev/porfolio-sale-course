@@ -136,3 +136,40 @@ $white-color: #fff;
 		display: none; /* Ẩn phần loading */
 	}
 }
+.container :where(.css-dev-only-do-not-override-1mqg3i0) .ant-card .ant-card-body {
+	padding: 16px;
+}
+:where(.css-1mqg3i0).ant-btn-primary:not(:disabled):hover {
+	background-color: $primary-color;
+}
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-menu-light .ant-menu-item-selected {
+		color: rgb(255, 92, 40);
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+}
+
+.ant-tabs-nav-wrap::before {
+	background-color: red;
+}
+
+.tabs-style {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	color: #000;
+	&:hover {
+		color: #ff5c28;
+	}
+}
+
+:where(.css-dev-only-do-not-override-1mqg3i0) {
+	.ant-tabs .ant-tabs-ink-bar {
+		background: #ff5c28;
+	}
+}
