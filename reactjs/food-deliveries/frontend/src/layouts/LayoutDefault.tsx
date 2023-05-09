@@ -10,9 +10,11 @@ import Sidebar from '../components/Sidebars/Sidebar';
 import { UserSwitchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { createAxios } from '../config/intance';
+import { getUserById } from '../redux/actions/userAction';
 import jwt_decode from 'jwt-decode';
 import { loginSuccess } from '../redux/reducers/authSlice';
 import { logoutUser } from '../redux/actions/authAction';
+import { logoutUserSuccess } from '../redux/reducers/userSlice';
 import { useEffect } from 'react';
 
 const styleSider: React.CSSProperties = {
@@ -45,13 +47,16 @@ const LayoutDefault = () => {
 		}
 	}, [navigate, currentUser]);
 	const accessToken = currentUser?.accessToken;
-	const id = currentUser?._id;
+	const id = currentUser?.user?._id;
 	const axiosJWT = createAxios(currentUser, dispatch, loginSuccess);
 	/* xứ lí logout */
 	const handleLogout = () => {
 		logoutUser(dispatch, id, navigate, accessToken, axiosJWT);
+		dispatch(logoutUserSuccess());
 	};
-
+	useEffect(() => {
+		dispatch(getUserById(id));
+	}, [id, dispatch]);
 	/* axios interceptor */
 	let axiosJwt = axios.create();
 	axiosJwt.interceptors.request.use(async (config) => {

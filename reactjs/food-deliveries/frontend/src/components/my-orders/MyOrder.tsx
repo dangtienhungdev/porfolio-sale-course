@@ -21,8 +21,7 @@ const MyOrder = () => {
 	/* useState */
 	const [distance, setDistance] = useState<any>(0);
 	/* redux */
-	const { user }: any = useAppSelector((state: RootState) => state.user.currentUser);
-	console.log('🚀 ~ file: MyOrder.tsx:25 ~ MyOrder ~ user:', user);
+	const { currentUser }: any = useAppSelector((state: RootState) => state.user);
 	const { order, totalAmount, totalPrice } = useAppSelector((state: RootState) => state.order);
 	const handleDeleteFood = (id: string) => {
 		dispatch(removeFood(id));
@@ -65,7 +64,7 @@ const MyOrder = () => {
 								textTransform: 'capitalize',
 							}}
 						>
-							{user?.address || 'Chưa cập nhật địa chỉ'}
+							{currentUser?.user?.address || 'Chưa cập nhật địa chỉ'}
 						</Typography.Text>
 					</Col>
 					<Col span={8}>

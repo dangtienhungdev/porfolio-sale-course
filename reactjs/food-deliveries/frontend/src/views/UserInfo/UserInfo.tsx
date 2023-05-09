@@ -6,7 +6,6 @@ import Payment from './components/Payment';
 import { PlusOutlined } from '@ant-design/icons';
 import { RootState } from '../../redux/store';
 import { getOnePayment } from '../../API/payment';
-import { loginUser } from '../../redux/actions/authAction';
 import { updateUser } from '../../redux/actions/userAction';
 import { useToggleModal } from '../../hooks/useToggleModal';
 
@@ -15,49 +14,51 @@ const UserInfo = () => {
 	const dispatch = useAppDispatch();
 	const [payment, setPayment] = useState<any>();
 	const { currentUser }: any = useAppSelector((state: RootState) => state.auth.login);
-	const { user }: any = useAppSelector((state: RootState) => state.user.currentUser);
+	const { currentUser: userInfo }: any = useAppSelector((state: RootState) => state.user);
+	const user = userInfo?.user;
+	/* open modal payment */
 	const { openModal, handleToggleModal } = useToggleModal();
 	const handleAddPayment = () => {
 		handleToggleModal('isOpenModalAdd');
 	};
+	/* set filed form */
 	useEffect(() => {
-		if (!user) return;
-		if (!payment) return;
-		form.setFieldsValue({
-			name: user.name,
-			address: user.address,
-			phone: user.phone,
-			paymentMethodId: payment.cardName,
-		});
-		return () => {
-			form.resetFields();
-		};
-	}, [form, user, payment]);
+		if (user) {
+			form.setFieldsValue({
+				name: user.name,
+				address: user.address,
+				phone: user.phone,
+				paymentMethodId: payment?.cardName,
+			});
+		}
+	}, [form, user, payment?.cardName]);
+	/* get payment */
 	useEffect(() => {
 		const getPayment = async () => {
-			if (user?.paymentMethodId) {
-				try {
-					const payment = user?.paymentMethodId;
-					const response = await getOnePayment(currentUser.accessToken, payment);
-					if (response) {
-						setPayment(response.data.payment);
-					}
-				} catch (error) {
-					console.log(error);
+			try {
+				const res = await getOnePayment(
+					currentUser?.accessToken,
+					currentUser?.user?.paymentMethodId
+				);
+				if (res && res.data) {
+					setPayment(res.data.payment);
 				}
+			} catch (error) {
+				console.log('Lỗi lấy thông tin thanh toán');
 			}
 		};
 		getPayment();
-	}, [user?.paymentMethodId]);
+	}, [currentUser?.user?.paymentMethodId, currentUser?.accessToken]);
 	const onFinish = async (values: any) => {
 		try {
-			const newCurrent = {
+			const newUser = {
 				...user,
 				name: values.name,
 				address: values.address,
 				phone: values.phone,
+				paymentMethodId: payment._id,
 			};
-			await updateUser(newCurrent, dispatch);
+			await updateUser(newUser, dispatch);
 			message.success('Cập nhật thông tin thành công');
 		} catch (error) {
 			console.log('Cập nhật thông tin thất bại');
@@ -90,7 +91,9 @@ const UserInfo = () => {
 									label="Địa chỉ người dùng"
 									rules={[{ message: 'Không được bỏ trống!', required: true }]}
 								>
-									<Input placeholder={`${user.address ? 'Địa chỉ người dùng' : 'Chưa cập nhật'}`} />
+									<Input
+										placeholder={`${user?.address ? 'Địa chỉ người dùng' : 'Chưa cập nhật'}`}
+									/>
 								</Form.Item>
 							</Col>
 							<Col span={12}>
