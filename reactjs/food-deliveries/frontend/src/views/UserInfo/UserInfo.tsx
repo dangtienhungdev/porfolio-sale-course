@@ -15,29 +15,29 @@ const UserInfo = () => {
 	const dispatch = useAppDispatch();
 	const [payment, setPayment] = useState<any>();
 	const { currentUser }: any = useAppSelector((state: RootState) => state.auth.login);
-	const { name, address, phone, paymentMethodId } = currentUser?.user;
+	const { user }: any = useAppSelector((state: RootState) => state.user.currentUser);
 	const { openModal, handleToggleModal } = useToggleModal();
 	const handleAddPayment = () => {
 		handleToggleModal('isOpenModalAdd');
 	};
 	useEffect(() => {
-		if (!currentUser) return;
+		if (!user) return;
 		if (!payment) return;
 		form.setFieldsValue({
-			name: name,
-			address: address,
-			phone: phone,
+			name: user.name,
+			address: user.address,
+			phone: user.phone,
 			paymentMethodId: payment.cardName,
 		});
 		return () => {
 			form.resetFields();
 		};
-	}, [form, address, name, phone, currentUser, paymentMethodId, payment]);
+	}, [form, user, payment]);
 	useEffect(() => {
 		const getPayment = async () => {
-			if (currentUser?.user?.paymentMethodId) {
+			if (user?.paymentMethodId) {
 				try {
-					const payment = currentUser?.user?.paymentMethodId;
+					const payment = user?.paymentMethodId;
 					const response = await getOnePayment(currentUser.accessToken, payment);
 					if (response) {
 						setPayment(response.data.payment);
@@ -48,11 +48,11 @@ const UserInfo = () => {
 			}
 		};
 		getPayment();
-	}, [currentUser?.user?.paymentMethodId]);
+	}, [user?.paymentMethodId]);
 	const onFinish = async (values: any) => {
 		try {
 			const newCurrent = {
-				...currentUser.user,
+				...user,
 				name: values.name,
 				address: values.address,
 				phone: values.phone,
@@ -90,7 +90,7 @@ const UserInfo = () => {
 									label="Địa chỉ người dùng"
 									rules={[{ message: 'Không được bỏ trống!', required: true }]}
 								>
-									<Input placeholder={`${address ? 'Địa chỉ người dùng' : 'Chưa cập nhật'}`} />
+									<Input placeholder={`${user.address ? 'Địa chỉ người dùng' : 'Chưa cập nhật'}`} />
 								</Form.Item>
 							</Col>
 							<Col span={12}>
@@ -99,10 +99,12 @@ const UserInfo = () => {
 									label="Sđt người dùng"
 									rules={[{ message: 'Không được bỏ trống!', required: true }]}
 								>
-									<Input placeholder={`${phone ? 'Số điện thoại người dùng' : 'Chưa cập nhật'}`} />
+									<Input
+										placeholder={`${user?.phone ? 'Số điện thoại người dùng' : 'Chưa cập nhật'}`}
+									/>
 								</Form.Item>
 							</Col>
-							{currentUser?.user?.paymentMethodId && (
+							{user?.paymentMethodId && (
 								<Col span={12}>
 									<Form.Item name={'paymentMethodId'} label="Phương thức thanh toán">
 										<Input placeholder={'Phương thức thanh toán'} />

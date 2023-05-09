@@ -17,12 +17,12 @@ const styleMyOrder = {
 };
 
 const MyOrder = () => {
-	/* dispatch */
 	const dispatch = useAppDispatch();
 	/* useState */
 	const [distance, setDistance] = useState<any>(0);
 	/* redux */
-	/* redux */
+	const { user }: any = useAppSelector((state: RootState) => state.user.currentUser);
+	console.log('🚀 ~ file: MyOrder.tsx:25 ~ MyOrder ~ user:', user);
 	const { order, totalAmount, totalPrice } = useAppSelector((state: RootState) => state.order);
 	const handleDeleteFood = (id: string) => {
 		dispatch(removeFood(id));
@@ -54,10 +54,18 @@ const MyOrder = () => {
 					My Order
 				</Typography.Title>
 				<Typography.Text>Delivery address</Typography.Text>
-				<Row>
+				<Row gutter={[16, 16]}>
 					<Col span={16}>
-						<Typography.Text style={{ marginTop: '2px', fontSize: '20px', fontWeight: 'bold' }}>
-							1342 Morris Street
+						<Typography.Text
+							ellipsis
+							style={{
+								marginTop: '2px',
+								fontSize: '16px',
+								fontWeight: 'bold',
+								textTransform: 'capitalize',
+							}}
+						>
+							{user?.address || 'Chưa cập nhật địa chỉ'}
 						</Typography.Text>
 					</Col>
 					<Col span={8}>
@@ -146,7 +154,7 @@ const MyOrder = () => {
 					<Col span={8}>
 						<Typography.Text style={{ marginTop: '2px', fontSize: '20px' }}>
 							<span style={{ fontSize: '20px', color: '#FF5C28' }}>
-								{totalPrice === 0 ? 0 : fomatCurrent(Math.ceil(distance.toFixed(1) * 1000))}đ
+								{totalPrice === 0 ? 0 : fomatCurrent(Math.ceil(distance.toFixed(1) * 500))}đ
 							</span>
 						</Typography.Text>
 					</Col>
@@ -161,7 +169,7 @@ const MyOrder = () => {
 							<span style={{ fontSize: '20px', color: '#FF5C28' }}>
 								{totalPrice === 0
 									? 0
-									: fomatCurrent(totalPrice + Math.ceil(distance.toFixed(1) * 1000))}
+									: fomatCurrent(totalPrice + Math.ceil(distance.toFixed(1) * 500))}
 								đ
 							</span>
 						</Typography.Text>
