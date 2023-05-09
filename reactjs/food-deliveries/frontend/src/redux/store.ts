@@ -14,6 +14,7 @@ import authReducer from './reducers/authSlice';
 import foodReducer from './reducers/foodSlice';
 import orderReducer from './reducers/orderSlice';
 import storage from 'redux-persist/lib/storage';
+import userReducer from './reducers/userSlice';
 
 const persistConfig = {
 	key: 'root',
@@ -23,6 +24,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	auth: authReducer,
+	user: userReducer,
 	food: foodReducer,
 	order: orderReducer,
 });

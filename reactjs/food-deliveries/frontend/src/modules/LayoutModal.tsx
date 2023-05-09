@@ -1,8 +1,9 @@
+import { IUseToggleModal } from '../hooks/useToggleModal';
 import { Modal } from 'antd';
 
 type LayoutModalProps = {
 	title: string;
-	open: { isOpenModalAdd: boolean; isOpenModalEdit: boolean; isOpenModalView: boolean };
+	open: IUseToggleModal;
 	onCancel: () => void;
 	children?: React.ReactNode;
 };

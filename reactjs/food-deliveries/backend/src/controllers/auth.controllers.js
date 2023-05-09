@@ -41,7 +41,7 @@ export const authController = {
 	/* generic accessToken  */
 	generateAccessToken: (user) => {
 		return jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: '30s',
+			expiresIn: '1d',
 		});
 	},
 	/* generic refreshToken */

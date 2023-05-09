@@ -71,9 +71,6 @@ $white-color: #fff;
 		color: rgb(255, 92, 40);
 		background-color: rgba(255, 92, 40, 0.1);
 	}
-	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
-		background-color: rgba(255, 92, 40, 0.1);
-	}
 	a {
 		color: #000;
 	}
@@ -117,6 +114,16 @@ $white-color: #fff;
 	.ant-input-affix-wrapper-focused {
 		box-shadow: 0 0 0 2px rgba(250, 88, 34, 0.2);
 	}
+	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
+		background-color: rgba(255, 92, 40, 0.1);
+	}
+	.ant-tabs .ant-tabs-ink-bar {
+		background: #ff5c28;
+	}
+	.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+		border-color: $primary-color;
+		background-color: $primary-color;
+	}
 }
 @media (max-width: 900px) {
 	/* Điều kiện khi kích thước màn hình nhỏ hơn 900px */
@@ -142,15 +149,6 @@ $white-color: #fff;
 :where(.css-1mqg3i0).ant-btn-primary:not(:disabled):hover {
 	background-color: $primary-color;
 }
-:where(.css-dev-only-do-not-override-1mqg3i0) {
-	.ant-menu-light .ant-menu-item-selected {
-		color: rgb(255, 92, 40);
-		background-color: rgba(255, 92, 40, 0.1);
-	}
-	.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item:not(.ant-menu-item-selected):hover {
-		background-color: rgba(255, 92, 40, 0.1);
-	}
-}
 
 .ant-tabs-nav-wrap::before {
 	background-color: red;
@@ -165,11 +163,5 @@ $white-color: #fff;
 	color: #000;
 	&:hover {
 		color: #ff5c28;
-	}
-}
-
-:where(.css-dev-only-do-not-override-1mqg3i0) {
-	.ant-tabs .ant-tabs-ink-bar {
-		background: #ff5c28;
 	}
 }

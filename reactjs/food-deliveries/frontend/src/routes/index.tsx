@@ -1,5 +1,5 @@
 import { Dashboard, LoginAdmin, ManagerCategories, ManagerFoods } from '../components';
-import { FoodPage, Hearts, HomePage, NotFound } from '../views';
+import { FoodPage, Hearts, HomePage, NotFound, UserInfo } from '../views';
 import { Route, Routes } from 'react-router-dom';
 
 import LayoutAdmin from '../layouts/LayoutAdmin';
@@ -12,7 +12,7 @@ const index = () => {
 				<Route path="/" element={<HomePage />} />
 				<Route path="/foods" element={<FoodPage />} />
 				<Route path="/hearts" element={<Hearts />} />
-				<Route path="/users" element={'users'} />
+				<Route path="/users" element={<UserInfo />} />
 			</Route>
 			<Route path="/admin/sign-in" element={<LoginAdmin />} />
 			<Route path="/admin" element={<LayoutAdmin />}>
