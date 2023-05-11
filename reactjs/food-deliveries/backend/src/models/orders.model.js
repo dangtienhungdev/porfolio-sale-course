@@ -35,9 +35,22 @@ const orderSchema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
+		priceShipping: {
+			type: Number,
+			default: 0,
+			required: true,
+		},
+		shipping: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Shipping',
+		},
 		paymentMethodId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Payment',
+		},
+		address: {
+			type: String,
+			required: true,
 		},
 		is_active: {
 			type: Boolean,
