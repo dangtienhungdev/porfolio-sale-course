@@ -11,7 +11,11 @@ export const orderSchema = yup.object().shape({
 			price: yup.number().required().integer().min(0),
 		})
 	),
+	total: yup.number().required().integer().min(0),
+	priceShipping: yup.number().integer().min(0).required(),
+	shipping: yup.string(),
+	address: yup.string().required(),
 	status: yup.string().required().oneOf(validStatusValue),
-	paymentMethodId: yup.string().required(),
+	paymentMethodId: yup.string(),
 	is_active: yup.boolean().required().default(true),
 });

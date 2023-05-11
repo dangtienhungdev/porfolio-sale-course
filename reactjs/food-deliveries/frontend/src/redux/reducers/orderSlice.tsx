@@ -72,9 +72,16 @@ export const orderSlice = createSlice({
 				}
 			}
 		},
+		/* reset order */
+		resetOrder: (state) => {
+			state.order = [];
+			state.totalAmount = 0;
+			state.totalPrice = 0;
+		},
 	},
 });
 
-export const { addOrderFood, removeFood, increaseAmount, decreaseAmount } = orderSlice.actions;
+export const { addOrderFood, removeFood, increaseAmount, decreaseAmount, resetOrder } =
+	orderSlice.actions;
 
 export default orderSlice.reducer;
