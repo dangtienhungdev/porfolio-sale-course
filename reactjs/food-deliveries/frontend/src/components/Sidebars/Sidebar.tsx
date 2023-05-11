@@ -75,14 +75,6 @@ const Sidebar = ({ handleLogout }: Props) => {
 		},
 		{
 			label: (
-				<Link to="/foods" style={styleLink}>
-					<ShopOutlined style={styleIcon} />
-				</Link>
-			),
-			key: 'products',
-		},
-		{
-			label: (
 				<Link to="/hearts" style={styleLink}>
 					<HeartOutlined style={styleIcon} />
 				</Link>
