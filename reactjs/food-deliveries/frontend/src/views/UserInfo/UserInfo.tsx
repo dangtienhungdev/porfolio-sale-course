@@ -1,9 +1,10 @@
-import { Button, Col, Form, Input, Row, message } from 'antd';
+import { Button, Col, Form, Input, Row, Space, message } from 'antd';
+import { ClockCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect, useState } from 'react';
 
+import HistoryOrder from './components/HistoryOrder';
 import Payment from './components/Payment';
-import { PlusOutlined } from '@ant-design/icons';
 import { RootState } from '../../redux/store';
 import { getOnePayment } from '../../API/payment';
 import { updateUser } from '../../redux/actions/userAction';
@@ -18,8 +19,14 @@ const UserInfo = () => {
 	const user = userInfo?.user;
 	/* open modal payment */
 	const { openModal, handleToggleModal } = useToggleModal();
+	/* open modal history */
+	const { openModal: openModalHistory, handleToggleModal: handleToggleModalHistory } =
+		useToggleModal();
 	const handleAddPayment = () => {
 		handleToggleModal('isOpenModalAdd');
+	};
+	const handleOpenHistory = () => {
+		handleToggleModalHistory('isOpenModalView');
 	};
 	/* set filed form */
 	useEffect(() => {
@@ -68,10 +75,16 @@ const UserInfo = () => {
 		<>
 			<Row gutter={[32, 32]}>
 				<Col span={24}>
-					<Button type="primary" onClick={() => handleAddPayment()}>
-						<PlusOutlined />
-						Thêm phương thức thanh toán
-					</Button>
+					<Space>
+						<Button type="primary" onClick={() => handleAddPayment()}>
+							<PlusOutlined />
+							Thêm phương thức thanh toán
+						</Button>
+						<Button type="primary" onClick={() => handleOpenHistory()}>
+							<ClockCircleOutlined />
+							Lịch sử mua hàng
+						</Button>
+					</Space>
 				</Col>
 				<Col span={24}>
 					<Form layout="vertical" autoComplete="off" onFinish={onFinish} form={form}>
@@ -126,6 +139,7 @@ const UserInfo = () => {
 				</Col>
 			</Row>
 			<Payment openModal={openModal} handleToggleModal={handleToggleModal} />
+			<HistoryOrder openModal={openModalHistory} handleToggleModal={handleToggleModalHistory} />
 		</>
 	);
 };

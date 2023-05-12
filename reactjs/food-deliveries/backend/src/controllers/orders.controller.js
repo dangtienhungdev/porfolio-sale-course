@@ -140,4 +140,26 @@ export const orderController = {
 			return res.status(500).json({ message: error.message });
 		}
 	},
+	/* get one order by userId */
+	getOrderByUserId: async (req, res) => {
+		try {
+			const { id } = req.params;
+			if (!id) {
+				return res.status(400).json({ message: 'User not found' });
+			}
+			/* get order by userId */
+			const orderByUserId = await Order.find({ userId: id }).populate({
+				path: 'items.foodId',
+			});
+			if (!orderByUserId) {
+				return res.status(400).json({ message: 'Order not found' });
+			}
+			return res.status(200).json(orderByUserId);
+		} catch (error) {
+			if (error.errors) {
+				return res.status(400).json({ message: error.errors });
+			}
+			return res.status(500).json({ message: error.message });
+		}
+	},
 };

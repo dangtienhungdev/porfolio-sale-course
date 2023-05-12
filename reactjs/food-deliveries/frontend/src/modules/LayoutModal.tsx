@@ -12,7 +12,7 @@ const LayoutModal = ({ title, open, children, onCancel }: LayoutModalProps) => {
 	return (
 		<ModalComponent
 			title={title}
-			open={open.isOpenModalAdd || open.isOpenModalEdit}
+			open={open.isOpenModalAdd || open.isOpenModalEdit || open.isOpenModalView}
 			onCancel={onCancel}
 		>
 			{children}
