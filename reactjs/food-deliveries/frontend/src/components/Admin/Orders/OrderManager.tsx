@@ -51,7 +51,7 @@ const OrderManager = () => {
 			}
 		};
 		fetchOrders();
-	}, []);
+	}, [search]);
 	return (
 		<>
 			<LayoutModule
