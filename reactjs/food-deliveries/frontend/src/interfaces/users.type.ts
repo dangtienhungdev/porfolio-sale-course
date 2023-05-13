@@ -25,3 +25,10 @@ export interface CurrentUser {
 	msg: string;
 	user: User;
 }
+
+export interface IUserInfoOrder {
+	_id: string;
+	name: string;
+	address: string;
+	phone: string;
+}

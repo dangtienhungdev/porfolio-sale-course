@@ -1,4 +1,10 @@
-import { Dashboard, LoginAdmin, ManagerCategories, ManagerFoods } from '../components';
+import {
+	Dashboard,
+	LoginAdmin,
+	ManagerCategories,
+	ManagerFoods,
+	OrderManager,
+} from '../components';
 import { FoodPage, Hearts, HomePage, NotFound, UserInfo } from '../views';
 import { Route, Routes } from 'react-router-dom';
 
@@ -19,6 +25,7 @@ const index = () => {
 				<Route path="dashboard" element={<Dashboard />} />
 				<Route path="foods" element={<ManagerFoods />} />
 				<Route path="categories" element={<ManagerCategories />} />
+				<Route path="orders" element={<OrderManager />} />
 			</Route>
 			<Route path="*" element={<NotFound />} />
 		</Routes>

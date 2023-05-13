@@ -1,3 +1,6 @@
+import { IFoodIdOrder } from './foods.type';
+import { IUserInfoOrder } from './users.type';
+
 interface IItemFoods {
 	_id: string;
 	foodId: string;
@@ -6,9 +9,10 @@ interface IItemFoods {
 	current_price: number;
 }
 
-enum OrderStatus {
+export enum OrderStatus {
 	PENDING = 'pending',
 	CONFIRMED = 'confirmed',
+	SHIPPING = 'shipping',
 	DELIVERED = 'delivered',
 	CANCELED = 'canceled',
 }
@@ -23,4 +27,17 @@ export interface IOrder {
 	address: string;
 	total: number;
 	paymentMethodId: string;
+}
+
+export interface IOrders {
+	_id: string;
+	userId: IUserInfoOrder;
+	items: IFoodIdOrder[];
+	is_active: boolean;
+	status: OrderStatus;
+	priceShipping: number;
+	address: string;
+	total: number;
+	paymentMethodId: string;
+	createdAt: string;
 }

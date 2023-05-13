@@ -33,30 +33,7 @@ const ManagerFoods = () => {
 	const [foodEdit, setFoodEdit] = useState<IFood | null>(null);
 	const [foodView, setFoodView] = useState<IFood | null>(null);
 	const [search, setSearch] = useState<string>('');
-	const options = [
-		{ value: 'active', label: 'active' },
-		{ value: 'in-active', label: 'in-active' },
-	];
-	const handleChange = async ({ food, value }: { food: IFood; value: any }) => {
-		try {
-			const newActive = { is_active: value.value === 'active' ? true : false };
-			const newFood = { ...food, ...newActive, categoryId: food.categoryId._id };
-			const foodUpdate = await updateFood(newFood);
-			if (foodUpdate) {
-				const newFoods = foods.map((item) => {
-					if (item._id === food._id) {
-						return { ...item, is_active: newActive.is_active };
-					}
-					return item;
-				});
-				setFoods(newFoods);
-				message.success('Cập nhập thông tin món ăn thành công!');
-			}
-		} catch (error) {
-			message.error('Cập nhập thông tin món ăn thành công!');
-		}
-	};
-	/* table antd */
+	/* data */
 	const columns: ColumnsType<IFood> = [
 		{
 			title: 'Name',
@@ -167,6 +144,31 @@ const ManagerFoods = () => {
 			},
 		},
 	];
+
+	const options = [
+		{ value: 'active', label: 'active' },
+		{ value: 'in-active', label: 'in-active' },
+	];
+	const handleChange = async ({ food, value }: { food: IFood; value: any }) => {
+		try {
+			const newActive = { is_active: value.value === 'active' ? true : false };
+			const newFood = { ...food, ...newActive, categoryId: food.categoryId._id };
+			const foodUpdate = await updateFood(newFood);
+			if (foodUpdate) {
+				const newFoods = foods.map((item) => {
+					if (item._id === food._id) {
+						return { ...item, is_active: newActive.is_active };
+					}
+					return item;
+				});
+				setFoods(newFoods);
+				message.success('Cập nhập thông tin món ăn thành công!');
+			}
+		} catch (error) {
+			message.error('Cập nhập thông tin món ăn thành công!');
+		}
+	};
+
 	const handleEditFood = (food: IFood) => {
 		setOpenModal({ ...openModal, isOpenModalEdit: true });
 		setFoodEdit(food);

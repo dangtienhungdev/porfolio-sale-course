@@ -36,3 +36,15 @@ export const getOneOrderUser = async (id: string) => {
 		console.log(error);
 	}
 };
+
+/* get all orders */
+export const getAllOrders = async () => {
+	try {
+		const response = await instance.get('/orders?_page=1&_limit=10');
+		if (response && response.data) {
+			return response;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};

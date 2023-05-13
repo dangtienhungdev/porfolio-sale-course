@@ -19,3 +19,13 @@ export interface IFood {
 export interface IFoodProps {
 	docs: IFood[];
 }
+
+export interface IFoodIdOrder {
+	quantity: number;
+	price: number;
+	_id: string;
+	foodId: {
+		_id: string;
+		name: string;
+	};
+}
