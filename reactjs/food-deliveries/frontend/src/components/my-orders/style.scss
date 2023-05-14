@@ -50,6 +50,7 @@
 					font-weight: 600;
 					color: #ff5c28;
 					margin-bottom: 0;
+					text-transform: capitalize;
 				}
 				p {
 					font-size: 14px;
@@ -59,4 +60,15 @@
 			}
 		}
 	}
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-btn-primary {
+	background-color: #ff5c28;
+	&:hover {
+		background-color: #ff5c28;
+	}
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-card-hoverable {
+	padding: 16px;
 }

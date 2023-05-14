@@ -79,6 +79,10 @@ const DrawerCheckOut = ({ open, onClose }: Props) => {
 					current_price: item.price,
 				};
 			});
+			if (orderDetail.length === 0) {
+				message.error('Bạn chưa chọn món ăn nào!');
+				return;
+			}
 			const data = {
 				userId: user._id,
 				items: orderDetail,
@@ -89,14 +93,21 @@ const DrawerCheckOut = ({ open, onClose }: Props) => {
 				is_active: true,
 				paymentMethodId: value === 1 ? 'Tiền mặt' : user.paymentMethodId._id,
 			} as IOrder;
-			const response = await createOrder(data);
-			if (response) {
+			const response: any = await createOrder(data);
+			if (response.response.status === 400) {
+				response.response.data.message.map((item: string) => message.error(item));
+				return;
+			}
+			if (response.status === 200) {
 				message.success('Order success');
 				dispatch(resetOrder());
 				onClose();
 			}
-		} catch (error) {
+		} catch (error: any) {
 			message.error('Something went wrong, please try again');
+			if (error.response.data) {
+				error.response.data.message.map((item: string) => message.error(item));
+			}
 		}
 	};
 	return (

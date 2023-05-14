@@ -9,7 +9,7 @@ export const createOrder = async (order: IOrder) => {
 			return response;
 		}
 	} catch (error) {
-		console.log(error);
+		return error;
 	}
 };
 

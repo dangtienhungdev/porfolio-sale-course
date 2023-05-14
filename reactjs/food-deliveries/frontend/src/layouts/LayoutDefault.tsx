@@ -79,7 +79,7 @@ const LayoutDefault = () => {
 							<Outlet />
 						</Layout.Content>
 					</Col>
-					<Col span={8} style={{ padding: '16px 24px' }}>
+					<Col span={8}>
 						{currentUser ? <MyOrder /> : <Tabs defaultActiveKey="login" items={items} centered />}
 					</Col>
 				</Row>

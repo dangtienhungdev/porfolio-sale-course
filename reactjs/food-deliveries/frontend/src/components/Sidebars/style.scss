@@ -7,3 +7,17 @@
 		background-color: rgba(255, 92, 40, 0.1);
 	}
 }
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-ed5zg0).ant-menu-light > .ant-menu .ant-menu-item-selected {
+	color: rgb(255, 92, 40);
+	background-color: rgba(255, 92, 40, 0.1);
+}
+
+:where(.css-dev-only-do-not-override-ed5zg0).ant-menu-light:not(.ant-menu-horizontal)
+	.ant-menu-item:not(.ant-menu-item-selected):hover,
+:where(.css-dev-only-do-not-override-ed5zg0).ant-menu-light
+	> .ant-menu:not(.ant-menu-horizontal)
+	.ant-menu-item:not(.ant-menu-item-selected):hover {
+	background-color: rgba(255, 92, 40, 0.1);
+}
