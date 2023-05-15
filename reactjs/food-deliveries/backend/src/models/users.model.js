@@ -43,6 +43,10 @@ const userSchema = new mongoose.Schema(
 			enum: ['user', 'admin', 'superadmin'],
 			default: 'user',
 		},
+		is_active: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{ timestamps: true, versionKey: false }
 );

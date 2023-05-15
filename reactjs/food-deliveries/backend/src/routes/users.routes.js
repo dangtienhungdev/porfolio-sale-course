@@ -8,6 +8,8 @@ const router = express.Router();
 
 /* đăng ký */
 router.post('/sign-up', authController.register);
+/* tạo người dùng mới từ admin */
+router.post('/users/create', userController.create);
 /* đăng nhập */
 router.post('/sign-in', authController.login);
 /* refresh token */
@@ -19,7 +21,7 @@ router.get('/users', userController.getAll);
 /* lấy thông tin người dùng */
 router.get('/me/:id', userController.getOne);
 /* cập nhật thông tin người dùng */
-router.put('/me/:id', userController.update);
+router.put('/me/:id', userMiddlewares.verifyTokenAdmin, userController.update);
 /* xóa người dùng */
 router.delete(
 	'/me/:id',

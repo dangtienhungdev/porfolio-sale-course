@@ -1,3 +1,5 @@
+import { IPayment } from './payments.type';
+
 export interface IUserLogin {
 	email: string;
 	password: string;
@@ -31,4 +33,10 @@ export interface IUserInfoOrder {
 	name: string;
 	address: string;
 	phone: string;
+}
+
+export interface IUserInfoManager extends User {
+	phone?: string;
+	address?: string;
+	paymentMethodId?: Omit<IPayment, 'userId'>[];
 }

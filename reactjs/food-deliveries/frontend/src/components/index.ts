@@ -16,3 +16,4 @@ export { default as ManagerFoods } from './Admin/Food/ManagerFoods';
 export { default as ManagerCategories } from './Admin/Categories/ManagerCategories';
 export { default as LoginAdmin } from './Admin/Login/LoginAdmin';
 export { default as OrderManager } from './Admin/Orders/OrderManager';
+export { default as ManagerUsers } from './Admin/Users/ManagerUsers';

@@ -3,6 +3,7 @@ import {
 	LoginAdmin,
 	ManagerCategories,
 	ManagerFoods,
+	ManagerUsers,
 	OrderManager,
 } from '../components';
 import { FoodPage, Hearts, HomePage, NotFound, UserInfo } from '../views';
@@ -26,6 +27,7 @@ const index = () => {
 				<Route path="foods" element={<ManagerFoods />} />
 				<Route path="categories" element={<ManagerCategories />} />
 				<Route path="orders" element={<OrderManager />} />
+				<Route path="users" element={<ManagerUsers />} />
 			</Route>
 			<Route path="*" element={<NotFound />} />
 		</Routes>

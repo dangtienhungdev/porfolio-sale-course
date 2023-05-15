@@ -16,3 +16,13 @@ export const userLogin = yup.object().shape({
 	email: yup.string().required().email().trim(),
 	password: yup.string().required().min(6).max(200).trim(),
 });
+
+export const createUserValidate = yup.object().shape({
+	name: yup.string().required().min(3).max(200).trim(),
+	email: yup.string().required().email().trim(),
+	password: yup.string().required().min(6).max(200).trim(),
+	address: yup.string().trim(),
+	phone: yup.string().trim(),
+	role: yup.string().oneOf(['user', 'admin', 'superadmin']),
+	is_active: yup.boolean(),
+});
