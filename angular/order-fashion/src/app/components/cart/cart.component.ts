@@ -10,5 +10,8 @@ import { IProduct } from 'src/app/interfaces/product.type';
 export class CartComponent {
   cartItems: IProduct[] = [];
   constructor(public cartService: CartService) {}
-  ngOnInit(): void {}
+  /* remove product to cart */
+  remove(id: number) {
+    this.cartService.removeProductSignal(id);
+  }
 }

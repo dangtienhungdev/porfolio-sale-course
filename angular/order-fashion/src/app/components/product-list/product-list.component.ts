@@ -20,4 +20,9 @@ export class ProductListComponent {
       this.products = res;
     });
   }
+
+  /* add product to cart */
+  addToCart(product: IProduct) {
+    this.cartService.addProductSignal(product);
+  }
 }
