@@ -29,5 +29,12 @@ router.delete(
 	checkAdmin,
 	userController.delete
 );
-
+/* xóa mềm người dùng */
+router.put('/me/:id/recoverable-delete', userController.recoverableDeletion);
+/* khôi phục người dùng */
+router.put('/me/:id/undo-delete', userController.undeDeleteUser);
+/* lấy tất cả người dùng đã xóa */
+router.get('/users/deleted', userController.getAllUserDeleted);
+/* xóa 30s */
+router.delete('/users/:id', userController.deleteUserCannotRecover);
 export default router;
