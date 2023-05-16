@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import { userLogin, userRegister } from '../validates/Users.validate';
+import { userLogin, userRegister } from '../validates/users.validate';
 
 import User from '../models/users.model';
 import bcrypt from 'bcrypt';
@@ -35,7 +35,10 @@ export const authController = {
 			const user = await User.create(body);
 			return res.status(201).json({ msg: 'User created', user });
 		} catch (error) {
-			return res.status(500).json({ msg: error.errors });
+			if (error.errors) {
+				return res.status(500).json({ msg: error.errors });
+			}
+			return res.status(500).json({ msg: 'Register not found' });
 		}
 	},
 	/* generic accessToken  */

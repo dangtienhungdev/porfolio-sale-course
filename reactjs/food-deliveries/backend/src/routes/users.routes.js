@@ -7,6 +7,39 @@ import { userController } from '../controllers/users.controller';
 const router = express.Router();
 
 /* đăng ký */
+/**
+ * @openapi
+ * /sign-up:
+ * get:
+ * 		summary: Đăng ký tài khoản
+ * 		description: Đăng ký tài khoản
+ * 		parameters:
+ * 			- in: body
+ * 				name: body
+ * 				description: Thông tin tài khoản
+ * 				required: true
+ * 				schema:
+ * 					type: object
+ * 					required:
+ * 						- name
+ * 						- email
+ * 						- password
+ * 						- confirmPassword
+ * 					properties:
+ * 						name:
+ * 							type: string
+ * 						email:
+ * 							type: string
+ * 						password:
+ * 							type: string
+ * 						confirmPassword:
+ * 							type: string
+ * 		responses:
+ * 			200:
+ * 				description: User created
+ * 			500:
+ * 				description: Register not found
+ */
 router.post('/sign-up', authController.register);
 /* tạo người dùng mới từ admin */
 router.post('/users/create', userController.create);

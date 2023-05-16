@@ -10,6 +10,8 @@ import morgan from 'morgan';
 import orderRoutes from './routes/orders.routes';
 import paymentRoutes from './routes/payments.routes';
 import reviewRoutes from './routes/reviews.routes';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 import userRotes from './routes/users.routes';
 
 /* confign */
@@ -23,6 +25,24 @@ app.use(cors());
 app.use(morgan('common'));
 app.use(express.urlencoded({ extended: true }));
 
+const options = {
+	definition: {
+		openapi: '3.0.0',
+		info: {
+			title: 'Food Delivery API',
+			version: '1.0.0',
+		},
+		servers: [
+			{
+				url: 'http://localhost:8080/api/v1',
+			},
+		],
+	},
+	apis: ['./routes/*.js'],
+};
+
+const openapiSpecification = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 /* routes */
 app.use('/api/v1', userRotes);
 app.use('/api/v1', categoryRoutes);
