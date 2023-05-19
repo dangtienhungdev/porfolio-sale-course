@@ -1,5 +1,7 @@
+import RouterController from './routes';
+
 const App = () => {
-	return <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione, cupiditate.</div>;
+	return <RouterController />;
 };
 
 export default App;
