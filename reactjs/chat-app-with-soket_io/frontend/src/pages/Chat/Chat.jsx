@@ -1,4 +1,4 @@
-import { Contact, Welcome } from '../../components';
+import { ChatContainer, Contact, Welcome } from '../../components';
 import { useEffect, useState } from 'react';
 
 import { getAllUsersById } from '../../utils/user';
@@ -51,7 +51,11 @@ const Chat = () => {
 		<Container>
 			<div className="container">
 				<Contact contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
-				<Welcome currentUser={currentUser} />
+				{currenChat ? (
+					<ChatContainer currenChat={currenChat} />
+				) : (
+					<Welcome currentUser={currentUser} />
+				)}
 			</div>
 		</Container>
 	);
