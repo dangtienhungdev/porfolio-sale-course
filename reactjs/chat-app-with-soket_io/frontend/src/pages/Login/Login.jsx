@@ -127,11 +127,6 @@ const Login = () => {
 	const handleChange = (e) => {
 		setValues({ ...values, [e.target.name]: e.target.value });
 	};
-	useEffect(() => {
-		if (localStorage.getItem('accessToken')) {
-			navigate('/');
-		}
-	}, []);
 	return (
 		<FormContainer>
 			<form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

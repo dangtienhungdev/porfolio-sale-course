@@ -70,7 +70,7 @@ const SetAvatar = () => {
 		const fetchAvatars = async () => {
 			const data = [];
 			for (let i = 0; i <= 4; i++) {
-				const image = `${linkApi}/${i}.png`;
+				const image = `${linkApi}/${Math.random() * 1000}.png`;
 				data.push(image);
 			}
 			setAvatars(data);
