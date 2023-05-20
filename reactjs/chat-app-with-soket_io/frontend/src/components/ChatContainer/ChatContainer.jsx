@@ -1,8 +1,13 @@
+import ChatInput from '../ChatInput/ChatInput';
 import Logout from '../Logout/Logout';
+import Messages from '../Message/Messages';
 import React from 'react';
 import { styled } from 'styled-components';
 
 const ChartContainer = ({ currenChat }) => {
+	const handleSendMessage = async (msg) => {
+		console.log('🚀 ~ file: ChatContainer.jsx:9 ~ handleSendMessage ~ msg:', msg);
+	};
 	return (
 		<Container>
 			<div className="chat-header">
@@ -16,19 +21,21 @@ const ChartContainer = ({ currenChat }) => {
 				</div>
 				<Logout />
 			</div>
-			<div className="chat-message"></div>
-			<div className="chat-input"></div>
+			<Messages />
+			<ChatInput handleSendMessage={handleSendMessage} />
 		</Container>
 	);
 };
 
 const Container = styled.div`
-	padding-top: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 	.chat-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.2rem 10px;
+		padding: 10px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 		background-color: #1e1e30;
 		.user-details {
