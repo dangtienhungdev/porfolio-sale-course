@@ -105,3 +105,15 @@ export const checkToken = async (req, res, next) => {
 		return res.status(500).json({ message: error.message });
 	}
 };
+
+export const getAllUsers = async (req, res) => {
+	try {
+		const id = req.params.id;
+		const users = await User.find({ _id: { $ne: id } }).select(['-password']); // get users except current user
+		return res
+			.status(200)
+			.json({ message: 'Get all user successfully', users });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+};
