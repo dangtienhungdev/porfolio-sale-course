@@ -1,9 +1,10 @@
 import * as yup from 'yup';
 
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
 import Logo from '../../assets/Logo/heart-logo.png';
+import { registerAuth } from '../../utils/auth';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
@@ -110,9 +111,16 @@ const Register = () => {
 		password: '',
 		confirmPassword: '',
 	});
-	const onSubmit = (values) => {
+	const navigate = useNavigate();
+	const onSubmit = async (values) => {
 		try {
-			console.log('ahihi', values);
+			const response = await registerAuth(values);
+			if (response.status === 201) {
+				/* save localstorage */
+				localStorage.setItem('user-chat-app', JSON.stringify(response.data.user));
+				toast.success('Register successfully');
+				navigate('/login');
+			}
 		} catch (error) {
 			toast.error('Register failed');
 		}
