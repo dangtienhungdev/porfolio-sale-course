@@ -64,6 +64,22 @@ export const login = async (req, res) => {
 	}
 };
 
+/* update */
+export const updateUser = async (req, res) => {
+	try {
+		const body = req.body;
+		const id = req.params.id;
+		const user = await User.findByIdAndUpdate({ _id: id }, body, { new: true });
+		if (!user) {
+			return res.status(400).json({ message: 'User does not exist' });
+		}
+		const { password, ...info } = user._doc;
+		return res.status(200).json({ message: 'Update successfully', user: info });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+};
+
 export const checkToken = async (req, res, next) => {
 	/* chưa hoàn thành */
 	try {

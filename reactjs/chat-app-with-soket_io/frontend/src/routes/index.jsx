@@ -1,4 +1,4 @@
-import { Chat, Login, Register } from '../pages';
+import { Chat, Login, Register, SetAvatar } from '../pages';
 import { Route, Routes } from 'react-router-dom';
 
 import React from 'react';
@@ -8,6 +8,7 @@ const index = () => {
 		<Routes>
 			<Route path="/register" element={<Register />} />
 			<Route path="/login" element={<Login />} />
+			<Route path="/set-avatar" element={<SetAvatar />} />
 			<Route path="/" element={<Chat />} />
 		</Routes>
 	);
