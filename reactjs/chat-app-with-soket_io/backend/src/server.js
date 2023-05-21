@@ -2,6 +2,7 @@ import authRoutes from './routes/users.routes.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import messageRoutes from './routes/message.routes.js';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 /* routes */
 app.use('/api/auth', authRoutes);
+app.use('/api', messageRoutes);
 
 /* database */
 mongoose
