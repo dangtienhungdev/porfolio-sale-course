@@ -1,13 +1,42 @@
+import React, { useEffect, useState } from 'react';
+import { createMessage, getAllMessages } from '../../utils/message';
+
 import ChatInput from '../ChatInput/ChatInput';
 import Logout from '../Logout/Logout';
 import Messages from '../Message/Messages';
-import React from 'react';
 import { styled } from 'styled-components';
+import { toast } from 'react-toastify';
 
-const ChartContainer = ({ currenChat }) => {
+const ChartContainer = ({ currenChat, currentUser }) => {
+	const [messages, setMessages] = useState([]);
 	const handleSendMessage = async (msg) => {
-		console.log('🚀 ~ file: ChatContainer.jsx:9 ~ handleSendMessage ~ msg:', msg);
+		try {
+			const response = await createMessage({
+				from: currentUser._id,
+				to: currenChat._id,
+				message: msg,
+			});
+			console.log('🚀 ~ file: ChatContainer.jsx:17 ~ handleSendMessage ~ response:', response);
+		} catch (error) {
+			toast.error('Send message failed');
+		}
 	};
+	useEffect(() => {
+		const fetchMessages = async () => {
+			try {
+				const response = await getAllMessages({
+					from: currentUser._id,
+					to: currenChat._id,
+				});
+				if (response.status === 200) {
+					setMessages(response.data.messages);
+				}
+			} catch (error) {
+				toast.error('Get messages failed');
+			}
+		};
+		fetchMessages();
+	}, [currentUser._id, currenChat._id]);
 	return (
 		<Container>
 			<div className="chat-header">
@@ -21,7 +50,7 @@ const ChartContainer = ({ currenChat }) => {
 				</div>
 				<Logout />
 			</div>
-			<Messages />
+			<Messages messages={messages} />
 			<ChatInput handleSendMessage={handleSendMessage} />
 		</Container>
 	);
@@ -31,6 +60,7 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	overflow: auto;
 	.chat-header {
 		display: flex;
 		justify-content: space-between;

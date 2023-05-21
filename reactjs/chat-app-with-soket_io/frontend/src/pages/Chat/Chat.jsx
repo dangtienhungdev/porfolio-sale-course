@@ -52,7 +52,7 @@ const Chat = () => {
 			<div className="container">
 				<Contact contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
 				{currenChat ? (
-					<ChatContainer currenChat={currenChat} />
+					<ChatContainer currenChat={currenChat} currentUser={currentUser} />
 				) : (
 					<Welcome currentUser={currentUser} />
 				)}
