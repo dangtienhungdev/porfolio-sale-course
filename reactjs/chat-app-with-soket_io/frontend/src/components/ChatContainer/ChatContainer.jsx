@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createMessage, getAllMessages } from '../../utils/message';
 
 import ChatInput from '../ChatInput/ChatInput';
@@ -7,20 +7,45 @@ import Messages from '../Message/Messages';
 import { styled } from 'styled-components';
 import { toast } from 'react-toastify';
 
-const ChartContainer = ({ currenChat, currentUser }) => {
+const ChartContainer = ({ currenChat, currentUser, socket }) => {
+	const [arrivalMassage, setArrivalMassage] = useState(null);
 	const [messages, setMessages] = useState([]);
+	const srcollRef = useRef();
 	const handleSendMessage = async (msg) => {
 		try {
-			const response = await createMessage({
+			await createMessage({
 				from: currentUser._id,
 				to: currenChat._id,
 				message: msg,
 			});
-			console.log('🚀 ~ file: ChatContainer.jsx:17 ~ handleSendMessage ~ response:', response);
+			socket.current.emit('send-message', {
+				from: currentUser._id,
+				to: currenChat._id,
+				message: msg,
+			});
+			const msgs = [...messages];
+			msgs.push({ fromSelf: true, message: msg });
+			setMessages(msgs);
 		} catch (error) {
 			toast.error('Send message failed');
 		}
 	};
+	useEffect(() => {
+		if (socket.current) {
+			socket.current.on('msg-receive', (msg) => {
+				setArrivalMassage({
+					fromSelf: false,
+					message: msg.message,
+				});
+			});
+		}
+	}, [socket]);
+	useEffect(() => {
+		srcollRef.current?.scrollIntoView({ behavior: 'smooth' });
+	}, [messages]);
+	useEffect(() => {
+		arrivalMassage && setMessages((prev) => [...prev, arrivalMassage]);
+	}, [arrivalMassage]);
 	useEffect(() => {
 		const fetchMessages = async () => {
 			try {

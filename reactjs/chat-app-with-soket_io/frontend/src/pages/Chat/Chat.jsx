@@ -1,13 +1,16 @@
 import { ChatContainer, Contact, Welcome } from '../../components';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { getAllUsersById } from '../../utils/user';
+import { instance } from '../../utils/instances';
+import io from 'socket.io-client';
 import loader from '../../assets/loader.gif';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
+	const socket = useRef();
 	const navigate = useNavigate();
 	const [contacts, setContacts] = useState([]);
 	const [currentUser, setCurrentUser] = useState(undefined);
@@ -23,6 +26,11 @@ const Chat = () => {
 			navigate('/login');
 		}
 	}, [navigate]);
+	useEffect(() => {
+		if (!currentUser) return;
+		socket.current = io(instance.defaults.baseURL);
+		socket.current.emit('add-user', currentUser._id);
+	}, [currentUser]);
 	useEffect(() => {
 		const fetchUser = async () => {
 			if (!currentUser) return;
@@ -52,7 +60,7 @@ const Chat = () => {
 			<div className="container">
 				<Contact contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
 				{currenChat ? (
-					<ChatContainer currenChat={currenChat} currentUser={currentUser} />
+					<ChatContainer currenChat={currenChat} currentUser={currentUser} socket={socket} />
 				) : (
 					<Welcome currentUser={currentUser} />
 				)}
