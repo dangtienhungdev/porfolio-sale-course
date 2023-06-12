@@ -1,10 +1,12 @@
+import { authors } from '../data/authors.js';
+import { books } from '../data/books.js';
+
 const resolvers = {
   Query: {
-    books: () => [
-      { id: 1, name: 'Name of the Wind', genre: 'Fantasy' },
-      { id: 2, name: 'The Final Empire', genre: 'Fantasy' },
-      { id: 3, name: 'The Long Earth', genre: 'Sci-Fi' },
-    ],
+    books: () => books,
+    book: (parent, args) => books.find((book) => book.id.toString() === args.id),
+    authors: () => authors,
+    author: (parent, args) => authors.find((author) => author.id.toString() === args.id),
   },
 };
 

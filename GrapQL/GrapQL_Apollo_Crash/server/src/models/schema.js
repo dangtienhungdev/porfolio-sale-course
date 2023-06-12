@@ -1,15 +1,23 @@
-import { qgl } from 'apollo-server-express';
+import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
+const typeDefs = gql/* GraphQL */ `
   type Book {
     id: ID
     name: String
     genre: String
   }
+  type Author {
+    id: ID
+    name: String
+    age: Int
+  }
 
-  # Root Query
+  # Root Type
   type Query {
     books: [Book]
+    book(id: ID): Book
+    authors: [Author]
+    author(id: ID): Author
   }
 `;
 
