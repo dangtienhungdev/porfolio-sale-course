@@ -21,6 +21,15 @@ const typeDefs = gql/* GraphQL */ `
     authors: [Author]
     author(id: ID): Author
   }
+
+  # Mutation
+  type Mutation {
+    createAuthor(id: ID!, name: String!, age: Int!): Author
+    createBook(id: ID!, name: String!, genre: String!, authorId: ID!): Book
+  }
 `;
+
+// Query: dùng để lấy ra dữ liệu
+// Mutation: dùng để thêm, sửa, xóa dữ liệu
 
 export default typeDefs;
