@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
+import { bookController } from './controllers/book.controllers.js';
 import express from 'express';
 import mongoose from 'mongoose';
 import resolvers from './resolver/resolver.js';
@@ -11,6 +12,7 @@ const app = express();
 mongoose
   .connect(
     'mongodb+srv://hungdang02042003:ehxKvBZ7aMrAok8s@tutorial-graphql.hwmyguy.mongodb.net/',
+    // 'mongodb://127.0.0.1:27017/tutorial-graphql',
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -21,7 +23,11 @@ mongoose
 
 // hungdang02042003 - ehxKvBZ7aMrAok8s
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => ({ bookController }),
+});
 
 async function startApolloServer() {
   await server.start();
