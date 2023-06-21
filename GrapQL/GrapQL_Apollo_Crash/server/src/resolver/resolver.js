@@ -10,7 +10,9 @@ const resolvers = {
       return await context.bookController.getBooks();
     },
     book: (parent, args) => books.find((book) => book.id.toString() === args.id),
-    authors: () => authors,
+    authors: async (parent, args, context) => {
+      return await context.authorController.getAuthors();
+    },
     author: (parent, args) => authors.find((author) => author.id.toString() == args.id),
   },
   Book: {
@@ -24,15 +26,11 @@ const resolvers = {
   },
   /* Mutation => thêm, sửa, xóa dữ liệu */
   Mutation: {
-    createAuthor: async (_, args) => {
-      const { name, age } = args;
-      const author = { name, age };
-      const newAuthor = new Author(author);
-      return await newAuthor.save();
+    createAuthor: async (_, args, context) => {
+      return await context.authorController.createAuthor(args);
     },
-    createBook: async (_, args) => {
-      const newBook = new Book(args);
-      return await newBook.save();
+    createBook: async (_, args, context) => {
+      return await context.bookController.createBook(args);
     },
   },
 };

@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
+import { authorController } from './controllers/author.controllers.js';
 import { bookController } from './controllers/book.controllers.js';
 import express from 'express';
 import mongoose from 'mongoose';
@@ -26,7 +27,7 @@ mongoose
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => ({ bookController }),
+  context: () => ({ bookController, authorController }),
 });
 
 async function startApolloServer() {

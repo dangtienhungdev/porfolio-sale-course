@@ -10,4 +10,12 @@ export const bookController = {
       res.status(500).json(error);
     }
   },
+  createBook: async (args) => {
+    try {
+      const newBook = new Book(args);
+      return await newBook.save();
+    } catch (error) {
+      return error;
+    }
+  },
 };
