@@ -1,10 +1,25 @@
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
+import mongoose from 'mongoose';
 import resolvers from './resolver/resolver.js';
-import typeDefs from './models/schema.js';
+import typeDefs from './schema/schema.js';
 
 /* load schema & resolver */
 const app = express();
+
+/* connect mongoose */
+mongoose
+  .connect(
+    'mongodb+srv://hungdang02042003:ehxKvBZ7aMrAok8s@tutorial-graphql.hwmyguy.mongodb.net/',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log('MongoDB Connected...'))
+  .catch((err) => console.log(err));
+
+// hungdang02042003 - ehxKvBZ7aMrAok8s
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
