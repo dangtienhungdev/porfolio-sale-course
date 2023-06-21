@@ -1,10 +1,9 @@
-import Author from '../models/Author.model.js';
 import Book from '../models/Book.model.js';
 
 export const bookController = {
-  getBooks: async () => {
+  getBooks: async (condition = null) => {
     try {
-      const books = await Book.find();
+      const books = condition === null ? await Book.find() : await Book.find(condition);
       return books;
     } catch (error) {
       res.status(500).json(error);
@@ -14,6 +13,17 @@ export const bookController = {
     try {
       const newBook = new Book(args);
       return await newBook.save();
+    } catch (error) {
+      return error;
+    }
+  },
+  getBookById: async (id) => {
+    try {
+      const book = await Book.findById(id);
+      if (!book) {
+        throw new Error('Book not found');
+      }
+      return book;
     } catch (error) {
       return error;
     }

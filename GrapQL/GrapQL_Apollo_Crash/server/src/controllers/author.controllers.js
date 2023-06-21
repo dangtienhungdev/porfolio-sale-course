@@ -17,4 +17,15 @@ export const authorController = {
       return error;
     }
   },
+  getAuthorById: async (id) => {
+    try {
+      const author = await Author.findById(id);
+      if (!author) {
+        throw new Error('Author not found');
+      }
+      return author;
+    } catch (error) {
+      return error;
+    }
+  },
 };
