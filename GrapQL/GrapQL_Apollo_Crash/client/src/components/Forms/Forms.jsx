@@ -1,6 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { getAuthorsQuery, getBooksQuery } from '../../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
+
+import { addBookMutation } from '../../graphql/mutations';
 
 const Forms = () => {
+	const { loading, error, data } = useQuery(getAuthorsQuery);
+	const [newBook, setNewBook] = useState({
+		name: '',
+		genre: '',
+		authorId: '',
+	});
+	const handleChange = (e) => {
+		setNewBook({ ...newBook, [e.target.name]: e.target.value });
+	};
+	const [addBook, dataMutation] = useMutation(addBookMutation);
+	console.log('🚀 ~ file: Forms.jsx:18 ~ Forms ~ dataMutation:', dataMutation);
+	const handleSubmitAddBook = (e) => {
+		e.preventDefault();
+		addBook({
+			variables: {
+				name: newBook.name,
+				genre: newBook.genre,
+				authorId: newBook.authorId,
+			},
+			refetchQueries: [{ query: getBooksQuery }],
+		});
+		setNewBook({
+			name: '',
+			genre: '',
+			authorId: '',
+		});
+	};
+	if (error) {
+		return <p>Error</p>;
+	}
 	return (
 		<div className="grid grid-cols-2 gap-5 mb-6">
 			<div className="bg-blue-100 p-5">
@@ -44,7 +78,7 @@ const Forms = () => {
 				</form>
 			</div>
 			<div className="bg-blue-100 p-5">
-				<form autoComplete="off">
+				<form autoComplete="off" onSubmit={handleSubmitAddBook}>
 					<div className="mb-6">
 						<label
 							htmlFor="Book name"
@@ -58,6 +92,8 @@ const Forms = () => {
 							className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Book name"
 							required
+							name="name"
+							onChange={(e) => handleChange(e)}
 						/>
 					</div>
 					<div className="mb-6">
@@ -73,6 +109,8 @@ const Forms = () => {
 							placeholder="Book genre"
 							className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							required
+							name="genre"
+							onChange={(e) => handleChange(e)}
 						/>
 					</div>
 					<div className="mb-6">
@@ -82,16 +120,21 @@ const Forms = () => {
 						>
 							Author
 						</label>
-						<select
-							id="countries"
-							className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						>
-							<option defaultValue>Author</option>
-							<option value="US">United States</option>
-							<option value="CA">Canada</option>
-							<option value="FR">France</option>
-							<option value="DE">Germany</option>
-						</select>
+						{loading && <p>Loading....</p>}
+						{!loading && data && (
+							<select
+								name="authorId"
+								onChange={(e) => handleChange(e)}
+								id="countries"
+								className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+							>
+								{data.authors.map((author) => (
+									<option key={author.id} value={`${author.id}`}>
+										{author.name}
+									</option>
+								))}
+							</select>
+						)}
 					</div>
 					<button
 						type="submit"
