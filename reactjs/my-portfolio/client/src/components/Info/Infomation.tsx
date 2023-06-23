@@ -1,7 +1,12 @@
-import React from 'react';
+import Banner from './components/Banner';
+import LayoutContainer from '../../layouts/client/LayoutContainer';
 
 const Infomation = () => {
-	return <div>Infomation</div>;
+	return (
+		<LayoutContainer>
+			<Banner />
+		</LayoutContainer>
+	);
 };
 
 export default Infomation;

@@ -1,6 +1,5 @@
 import { Col, Menu, Row } from 'antd';
 
-import React from 'react';
 import { items } from './components/Items';
 
 const SidebarMenu = () => {
@@ -9,7 +8,7 @@ const SidebarMenu = () => {
 			<Col span={24}>
 				<Menu
 					style={{
-						width: 256,
+						width: '100%',
 					}}
 					defaultSelectedKeys={['1']}
 					defaultOpenKeys={['sub1']}

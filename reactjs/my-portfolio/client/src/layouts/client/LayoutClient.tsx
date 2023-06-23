@@ -6,7 +6,7 @@ const LayoutClient = () => {
 	return (
 		<Layout>
 			<Sidebar />
-			<Layout style={{ marginLeft: '260px' }}>
+			<Layout style={{ marginLeft: '280px' }}>
 				<Layout.Content>
 					<Outlet />
 				</Layout.Content>

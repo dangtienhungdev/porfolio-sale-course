@@ -1,7 +1,7 @@
-import React from 'react';
+import LayoutContainer from '../../layouts/client/LayoutContainer';
 
 const Skill = () => {
-	return <div>Skill</div>;
+	return <LayoutContainer>Skill</LayoutContainer>;
 };
 
 export default Skill;

@@ -8,7 +8,7 @@ import SidebarMenu from './Menu/SidebarMenu';
 const SidebarClientStyle: React.CSSProperties = {
 	height: '100vh',
 	overflow: 'auto',
-	background: '#fff',
+	background: '#f2f3f7',
 	position: 'fixed',
 	top: 0,
 	left: 0,
@@ -17,7 +17,7 @@ const SidebarClientStyle: React.CSSProperties = {
 const Sidebar = () => {
 	return (
 		<Layout.Sider
-			width={260}
+			width={280}
 			style={SidebarClientStyle}
 			className="sidebar-container"
 		>
