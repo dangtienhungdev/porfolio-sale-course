@@ -3,9 +3,12 @@ interface LayoutContainerProps {
 	className?: string;
 }
 
-const LayoutContainer = ({ children, className }: LayoutContainerProps) => {
+const LayoutContainer = ({
+	children,
+	className = '',
+}: LayoutContainerProps) => {
 	return (
-		<section style={{ height: '100vh' }} className={className}>
+		<section className={`min-h-screen bg-white ${className}`}>
 			{children}
 		</section>
 	);

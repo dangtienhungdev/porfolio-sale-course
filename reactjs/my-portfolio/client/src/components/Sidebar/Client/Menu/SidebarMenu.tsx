@@ -9,6 +9,7 @@ const SidebarMenu = () => {
 				<Menu
 					style={{
 						width: '100%',
+						background: '#f2f3f7',
 					}}
 					defaultSelectedKeys={['1']}
 					defaultOpenKeys={['sub1']}
