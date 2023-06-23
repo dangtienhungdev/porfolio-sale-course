@@ -8,8 +8,8 @@ const RoutePath = () => {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<LayoutClient />}>
-					<Route index element={<HomePage />} />
+				<Route element={<LayoutClient />}>
+					<Route path="/" element={<HomePage />} />
 				</Route>
 				<Route path="*" element={<NotFound />} />
 			</Routes>

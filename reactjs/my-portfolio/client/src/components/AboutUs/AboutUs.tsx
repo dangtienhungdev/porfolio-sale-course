@@ -1,4 +1,4 @@
-import { HeadingMeta, HeadingTitle } from '../../modules';
+import { Description, HeadingMeta, HeadingTitle } from '../../modules';
 
 import Infomation from './components/Infomation';
 import LayoutContainer from '../../layouts/client/LayoutContainer';
@@ -10,8 +10,8 @@ const AboutUs = () => {
 			<LayoutWrapper name="about">
 				<HeadingMeta heading="About us" />
 				<HeadingTitle heading="WHO AM I?" />
-				<div className="mt-20">
-					<p className="onscrool-text text-base transition-all duration-1000">
+				<Description>
+					<p className="text-base transition-all duration-1000">
 						<span className="mr-2 font-semibold capitalize">
 							Đặng Tiến Hưng
 						</span>
@@ -22,7 +22,7 @@ const AboutUs = () => {
 							placeat alias cumque repellat, cupiditate iste sequi?
 						</span>
 					</p>
-				</div>
+				</Description>
 				<Infomation />
 			</LayoutWrapper>
 		</LayoutContainer>
