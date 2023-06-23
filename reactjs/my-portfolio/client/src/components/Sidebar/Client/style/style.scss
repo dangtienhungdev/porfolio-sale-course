@@ -1,0 +1,18 @@
+.sidebar-container {
+	text-align: center;
+	padding: 2.8125rem 0;
+	width: 100%;
+	height: 100%;
+	background-color: #f2f3f7;
+	.sidebar-avatar {
+		margin-bottom: 1.875rem;
+	}
+	.sidebar-title {
+		font-size: 1.375rem;
+		margin-bottom: 0.75rem;
+	}
+	.sidebar-desc {
+		font-size: 0.75rem;
+		margin-bottom: 1.5625rem;
+	}
+}
