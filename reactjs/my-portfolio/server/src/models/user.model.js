@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { mongoosePagination } from 'ts-mongoose-pagination';
+import mongoosePagination from 'mongoose-paginate-v2';
 
 const userSchema = new mongoose.Schema(
   {

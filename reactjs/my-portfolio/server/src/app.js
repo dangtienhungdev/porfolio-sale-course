@@ -1,5 +1,6 @@
 import { connectDB } from './configs/database.config.js';
 import express from 'express';
+import rootRoutes from './routes/index.js';
 
 /* config */
 const app = express();
@@ -10,6 +11,11 @@ app.use(express.json());
 connectDB();
 
 /* routes */
+app.use('/api/v1', rootRoutes);
+
+app.use('/', (req, res) => {
+  res.send('Hello World!');
+});
 
 /* connect db */
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
