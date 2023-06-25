@@ -1,8 +1,13 @@
 {
-  "build": {
-    "env": {
-      "MONGOOSE_URL": "@mongoose_url",
-      "PORT": "@port"
+  "version": "1.0.0",
+  "builds": {
+    "src": "src/app.js",
+    "use": "@vercel/node"
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
     }
-  }
+  ]
 }
