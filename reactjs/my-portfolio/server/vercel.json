@@ -1,0 +1,8 @@
+{
+  "build": {
+    "env": {
+      "MONGOOSE_URL": "@mongoose_url",
+      "PORT": "@port"
+    }
+  }
+}
