@@ -1,8 +1,8 @@
 {
   "build": {
     "env": {
-      "MONGOOSE_URL": "@mongoose_url",
-      "PORT": "@port"
+      "MONGOOSE_URL": "mongodb+srv://hungdang02042003:feuBkwhKKkU2SPso@cluster0.pe8xkno.mongodb.net/?retryWrites=true&w=majority",
+      "PORT": "8000"
     }
   }
 }
