@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
         ref: 'Project',
       },
     ],
+    social: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Social',
+      },
+    ],
   },
   { timestamps: true, versionKey: false }
 );
