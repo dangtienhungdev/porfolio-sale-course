@@ -13,9 +13,5 @@ connectDB();
 /* routes */
 app.use('/api/v1', rootRoutes);
 
-app.use('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 /* connect db */
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

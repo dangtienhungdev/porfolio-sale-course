@@ -17,3 +17,8 @@ export const registerValidate = yup.object().shape({
   role: yup.string().oneOf(['admin', 'user'], 'Role is invalid').default('user'),
   project: yup.array().of(yup.string()),
 });
+
+export const loginValidate = yup.object().shape({
+  email: yup.string().email('Email is invalid').required('Email is required'),
+  password: yup.string().required('Password is required'),
+});
