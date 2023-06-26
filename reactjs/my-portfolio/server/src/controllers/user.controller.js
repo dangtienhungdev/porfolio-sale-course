@@ -6,7 +6,8 @@ export const userController = {
   /* getAll */
   getAll: async (_, res) => {
     try {
-      const users = await User.paginate();
+      const options = { populate: { path: 'socials', select: '-user' } };
+      const users = await User.paginate({}, options);
       /* remove password */
       users.docs = users.docs.map((user) => {
         const { password, project, ...info } = user._doc;
