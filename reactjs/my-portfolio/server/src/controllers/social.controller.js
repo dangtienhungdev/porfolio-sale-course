@@ -8,6 +8,11 @@ export const socialController = {
       const body = req.body;
       /* validate */
       await socialValidate.validate(body, { abortEarly: false });
+      /* check user */
+      const user = await User.findById(body.user);
+      if (!user) {
+        return res.status(400).json({ message: 'User is not exist' });
+      }
       /* create social */
       const social = await Social.create(body);
       /* update user */
@@ -58,6 +63,11 @@ export const socialController = {
       const body = req.body;
       /* validate */
       await socialValidate.validate(body, { abortEarly: false });
+      /* check user */
+      const user = await User.findById(body.user);
+      if (!user) {
+        return res.status(400).json({ message: 'User is not exist' });
+      }
       /* update social */
       const social = await Social.findByIdAndUpdate(id, body, { new: true });
       if (!social) {
