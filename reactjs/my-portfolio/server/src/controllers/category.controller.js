@@ -6,7 +6,7 @@ export const categoryController = {
   /* getAll */
   getAll: async (_, res) => {
     try {
-      const categories = await Category.find();
+      const categories = await Category.paginate();
       return res.status(200).json({ data: categories });
     } catch (error) {
       if (error.name === 'ValidationError') {
