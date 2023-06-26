@@ -9,9 +9,11 @@ const socialSchema = new mongoose.Schema(
     },
     link: {
       type: String,
+      required: true,
     },
-    icon: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   { timestamps: true, versionKey: false }

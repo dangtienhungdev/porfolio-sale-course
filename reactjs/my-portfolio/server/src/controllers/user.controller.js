@@ -20,7 +20,10 @@ export const userController = {
   getOne: async (req, res) => {
     try {
       const id = req.params.id;
-      const user = await User.findById(id);
+      const user = await User.findById(id).populate({
+        path: 'socials',
+        select: '-user',
+      });
       if (!user) {
         return res.status(400).json({ message: 'User is not found' });
       }

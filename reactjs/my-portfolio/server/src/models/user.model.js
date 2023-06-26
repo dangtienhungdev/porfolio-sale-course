@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
         ref: 'Project',
       },
     ],
-    social: [
+    socials: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Social',
