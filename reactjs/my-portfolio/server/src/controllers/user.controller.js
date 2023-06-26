@@ -1,3 +1,4 @@
+import Social from '../models/social.model.js';
 import User from '../models/user.model.js';
 import { userValidate } from '../validates/user.validate.js';
 
@@ -48,6 +49,11 @@ export const userController = {
       if (!user) {
         return res.status(400).json({ message: 'User is not found' });
       }
+      /* update social */
+      if (body.socials && body.socials.length > 0) {
+        await Social.deleteMany({ user: id });
+        await Social.insertMany(body.socials.map((social) => ({ ...social, user: id })));
+      }
       /* remove password */
       const { password, ...info } = user._doc;
       return res.status(200).json({ data: info });
@@ -70,6 +76,8 @@ export const userController = {
       if (!user) {
         return res.status(400).json({ message: 'User is not found' });
       }
+      /* delete social */
+      await Social.deleteMany({ user: id });
       return res.status(200).json({ message: 'User is deleted' });
     } catch (error) {
       return res.status(500).json({ message: error.message });
