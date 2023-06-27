@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       enum: ['admin', 'user'],
       default: 'user',
     },
-    project: [
+    projects: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project',
