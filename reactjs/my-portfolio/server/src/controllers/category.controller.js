@@ -6,7 +6,15 @@ export const categoryController = {
   /* getAll */
   getAll: async (_, res) => {
     try {
-      const categories = await Category.paginate();
+      const options = {
+        populate: [
+          {
+            path: 'projects',
+            select: '-category -user',
+          },
+        ],
+      };
+      const categories = await Category.paginate({}, options);
       return res.status(200).json({ data: categories });
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -38,7 +46,17 @@ export const categoryController = {
   getOne: async (req, res) => {
     try {
       const { id } = req.params;
-      const category = await Category.findById(id);
+      const category = await Category.findById(id).populate([
+        {
+          path: 'projects',
+          select: '-category',
+          populate: {
+            path: 'user',
+            select: '-password -projects',
+            populate: { path: 'socials', select: '-user' },
+          },
+        },
+      ]);
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });
       }
