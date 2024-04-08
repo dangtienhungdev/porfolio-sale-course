@@ -1,0 +1,58 @@
+Step 1: ssh to server
+ $ ssh root@10.32.4.139 #example
+
+
+Step 2: Run new gitlab (the new version must be the same as the old version)
+ $ docker run --detach \
+  --hostname 10.32.4.129:3080 \
+  --publish 443:443 --publish 3080:3080 --publish 22:22 \
+  --name gitlab \
+  --restart always \
+  --volume /srv/gitlab/config:/etc/gitlab \
+  --volume /srv/gitlab/logs:/var/log/gitlab \
+  --volume /srv/gitlab/data:/var/opt/gitlab \
+  gitlab/gitlab-ee:latest
+
+ $ gitlab-ctl reconfigure
+
+
+Step 3: Bckup gitlab (if not arealry backup)
+ $ docker exec -it <container_id_old> bash
+ $ gitlab-backup create
+
+
+Step 4: Copy "file gitlab.rb", "gitlab-secrets.json", backup-file from old gitlab #copy docker to host
+ $ mkdir /home/backup-gitlab-file #backup-gitlab-file created by user
+ $ docker cp <container_id_old>:/etc/gitlab/gitlab.rb /home/backup-gitlab-file/ 
+ $ docker cp <container_id_old>:/etc/gitlab/gitlab-secrets.json /home/backup-gitlab-file/
+ $ docker cp <container_id>:var/opt/gitlab/backups/<name_gitlab_backup.tar file> /home/backup-gitlab-file/
+ $ ls /home/backup-gitlab-file/
+	=> in directory backup-gitlab-file: gitlab.rb, gitlab-secrets.json, gitlab_backup.tar file (ex: 1668694438_2022_11_17_14.9.3_gitlab_backup.tar)
+
+	
+Step 5: Copy file gitlab gitlab.rb, gitlab-secrets.json, backup-file from host to container #copy host to docker
+ $ docker cp /home/backup-gitlab-file/gitlab.rb <container_id_new>:/etc/gitlab/
+ $ docker cp /home/backup-gitlab-file/gitlab-secrets.json <container_id_new>:/etc/gitlab/
+ $ docker cp /home/backup-gitlab-file/<name_gitlab_backup.tar file> <container_id_new>:var/opt/gitlab/backups/
+
+	
+Step 6: Change permission backup file #Backups directory
+ $ docker exec -it <container_id> bash
+ $ chmod -R 777 /var/opt/gitlab/backups/
+
+	
+Step 7: Run backup
+ $ gitlab-ctl stop puma
+ $ gitlab-ctl stop sidekiq
+ $ gitlab-backup restore BACKUP=<name_gitlab_backup.tar file> #ex: 1673318327_2023_01_10_13.11.3-ee
+
+
+Step 8: change external_url from gitlab.rb file (if use)
+ $ nano /etc/gitlab/gitlab.rb
+	external_url = url run gitlab #edit line
+ $ gitlab-ctl reconfigure
+ $ docker restart <container_id>
+
+
+
+- document created by Elroy -

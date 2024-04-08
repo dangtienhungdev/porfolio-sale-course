@@ -1,0 +1,5 @@
+---
+postgres_version: "14"
+postgres_user: "postgres"
+postgres_password: "postgres"
+postgres_database: "initdb"

@@ -1,0 +1,27 @@
+ # CREATE USER <projectname>
+CREATE USER <projectname> WITH PASSWORD '<password>';
+
+# <projectname>
+CREATE DATABASE <projectname>;
+
+\c <projectname>;
+
+CREATE SCHEMA AUTHORIZATION <projectname>;
+
+GRANT CONNECT ON DATABASE <projectname> to <projectname>;
+
+GRANT USAGE, CREATE ON SCHEMA <projectname> to <projectname>;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA <projectname> TO <projectname>;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA <projectname> GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO <projectname>;
+
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA <projectname> TO <projectname>;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA <projectname> GRANT USAGE ON SEQUENCES TO <projectname>;
+
+GRANT ALL ON DATABASE <projectname> TO <projectname>;
+
+ALTER DATABASE <projectname> OWNER TO <projectname>;
+
+REVOKE ALL ON DATABASE <projectname> FROM PUBLIC;

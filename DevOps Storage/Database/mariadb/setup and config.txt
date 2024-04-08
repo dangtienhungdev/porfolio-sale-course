@@ -1,0 +1,18 @@
+====================== cấu hình mariadb ==================
+$ mysql -u root -p
+password: <password>
+db: CREATE DATABASE <database>;
+CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
+GRANT ALL PRIVILEGES ON <database>.* TO '<username>'@'localhost';
+FLUSH PRIVILEGES;
+SHOW DATABASES;
+SELECT user, host FROM mysql.user;
+GRANT ALL ON <database>.* TO '<username>'@'<IP server cần thông>' IDENTIFIED BY '<password>';
+FLUSH PRIVILEGES;
+
+mysql -h <IP> -P 3306 -u <username> -p
+
+----- import sql file ------
+mysql -h <IP> -P 3306 -u <username> -p
+USE database_name;
+SOURCE /path/to/your/sql/file.sql; # cách 2: mysqlimport -u username -p database_name /path/to/your/sql/file.sql

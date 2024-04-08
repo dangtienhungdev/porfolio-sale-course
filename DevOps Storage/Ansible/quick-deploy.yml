@@ -1,0 +1,6 @@
+---
+- name: Quick deploy
+  hosts: webservers
+  become: true
+  roles:
+    - quick-deploy

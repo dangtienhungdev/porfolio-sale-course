@@ -1,0 +1,47 @@
+stages:
+  - Build
+  - Restart
+  - checklog 
+  
+Build:
+  stage: Build
+  variables:
+    GIT_STRATEGY: clone
+  tags: 
+    - runner
+  script:
+    - mvn clean install
+  only:
+    - tags
+
+Restart:
+  stage: Restart
+  variables:
+      GIT_STRATEGY: none 
+  tags:
+    - runner
+  script:
+  - sudo su user sh -c "rm -Rf /home/user/run/server-web/webapps/ROOT/*"
+  - sleep 3s
+  - ls
+  - sudo cp -r target/user/* /data/user/run/server-web/webapps/ROOT/
+  - sleep 3s
+  - sudo /bin/chown -R user. /data/user/run/server-web/webapps/ROOT/
+  - sleep 3s
+  - sudo su user sh -c "cd /data/user/run/server-web;./bin/shutdown.sh"
+  - sleep 5s
+  - sudo su user sh -c "cd /data/user/run/server-web;./bin/startup.sh"
+  - sleep 5s
+  only:
+    - tags
+
+checklog:
+  stage: checklog
+  variables:
+      GIT_STRATEGY: none 
+  tags:
+    - runner
+  script:
+  - sudo su user sh -c "tail -n 1000 /data/user/run/server-web/logs/catalina.out"
+  only:
+    - tags

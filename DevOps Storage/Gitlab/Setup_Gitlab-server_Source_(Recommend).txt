@@ -1,0 +1,41 @@
+Step 1: ssh to server
+ $ ssh root@10.32.4.139 #example
+
+
+Step 2: install gitlab
+ $ apt update
+ $ apt upgrade -y
+ $ apt install -y ca-certificates curl openssh-server tzdata
+ $ apt install curl debian-archive-keyring lsb-release ca-certificates apt-transport-https software-properties-common -y
+ $ gpg_key_url="https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey"
+ $ curl -fsSL $gpg_key_url| sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/gitlab.gpg
+ $ tee /etc/apt/sources.list.d/gitlab_gitlab-ce.list<<EOF
+deb https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ focal main
+deb-src https://packages.gitlab.com/gitlab/gitlab-ce/ubuntu/ focal main
+EOF
+ $ curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+ $ cat /etc/apt/sources.list.d/gitlab_gitlab-ee.list
+ $ apt update
+ $ apt install gitlab-ee
+ $ nano /etc/gitlab/gitlab.rb
+--------------------------------------- #edit line
+external_url 'http://10.32.4.139:3080' 
+---------------------------------------
+ $ gitlab-ctl reconfigure
+ $ cat /etc/gitlab/initial_root_password
+
+
+Step 3: open port 
+ $ ufw status numbered
+ $ ufw enable
+ $ ufw allow 3080/tcp
+
+
+Step 4: setup gitlab (gitlab-ee)
+ $ gitlab-rake "gitlab:password:reset[root]" #reset password root account
+
+Result => gitlab: http://10.32.4.139:3080
+
+
+
+- document created by Elroy -

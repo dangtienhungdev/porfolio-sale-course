@@ -1,0 +1,63 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - 'which ssh-agent || ( apk update && apk add openssh-client )'
+  - docker info
+
+.build-env: &build-env
+  stage: build
+  script:
+    - >
+     if [ "$CI_COMMIT_REF_NAME" == "dev" ]; then
+       rm src/env.production.js
+     else
+       rm src/env.js
+       mv src/env.production.js src/env.js
+     fi
+    - cat src/env.js
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - echo $DOCKER_IMAGE
+    - docker pull $DOCKER_IMAGE || true
+    - docker build --cache-from $DOCKER_IMAGE --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $DOCKER_IMAGE .
+    - docker push $DOCKER_IMAGE
+
+build-dev:
+  variables:
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:latest
+  <<: *build-env
+  only:
+    - dev
+
+build-tags:
+  variables:
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  <<: *build-env
+  only:
+    - tags
+
+deploy:
+  stage: deploy
+  script:
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # UPDATE
+    - echo "$SSH_GKC_DEV_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_GKC_DEV_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh ${GKC_DEV_USER}@${GKC_DEV_SERVER} 'bash -s' < ./deploy.sh
+    - rm -rf ~/.ssh
+  only:
+    - dev

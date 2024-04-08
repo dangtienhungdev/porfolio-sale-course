@@ -1,0 +1,82 @@
+variables:
+  IMAGE_TAG: "$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA"
+
+stages:
+  - build
+  - test
+  - deploy-dev
+  - deploy-staging
+  - clean-up
+
+build:
+  stage: build
+  before_script:
+    - echo "$REGISTRY_PASS" | docker login -u "$REGISTRY_USER" --password-stdin $CI_REGISTRY
+  script:
+    - docker-compose build
+    - docker image tag $PROJECT_NAME:$IMAGE_TAG $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG 
+    - docker push $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+    - docker rmi $PROJECT_NAME:$IMAGE_TAG $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - node_modules/
+  rules:
+    - if: ($CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME == "staging")
+
+Code-quality:
+  stage: test
+  script:
+    - docker run --rm -e SONAR_HOST_URL=$SONARSERVER_URL -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=<projectname>' -e SONAR_TOKEN=$SONAR_TOKEN -v '.:/usr/src' sonarsource/sonar-scanner-cli
+  allow_failure: true
+  rules:
+    - if: ($CI_COMMIT_REF_NAME == "develop")
+
+deploy-dev:
+  stage: deploy-dev
+  script:
+    - |
+      cat << EOF > deploy.sh
+      #!/bin/sh
+      docker pull $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+      docker rm -f $PROJECT_NAME
+      docker run --name=$PROJECT_NAME -dp $PORT_API:80 $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+      EOF
+    - chmod +x deploy.sh
+    - scp deploy.sh $SSH_USER@$SERVER_DEV:~/deploy.sh
+    - ssh $SSH_USER@$SERVER_DEV "docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY && chmod +x ~/deploy.sh && ~/deploy.sh && rm -rf ~/deploy.sh"
+  rules:
+    - if: ($CI_COMMIT_REF_NAME == "develop")
+
+deploy-staging:
+  stage: deploy-staging
+  script:
+    - |
+      cat << EOF > deploy.sh
+      #!/bin/sh
+      docker pull $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+      docker rm -f $PROJECT_NAME
+      docker run --name=$PROJECT_NAME -dp $PORT_API:80 $CI_REGISTRY/$PROJECT_NAME:$IMAGE_TAG
+      EOF
+    - chmod +x deploy.sh
+    - scp deploy.sh $SSH_USER@$SERVER_STAGING:~/deploy.sh
+    - ssh $SSH_USER@$SERVER_STAGING "docker login -u $REGISTRY_USER -p $REGISTRY_PASS $CI_REGISTRY && chmod +x ~/deploy.sh && ~/deploy.sh && rm -rf ~/deploy.sh"
+  rules:
+    - if: ($CI_COMMIT_REF_NAME == "staging")
+
+clean-up:
+  stage: clean-up
+  script: 
+    # lấy danh sách nội dung trong thư mục sắp xếp từ mới đến cũ bỏ qua 3 dòng đầu tiên thư mục hoặc tệp có dạng <nhánh commit>-* và xóa hết dữ liệu còn lại
+    - cd $PATH_REGISTRY_PROJECT && ls -lt | grep "$CI_COMMIT_REF_NAME-*" | tail -n +4 | awk '{print $NF}' | xargs -I {} rm -rf {}
+    # kiểm tra xem các docker images có dạng <tên image:tên nhánh-*> được sắp xếp từ mới đến cũ bỏ qua 2 images đầu tiên và xóa những images còn lại.
+    - |
+      cat << EOF > checkImages.sh
+      #!/bin/bash
+      docker images $CI_REGISTRY/$PROJECT_NAME:$CI_COMMIT_REF_NAME-* --format '{{.Repository}}:{{.Tag}} {{.CreatedAt}}' | sort -k 2 -r | awk 'NR>2{print $1}' | xargs -r docker rmi
+      echo "clean up done."
+      EOF
+    - scp checkImages.sh $SSH_USER@$SERVER_DEV:~/checkImages.sh
+    - ssh $SSH_USER@$SERVER_DEV "chmod +x ~/checkImages.sh && ~/checkImages.sh && rm -rf ~/checkImages.sh"
+  rules:
+    - if: ($CI_COMMIT_REF_NAME == "develop")

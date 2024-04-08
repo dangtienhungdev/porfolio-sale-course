@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  frontend:
+    container_name: ${PROJECT_NAME}
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    restart: always
+    image: ${PROJECT_NAME}:${IMAGE_TAG}
+    ports:
+      - "8082:80"
+    environment:
+      - IMAGE_TAG=${IMAGE_TAG:-1.0.0}
+      - PROJECT_NAME=${PROJECT_NAME}

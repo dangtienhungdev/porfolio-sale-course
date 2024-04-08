@@ -1,0 +1,13 @@
+Step 1: Tạo bot trên telegram
+=> lấy được Token và ChatID
+
+Step 2: Cấu hình telegram trong Zabbix
+Administrator -> Media types -> Telegram 
+To: ChatID telegram
+Token: Token telegram
+
+Step 3: cấu hình user 
+Administrator -> User -> Admin -> Media -> 
+
+Step 4: Tạo action
+Configure -> Action

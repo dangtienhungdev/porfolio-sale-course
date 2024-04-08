@@ -1,0 +1,8 @@
+[control_plane]
+control1 ansible_ssh_host=<IP_Master>
+[workers]
+worker1 ansible_ssh_host=<IP_Node1>
+worker2 ansible_ssh_host=<IP_Node2>
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

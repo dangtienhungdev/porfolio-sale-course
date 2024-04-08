@@ -1,0 +1,29 @@
+
+def startProcess() {
+    stage('showlog') {
+        sh(script:""" sudo tail -n 10 /var/log/containers/<project>-* """, label:'show log')
+    }
+}
+
+def serverList = params.Server.split(',')
+
+for (server in serverList) {
+    node("${server}") {
+        stage("Server ${server}"){
+            echo "Server ${server}"
+        }
+        currentBuild.displayName = params.Action
+        if (params.Action == "showlog") {
+            def logexist = sh(script: 'ls /var/log/containers/ | grep ^<project>', returnStatus: true)
+            echo "value: ${logexist}"
+            if (logexist == 0)
+            {
+                startProcess()
+            }
+            else
+            {
+                echo "Node ${server} not running"
+            }
+        }
+    }
+}

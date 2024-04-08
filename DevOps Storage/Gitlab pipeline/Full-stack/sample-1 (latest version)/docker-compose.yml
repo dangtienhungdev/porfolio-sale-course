@@ -1,0 +1,21 @@
+version: '3.4'
+services:
+  backend:
+    container_name: projects.backend
+    build:
+      context: ./BE/
+      dockerfile: "Dockerfile"
+    restart: always
+    image: projects.backend
+    ports:
+      - "8081:80"
+
+  frontend:
+    container_name: projects.frontend
+    build:
+      context: ./FE/
+      dockerfile: "Dockerfile"
+    restart: always
+    image: projects.frontend
+    ports:
+      - "80:80"

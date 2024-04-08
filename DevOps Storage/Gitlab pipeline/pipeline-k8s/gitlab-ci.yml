@@ -1,0 +1,57 @@
+variables:
+  deployment: "<project_name>"
+  image: "${CI_REGISTRY}/<project>:${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}"
+  namespace: "dev-<project>"
+
+image: docker
+services:
+  - docker
+stages:   
+  - createfolder 
+  - buildandpush
+  - deployk8s
+
+createfolder:  
+  stage: createfolder
+  allow_failure: true
+  variables:
+        GIT_STRATEGY: none
+  tags:
+    - dev-shell
+  script:
+    - cd /home/gitlab-runner/<project>
+    - rm -rf ${CI_PROJECT_NAME}.bk || FAILED=true
+    - mv -f ${CI_PROJECT_NAME} ${CI_PROJECT_NAME}.bk || FAILED=true
+    - mkdir ${CI_PROJECT_NAME} || FAILED=true
+  only:
+    - tags
+
+buildandpush:  
+  stage: buildandpush
+  before_script:
+  - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} $CI_REGISTRY
+  allow_failure: false
+  variables:
+        GIT_STRATEGY: clone
+  tags:
+    - dev-shell
+  script:
+    - cp -r . /home/gitlab-runner/<project>/${CI_PROJECT_NAME}
+    - cd /home/gitlab-runner/<project>/${CI_PROJECT_NAME}
+    - docker build --network host -t "$image" .
+    - docker push "$image"
+  only:
+    - tags
+
+
+deployk8s:
+  stage: deployk8s
+  variables:
+      GIT_STRATEGY: none
+  allow_failure: false
+  tags:
+    - k8s-master-shell
+  script:
+  - kubectl set image deployment/"$deployment" "$deployment"="$image" -n "$namespace"
+  only:
+    - tags

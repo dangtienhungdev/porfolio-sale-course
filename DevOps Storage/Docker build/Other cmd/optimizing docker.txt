@@ -1,0 +1,35 @@
+- Sử dụng lệnh docker container prune để xóa tất cả các container đã dừng hoạt động
+	$ docker container prune
+
+- Sử dụng lệnh docker image prune để xóa các images không sử dụng
+	$ docker image prune
+
+- Sử dụng lệnh docker network prune để xóa các network không sử dụng
+	$ docker network prune
+
+- Sử dụng lệnh docker volume prune để xóa các volume không sử dụng
+	$ docker volume prune
+
+- Sử dụng lệnh docker system prune để xóa tất cả các dữ liệu không sử dụng
+	$ docker system prune
+
+- Sử dụng lệnh docker image prune kèm theo tùy chọn --all để xóa tất cả các images không sử dụng và không được liên kết với container
+	$ docker image prune --all
+
+- Sử dụng lệnh grep hoặc các công cụ tìm kiếm khác để lọc và tìm các image theo tên hoặc mẫu tên
+	$ docker images | grep <tên hoặc mẫu tên>
+
+- Sử dụng lệnh docker image prune -a --filter "dangling=false" để xóa tất cả các images không được sử dụng bởi container đang chạy
+	$ docker image prune -a --filter "dangling=false"
+
+- Sử dụng lệnh docker image prune -a --filter "label=unused" để xóa tất cả các images không được sử dụng và không có tag
+	$ docker image prune -a --filter "label=unused"
+
+- Sử dụng lệnh docker image prune -a --filter "until=<duration>" để xóa các images có tuổi lớn hơn một khoảng thời gian cụ thể. Thay <duration> bằng giá trị như "24h" (24 giờ), "7d" (7 ngày) hoặc "1h30m" (1 giờ 30 phút)
+	$ docker image prune -a --filter "until=24h"
+
+- Xóa tất cả các docker images đang không chạy
+	$ docker images | grep '<none>' | awk '{ print $3 }' | xargs docker rmi
+
+- Xóa tất cả image để lại 3 image mới nhất
+	$ docker images --format "{{.Repository}}:{{.Tag}}" | xargs -L1 docker image inspect --format '{{.Created}} {{.ID}}' | sort -k1 -r | tail -n +4 | awk '{print $2}' | xargs -L1 docker rmi

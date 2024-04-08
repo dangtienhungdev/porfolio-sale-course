@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+  name: <project_name>-ingress
+  namespace: dev-<project>
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: <domain>
+    http:
+      paths:
+      - backend:
+          service:
+            name: <project_name>
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - <domain>
+    secretName: <secret_name>

@@ -1,0 +1,18 @@
+# Thay thế các giá trị sau bằng thông tin của bạn
+SONARQUBE_URL="https://<IP_ADDRESS>"
+API_TOKEN="<token>"
+PROJECT_KEY="<key>"
+METRIC_KEYS="bugs,vulnerabilities,security_hotspots,sqale_index,code_smells,duplicated_lines_density,coverage,sqale_rating,reliability_rating,security_rating,alert_status,ncloc"
+
+# Gọi API và lưu kết quả vào biến
+response=$(curl -s -u "$API_TOKEN:" -X GET "$SONARQUBE_URL/api/measures/component?component=$PROJECT_KEY&metricKeys=$METRIC_KEYS")
+
+# Kiểm tra xem yêu cầu có thành công không (status code 200)
+if [ $? -eq 0 ]; then
+  # In ra kết quả từ API
+  echo "$response"
+else
+  echo "Failed to fetch data."
+fi
+=========================================
+

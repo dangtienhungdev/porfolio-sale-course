@@ -1,0 +1,11 @@
+# tạo database
+sqlcmd -S <ADDRESS> -U <username> -P <password> -Q "CREATE DATABASE <dbname>;"
+
+# kiểm tra database
+sqlcmd -S <ADDRESS> -U <username> -P <password> -Q "SELECT name FROM sys.databases;"
+
+# kiểm tra tables
+sqlcmd -S <ADDRESS> -U <username> -P <password> -Q "SELECT table_name = t.name FROM sys.tables t;"
+
+# import .sql file
+sqlcmd -S <ADDRESS> -U <username> -P <password> -d webshop -i path/to/your/sqlfile.sql

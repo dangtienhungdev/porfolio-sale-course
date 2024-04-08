@@ -1,0 +1,13 @@
+============ JAVA ============
+docker run --rm --network host -v `pwd`:/app --workdir="/app"  sonarsource/sonar-scanner-cli sonar-scanner -X $SONAR_SCANNER_OPTS -Dsonar.host.url="http://<IP_ADDRESS>:9000" -Dsonar.login="<token>" -Dsonar.java.binaries="./target/classes" -Dsonar.sources="./src/" -Dsonar.projectKey="java" -Dsonar.projectName="java" -Dsonar.projectVersion="v1.0.0"
+=========== DOTNET ===========
+
+============ PHP =============
+docker run --rm --network host -v `pwd`:/app --workdir="/app"  sonarsource/sonar-scanner-cli sonar-scanner -X $SONAR_SCANNER_OPTS -Dsonar.host.url="http://<IP_ADDRESS>:9000" -Dsonar.login="<token>" -Dsonar.language="php" -Dsonar.php.tests.reportPath=build/phpunit.xml -Dsonar.sources="." -Dsonar.projectKey="php" -Dsonar.projectName="php" -Dsonar.projectVersion="v1.0.0"
+
+============ SWIFT ===========
+docker run --rm --network host -v `pwd`:/app --workdir="/app"  sonarsource/sonar-scanner-cli sonar-scanner -X $SONAR_SCANNER_OPTS -Dsonar.host.url="http://<IP_ADDRESS>:9000" -Dsonar.login="<token>" -Dsonar.sources="." -Dsonar.projectKey="swift" -Dsonar.projectName="swift" -Dsonar.projectVersion="v1.0.0"
+========== Other ===========
+DOCKER_BUILDKIT=1 docker run -u 1018:1019 --rm --network host -v `pwd`/$dirworking:/app --workdir="/app/$srcdir"  sonarsource/sonar-scanner-cli sonar-scanner -X $SONAR_SCANNER_OPTS -Dsonar.host.url="$STAG_SONAR_HOST_URL" -Dsonar.login="<token>" -Dsonar.sources="." -Dsonar.projectKey="${CI_PROJECT_NAME}" -Dsonar.projectName="$CI_PROJECT_NAME" -Dsonar.projectVersion="${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}";
+
+docker run --rm --network host -v `pwd`:/app --workdir="/app"  sonarsource/sonar-scanner-cli sonar-scanner -X $SONAR_SCANNER_OPTS -Dsonar.host.url="http://<IP_ADDRESS>:9000" -Dsonar.login="<token>" -Dsonar.sources="." -Dsonar.projectKey="<proejct>" -Dsonar.projectName="<proejct>" -Dsonar.projectVersion="v1.0.0"

@@ -1,0 +1,11 @@
+====================== cấu hình redis =====================
+$ yum install epel-release
+$ yum install redis
+$ systemctl start redis
+$ vi /etc/redis.conf
+bind 0.0.0.0
+$ sudo journalctl -u redis # xem log
+$ cat /etc/redis/redis.conf | grep requirepass => <password>
+$ redis-cli -h <IP_ADDRESS> -p 6379 -a <password> #full path: /usr/local/bin/redis-cli
+> KEYS *
+> FLUSHALL

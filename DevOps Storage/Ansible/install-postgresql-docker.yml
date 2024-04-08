@@ -1,0 +1,21 @@
+---
+- name: Install PostgreSQL 14 with Docker
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Pull PostgreSQL 14 Docker image
+      docker_image:
+        name: postgres:14
+        state: present
+
+    - name: Create PostgreSQL container
+      docker_container:
+        name: my_postgres_container
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - "5432:5432"
+        state: started

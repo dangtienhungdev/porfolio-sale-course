@@ -1,0 +1,14 @@
+===== Setup and use Kafka =====
+$ curl -O https://dlcdn.apache.org/kafka/3.5.0/kafka_2.13-3.5.0.tgz
+$ tar -xzf kafka_2.13-3.5.0.tgz
+$ bin/zookeeper-server-start.sh config/zookeeper.properties &
+$ bin/kafka-server-start.sh config/server.properties &
+$ bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic my-first-topic --create --partitions 3 --replication-factor 1
+$ bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+$ bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic my-first-topic --describe
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-first-topic
+Open new tab:
+$ bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic my-first-topic
+Open new tab:
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-first-topic --from-beginning
+$ bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-app --reset-offsets --to-earliest --execute --topic my-first-topic

@@ -1,0 +1,110 @@
+appname = "<projectname>.war"
+
+projectdeploy = "<projectname>"
+projectname = "<projectname>"
+runninguser = 'hvportal'
+
+projectpath = "/home/${runninguser}/<projectname>/source"
+backuppath = "/home/${runninguser}/<projectname>/backups"
+deploypath = "/opt/tomcat/webapps"
+
+gitlink = '<gitlink>'
+
+buildscript = "mvn clean package"
+
+def startProcess() {
+    stage('Start') {
+        def filePath = "${deploypath}/${appname}"
+        def fileExists = sh(script: "[ -e ${filePath} ]", returnStatus: true)
+        if (fileExists == 0) {
+            echo "Project is already running."
+        } else {
+            sh(script:""" sudo su - $runninguser -c 'rm -rf ${projectpath}/target' """, label:'clear old build')
+            sh(script:""" sudo su - $runninguser -c 'cd ${projectpath} && ${buildscript}' """, label:'build project')
+            sh(script:""" sudo su - $runninguser -c 'cp ${projectpath}/target/${appname} ${deploypath}' """, label:'copy .war file project into webserver')
+            sh(script:""" sudo su - $runninguser -c 'sudo systemctl restart tomcat' """, label:'restart webserver')
+        }
+    }
+}
+
+def stopProcess() {
+    stage('Stop') {
+        sh(script:""" sudo su - $runninguser -c 'rm -f ${deploypath}/${appname}' """, label:'delete .war file project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo rm -r ${deploypath}/${projectdeploy}' """, label:'delete folder project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo systemctl restart tomcat' """, label:'restart webserver')
+    }
+}
+
+def updateProcess() {
+    stage('Checkout') {
+        if (params.Hash == "")
+            error("Need hash for checkout")
+        checkout([$class: 'GitSCM', branches: [[name: params.Hash ]],
+                 userRemoteConfigs: [[credentialsId: 'jenkins-gitlab-user',url: gitlink]]])
+    }
+    stage('Build') {
+        try {
+            sh(script:""" sudo su - $runninguser -c 'rm -rf ${projectpath}/*' """, label:'delete old source')
+            def currentDir = pwd()
+            sh(script:""" sudo su - $runninguser -c 'cp -r ${currentDir}/* ${projectpath}' """, label:'update source')
+        } catch (Exception e) {
+            error("Build tháº¥t báº¡i")
+        }
+    }
+    stage('Deploy') {
+        sh(script:""" sudo su - $runninguser -c 'rm -f ${deploypath}/${appname}' """, label:'delete file .war project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo rm -r ${deploypath}/${projectdeploy}' """, label:'delete folder project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'cd ${projectpath} && ${buildscript}' """, label:'build project')
+        sh(script:""" sudo su - $runninguser -c 'cp ${projectpath}/target/${appname} ${deploypath}' """, label:'copy .war file project into webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo cp -r ${projectpath}/target/${projectdeploy} ${deploypath}' """, label:'delete folder project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo systemctl restart tomcat' """, label:'restart webserver')
+    }
+    stage('Backup') {
+        def currentDatetime = sh(script: 'date +\'%Y-%m-%d-%H-%M-%S\'', returnStdout: true).trim()
+        def archiveName = "${projectname}_${params.Hash}_${currentDatetime}.tar.gz"
+        sh(script:"""tar -czvf ${backuppath}/${archiveName} -C ${projectpath} .""", label:'zip project')
+		sh(script:"""sudo su $runninguser -c "find ${backuppath} -type f -printf '%T@\\t%p\\n' | sort -t \$'\\t' -g |  head -n -3 |  cut -d \$'\\t' -f 2-|xargs rm -f" """,label:'Delete all backup,keep 3 newest file')
+        echo "backup ${archiveName} success."
+    }
+}
+
+def Rollback() {
+    stage("Rollback") {
+        def rollbackFile = params.Rollback_version
+        sh(script: "tar -xzvf ${backuppath}/${rollbackFile} -C ${projectpath}", label: 'rollbackLabel')
+
+        sh(script:""" sudo su - $runninguser -c 'rm -f ${deploypath}/${appname}' """, label:'delete file .war project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo rm -r ${deploypath}/${projectdeploy}' """, label:'delete folder project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'cd ${projectpath} && ${buildscript}' """, label:'build project')
+        sh(script:""" sudo su - $runninguser -c 'cp ${projectpath}/target/${appname} ${deploypath}' """, label:'copy .war file project into webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo cp -r ${projectpath}/target/${projectdeploy} ${deploypath}' """, label:'delete folder project on webserver')
+        sh(script:""" sudo su - $runninguser -c 'sudo systemctl restart tomcat' """, label:'restart webserver')
+        echo "Rollback ${rollbackFile} success"
+    }
+}
+
+node(params.Server) {
+    stage('Server '+ params.Server){
+        echo 'Server '+ params.Server
+    }
+    currentBuild.displayName = params.Action
+    if (params.Action == "Start") {
+        startProcess()
+    }
+    if (params.Action == "Stop") {
+        stopProcess()
+    }
+    if (params.Action == "Restart") {
+        stopProcess()
+        startProcess()
+    }
+    if (params.Action == "Update") {
+        updateProcess()
+    }  
+    if (params.Action == "Backup") {
+        backupProcess()
+    }  
+    if (params.Action == "Rollback") {
+        Rollback()
+    } 
+}

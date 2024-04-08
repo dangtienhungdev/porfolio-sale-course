@@ -1,0 +1,45 @@
+$ vi /etc/sysconfig/network-scripts/ifcfg-ens33
+onboot=yes
+$ systemctl restart network
+$ setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+$ rpm -Uvh https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+$ yum clean all
+$ yum install zabbix-server-mysql zabbix-agent
+$ yum install -y centos-release-scl
+$ vi /etc/yum.repos.d/zabbix.repo
+[zabbix-frontend]
+enable=1
+$ yum install zabbix-web-mysql-scl zabbix-apache-conf-scl
+$ vi /etc/yum.repos.d/mariadb.repo
+# MariaDB 10.5 CentOS repository list - created 2021-08-31 10:52 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.5/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+$ yum install MariaDB-server MariaDB-client -y
+$ systemctl enable mariadb
+$ systemctl start mariadb
+$ mysql -uroot
+MariaDB [(none)]> create database zabbix character set utf8 collate utf8_bin;
+MariaDB [(none)]> create user zabbix@localhost identified by 'password';
+MariaDB [(none)]> grant all privileges on zabbix.* to zabbix@localhost;
+MariaDB [(none)]> quit;
+$ zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p zabbix
+$ vi /etc/zabbix/zabbix_server.conf
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=password
+$ vi /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf
+php_value[date.timezone] = Asia/Ho_Chi_Minh
+$ systemctl restart zabbix-server zabbix-agent httpd rh-php72-php-fpm
+$ systemctl enable zabbix-server zabbix-agent httpd rh-php72-php-fpm
+$ firewall-cmd --add-service={http,https} --permanent
+$ firewall-cmd --add-port={10051/tcp,10050/tcp} --permanent
+$ firewall-cmd --reload
+
+=> truy cập: http://<IP>/zabbix
+	Next step -> Next step --Điền thông tin database--> Next step --Điền tên Zabbix server--> Next step -> Next step -> Finish
+	Account mặc định: Admin/zabbix 

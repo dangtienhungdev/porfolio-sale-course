@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  cloudbeaver:
+    image: dbeaver/cloudbeaver
+    container_name: cloudbeaver
+    restart: always
+    ports:
+      - "3090:8978"

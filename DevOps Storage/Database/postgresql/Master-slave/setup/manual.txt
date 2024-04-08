@@ -1,0 +1,47 @@
+Master:
+$ sudo su - postgres
+$ createuser --replication -P -e replicator
+Enter password
+$ exit
+$ nano /etc/postgresql/14/main/pg_hba.conf
+host    replication     replicator      <IP_slave_1>/24       md5
+host    replication     replicator      <IP_slave_2>/24       md5
+$ systemctl reload postgresql.service
+
+Slave (1+2):
+$ systemctl stop postgresql.service
+$ cp -R /var/lib/postgresql/14/main /var/lib/postgresql/14/stand-by-bkp
+$ rm -rf /var/lib/postgresql/14/main/*
+$ sudo -i -u postgres
+$ pg_basebackup -h <IP_master> -D /var/lib/postgresql/14/main -U replicator -P -v -R -X stream -C -S slave_1
+Enter password
+$ exit
+$ systemctl start postgresql
+
+Master:
+$ sudo su - postgres
+$ psql postgres
+$ SELECT * FROM pg_replication_slots;
+$ CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+$ INSERT INTO customers (name) VALUES ('A');
+INSERT INTO customers (name) VALUES ('B');
+INSERT INTO customers (name) VALUES ('C');
+$ select * from customers;
+$ SELECT pg_drop_replication_slot('<tên node slave>'); #xóa slave
+
+===================
+Chuyển slave thành master
+$ sudo -u postgres psql
+$ SELECT pg_promote();
+
+
+
+===============
+done: 1 master + 2 slave (manual)
+
+===============
+xem logs
+$ tail /var/log/postgresql/postgresql-14-main.log

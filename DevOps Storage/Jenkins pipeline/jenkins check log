@@ -1,0 +1,31 @@
+Step 1: Config pipline
+    - string parameter
+    + Log_line_number
+    + Điền số dòng cần lấy (có thể bỏ qua nếu chỉ cần bước 2)
+
+    - string parameter
+    + keyword
+    + Keyword cần tìm (có thể bỏ qua nếu chỉ cần bước 1)
+    Ví dụ: 2023-05-28 17:15:10
+    Ví dụ: cc15ad05-ba13-47b2-839c-80ff357ab517
+
+Step 2: config script
+pipeline{
+    agent { label '<node server>' } 
+    stages{
+        stage('checklogs') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh "sudo su <user_project> sh -c  'cd /data/<user_project>/run/logs;tail -n ${params.Log_line_number} log.log'"
+            }
+            }
+        }
+        stage('checklogs_keyword') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh "sudo su <user_project> sh -c  'cd /data/<user_project>/run/logs;cat log.log | grep '${params.keyword}''"
+            }
+            }
+        }
+    }
+}

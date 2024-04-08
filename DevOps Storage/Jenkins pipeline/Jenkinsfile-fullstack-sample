@@ -1,0 +1,108 @@
+pipeline {
+    agent any
+    environment {
+        PATH_PROJECT = '/home/projects/<projectname>'
+        SONAR_PROJECT_KEY = 'root_<projectname>_AYe5jPZrkpMDT6RJzelC'
+        SONAR_TOKEN = credentials('token-<projectname>')
+
+        MIGRATION_NAME = sh (script: 'echo $(date +%Y%m%d%H%M%S)', returnStdout: true).trim()
+        
+        DOCKER_HUB = 'elroydevops'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        IMAGE_NAME_BACKEND = '<projectname>-backend'
+        IMAGE_NAME_FRONTEND = '<projectname>-frontend'
+    }
+    stages {
+        stage('Checkout source') {
+            steps {
+                sh "sudo cp -r . $PATH_PROJECT"
+            }
+        }
+
+        stage('Test backend with dotnet') {
+            steps {
+                sh "cd $PATH_PROJECT/BE \
+                && docker build -t dotnet6-app -f Dockerfile.dotnet6 . \
+                && docker run --rm -v .:/app -w /app dotnet6-app dotnet test"
+                }
+        } 
+
+        stage('Test with sonarqube') {
+            steps {
+                withSonarQubeEnv('Sonarqube server connection') {
+                    sh "cd $PATH_PROJECT/BE \
+                    && docker run --rm -e SONAR_HOST_URL=${env.SONAR_HOST_URL} \
+                    -e SONAR_SCANNER_OPTS='-Dsonar.projectKey=$SONAR_PROJECT_KEY' \
+                    -e SONAR_TOKEN=$SONAR_TOKEN \
+                    -v '.:/usr/src' \
+                    sonarsource/sonar-scanner-cli"
+                }
+            }
+        } 
+
+        stage('Migration database') {
+            steps {
+                script {
+                    try {
+                        timeout(time: 5, unit: 'MINUTES') {
+                            env.userChoice = input message: 'Do you want to migrate the database?',
+                                parameters: [choice(name: 'Versioning Service', choices: 'no\nyes', description: 'Choose "yes" if you want to migrate!')]
+                        }
+                        if (env.userChoice == 'yes') {
+                            echo "Migration success!"
+                            // sh "cd $PATH_PROJECT/BE \
+                            // && docker run --rm -v .:/app -w /app dotnet6-app dotnet ef migrations add $MIGRATION_NAME \
+                            // && docker run --rm -v .:/app -w /app dotnet6-app dotnet ef database update"
+                        } else {
+                            echo "Migration cancelled."
+                        }
+                    } catch (Exception err){
+                        def user = err.getCauses()[0].getUser()
+                        if ('SYSTEM' == user.toString()) {
+                            def didTimeout = true
+                            echo "Timeout. Migration cancelled."
+                        } else {
+                            echo "Migration cancelled by: ${user}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build and push images') {
+            steps {
+                script {
+                    def currentVersion = env.IMAGE_TAG ?: "1.0.0"
+                    def newVersion = currentVersion.tokenize('.').collect{ it.toInteger() } as Integer[]
+                    newVersion[newVersion.length-1] += 1
+                    newVersion = newVersion.join('.')
+                    env.IMAGE_TAG = newVersion
+                    sh " cd $PATH_PROJECT \
+                    && IMAGE_TAG=${env.IMAGE_TAG} \
+                    && docker-compose build --parallel \
+                    && docker tag ${IMAGE_NAME_BACKEND}:${newVersion} ${DOCKER_HUB}/${IMAGE_NAME_BACKEND}:${newVersion} \
+                    && docker tag ${IMAGE_NAME_FRONTEND}:${newVersion} ${DOCKER_HUB}/${IMAGE_NAME_FRONTEND}:${newVersion} \
+                    && echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin \
+                    && docker push ${DOCKER_HUB}/${IMAGE_NAME_BACKEND}:${newVersion} \
+                    && docker push ${DOCKER_HUB}/${IMAGE_NAME_FRONTEND}:${newVersion} \
+                    && docker rmi ${DOCKER_HUB}/${IMAGE_NAME_BACKEND}:${newVersion} \
+                    && docker rmi ${DOCKER_HUB}/${IMAGE_NAME_FRONTEND}:${newVersion}"
+                }
+            }
+        }
+
+        stage('Deploy to Staging')
+        {
+            steps {
+                script {
+                    sshagent(credentials: ['jenkins-ssh-key']) {
+                        //sh "ssh -o StrictHostKeyChecking=no -l root <IP_ADDRESS> ./project/<projectname>/deploy.sh"
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -l root <IP_ADDRESS> "echo \"docker rm -f ${IMAGE_NAME_BACKEND} ${IMAGE_NAME_FRONTEND} \ndocker pull ${DOCKER_HUB}/${IMAGE_NAME_BACKEND}:${newVersion} \ndocker pull ${DOCKER_HUB}/${IMAGE_NAME_FRONTEND}:${newVersion} \ndocker run --name=${IMAGE_NAME_BACKEND} -dp 8081:80 ${DOCKER_HUB}/${IMAGE_NAME_BACKEND}:${newVersion} \ndocker run --name=${IMAGE_NAME_FRONTEND} -dp 80:80 ${DOCKER_HUB}/${IMAGE_NAME_FRONTEND}:${newVersion}\"" > deploy.sh && cat deploy.sh"
+                        """
+                    }
+                }
+            }
+        }
+    }
+}

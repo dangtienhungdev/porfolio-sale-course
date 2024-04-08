@@ -1,0 +1,43 @@
+stages:
+  - Build
+  - Restart services
+  - Checklogs
+
+
+Build:
+  stage: Build
+  variables:
+        GIT_STRATEGY: clone
+  tags: 
+    - runner
+  script:
+  - mvn install
+  only:
+    - tags
+
+
+Restart services:
+  stage: Restart services
+  variables:
+        GIT_STRATEGY: none   
+  tags: 
+    - runner
+  script:
+    - sudo cp target/<projectname>-SNAPSHOT.jar /data/project-api/run/<projectname>-SNAPSHOT.jar
+    - sleep 2s
+    - sudo su project-api -c "cd /data/project-api/run/;sh jenkins.sh"
+    - sleep 2s
+    - sudo su project-api -c "ps -ef|grep <projectname>-SNAPSHOT.jar|grep -v grep|wc -l"
+  only:
+    - tags
+
+Checklogs:
+  stage: Checklogs
+  variables:
+      GIT_STRATEGY: none
+  tags:
+    - runner
+  script:
+    - sudo su project-api -c "tail -n 1000 /data/project-api/run/logs/log.log"
+  only:
+    - tags

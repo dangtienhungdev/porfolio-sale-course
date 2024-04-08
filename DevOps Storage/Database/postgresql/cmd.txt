@@ -1,0 +1,56 @@
+- create db: sudo -i -u postgres psql postgres -c "CREATE DATABASE initial;"
+
+- delete db: sudo -i -u postgres psql postgres -c "DROP DATABASE initial;"
+
+- backup db:
+    $ sudo -i -u postgres pg_dump -U postgres -d initial -f initial.sql
+    $ sudo -i -u postgres psql postgres -c "CREATE DATABASE \"initial.companyA\";"
+    $ sudo -i -u postgres psql -U postgres -d "initial.companyA" -f initial.sql
+
+    $ sudo -i -u postgres pg_dump -h <IP_server_mới> -p 5432 -U postgres test > test.sql #sang server mới
+- Auto backup:
+    $ nano backup-postgresql.sh
+------------------------------------------------------------------------------    
+#!/bin/bash
+
+# Đường dẫn đến thư mục lưu trữ các bản sao lưu
+backup_dir="/đường/dẫn/thư/mục/sao/lưu"
+
+# Đường dẫn tới công cụ pg_dump
+pg_dump_path="/đường/dẫn/tới/pg_dump"
+
+# Tên cơ sở dữ liệu cần sao lưu
+database_name="tên_cơ_sở_dữ_liệu"
+
+# Tạo tên tệp tin sao lưu với định dạng ngày-tháng-năm-giờ-phút-giây
+backup_file="$backup_dir/backup_$(date +"%Y-%m-%d-%H-%M-%S").sql"
+
+# Thực hiện sao lưu cơ sở dữ liệu
+sudo -i -u postgres pg_dump -U postgres -d $database_name -f $pg_dump_path/$backup_file
+
+# Đếm số lượng các bản sao lưu hiện có
+backup_count=$(ls -1 $backup_dir | wc -l)
+
+# Nếu số lượng bản sao lưu vượt quá 7, xóa bản sao lưu cũ nhất
+if [ $backup_count -gt 7 ]; then
+  oldest_backup=$(ls -t $backup_dir | tail -1)
+  rm "$backup_dir/$oldest_backup"
+fi 
+------------------------------------------------------------------------------
+    $ chmod +x backup-postgresql.sh
+    $ crontab -e
+    $ 0 1 * * * /đường/dẫn/tới/backup-postgresql.sh
+
+clone.sh
+
+$DB_INIT
+$DV_NEW
+
+
+thư mục làm việc
+
+ /var/lib/postgresql/14/main/pg_log/
+ /etc/postgresql/14/main/
+ /var/lib/postgresql/14/main/log/
+
+

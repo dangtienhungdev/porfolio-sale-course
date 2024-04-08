@@ -1,0 +1,18 @@
+services:
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - POSTGRES_USER=<password>
+            - POSTGRES_PASSWORD=<password>
+            - POSTGRES_DB=initial
+        volumes:
+            - "./postgres_data:/var/lib/postgresql/data:rw"
+        ports:
+            - "5432:5432"
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=<email>
+            - PGADMIN_DEFAULT_PASSWORD=<password>
+        ports:
+            - "5050:80"

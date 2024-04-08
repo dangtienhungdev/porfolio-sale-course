@@ -1,0 +1,27 @@
+================= database old ===============
+- config image project Backup Data new mongodb database
+Old server
+$ mongo
+> use <username>
+> db.auth("<username>", "<password>")
+> show collections
+> exit
+$ mongodump --db <username> --out /datas/ --username <username> --password '<password>'
+=> download folder backup
+
+New Server
+=> upload folder backup to new server
+$ docker run -d -v /database/mongo/datas:/data/db --name mongodb -p 27017:27017 mongo:4.0.20
+$ docker exec -it mongodb bash
+$ mongo
+> use <username>
+> db.createUser(
+  {
+    user: "<username>",
+    pwd: "<password>",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+> db.grantRolesToUser("<username>", [{ role: "readWrite", db: "<username>" }])
+> db.auth("<username>", "<password>")
+> exit

@@ -1,0 +1,24 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:*",
+        "s3:*",
+        "rds:*",
+        "codecommit:*",
+        "codebuild:*",
+        "codedeploy:*",
+        "codepipeline:*",
+        "iam:*",
+        "ecs:*",
+        "ecr:*",
+        "fargate:*",
+        "elasticloadbalancing:*",
+        "autoscaling:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

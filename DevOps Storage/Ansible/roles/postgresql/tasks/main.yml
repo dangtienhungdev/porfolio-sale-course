@@ -1,0 +1,82 @@
+---
+# install postgresql
+
+- name: Update apt cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install PostgreSQL dependencies
+  become: yes
+  apt:
+    name:
+      - wget
+      - ca-certificates
+      - gnupg
+      - software-properties-common
+    state: present
+
+- name: Add PostgreSQL repository
+  become: yes
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main
+    state: present
+    update_cache: yes
+
+- name: Add PostgreSQL repository key
+  become: yes
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Install PostgreSQL
+  become: yes
+  apt:
+    name:
+      - postgresql-{{ postgres_version }}
+      - postgresql-client-{{ postgres_version }}
+    state: present
+
+- name: Enable UFW
+  ansible.builtin.ufw:
+    state: enabled
+  
+- name: Allow ssh
+  become: yes
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name: Allow PostgreSQL connections through firewall
+  become: yes
+  ufw:
+    rule: allow
+    port: 5432
+    proto: tcp
+
+- name: Configure PostgreSQL default user and password
+  become: yes
+  shell: |
+    sudo -u postgres psql -c "ALTER USER postgres PASSWORD '{{ postgres_password }}';"
+    exit
+#  when: ansible_os_family == 'Debian'
+
+- name: Set listen_addresses to all in postgresql.conf
+  lineinfile:
+    path: /etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+    regexp: '^#?listen_addresses\s*=\s*.+$'
+    line: "listen_addresses = '*'"
+  notify:
+    - restart postgresql
+
+- name: Configure PostgreSQL connection
+  become: yes
+  template:
+    src: templates/pg_hba.conf.j2
+    dest: /etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: '0640'
+  notify:
+    - restart postgresql
