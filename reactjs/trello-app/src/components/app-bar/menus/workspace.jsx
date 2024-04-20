@@ -31,6 +31,7 @@ const Workspaces = () => {
 				aria-expanded={open ? 'true' : undefined}
 				onClick={handleClick}
 				endIcon={<ExpandMoreIcon />}
+				sx={{ color: 'white' }}
 			>
 				Workspaces
 			</Button>
@@ -43,7 +44,7 @@ const Workspaces = () => {
 					'aria-labelledby': 'basic-button-workspaces',
 				}}
 			>
-				<MenuItem>
+				<MenuItem sx={{ color: 'white' }}>
 					<ListItemIcon>
 						<ContentCut fontSize="small" />
 					</ListItemIcon>
@@ -52,7 +53,7 @@ const Workspaces = () => {
 						⌘X
 					</Typography>
 				</MenuItem>
-				<MenuItem>
+				<MenuItem sx={{ color: 'white' }}>
 					<ListItemIcon>
 						<ContentCopy fontSize="small" />
 					</ListItemIcon>
@@ -61,7 +62,7 @@ const Workspaces = () => {
 						⌘C
 					</Typography>
 				</MenuItem>
-				<MenuItem>
+				<MenuItem sx={{ color: 'white' }}>
 					<ListItemIcon>
 						<ContentPaste fontSize="small" />
 					</ListItemIcon>
@@ -71,7 +72,7 @@ const Workspaces = () => {
 					</Typography>
 				</MenuItem>
 				<Divider />
-				<MenuItem>
+				<MenuItem sx={{ color: 'white' }}>
 					<ListItemIcon>
 						<Cloud fontSize="small" />
 					</ListItemIcon>

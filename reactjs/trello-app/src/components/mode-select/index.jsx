@@ -12,6 +12,24 @@ const ModeSelect = () => {
 			sx={{
 				m: 1,
 				minWidth: 120,
+				'& label': { color: 'white' },
+				'& label.Mui-focused': { color: 'white' },
+				'& input': { color: 'white' },
+				'& .MuiInputBase-input': { color: 'white' },
+				'& .MuiInput-underline:before': {
+					borderBottom: '1px solid white',
+				},
+				'& .MuiOutlinedInput-root': {
+					'& fieldset': {
+						borderColor: 'white',
+					},
+					'&:hover fieldset': {
+						borderColor: 'white',
+					},
+					'&.Mui-focused fieldset': {
+						borderColor: 'white',
+					},
+				},
 			}}
 			size="small"
 		>

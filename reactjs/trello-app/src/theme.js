@@ -12,15 +12,36 @@ const theme = extendTheme({
 		light: {
 			palette: {
 				primary: teal,
+				blue: {
+					primary: '#1565c0',
+					secondary: '#1976d2',
+				},
 			},
 		},
 		dark: {
 			palette: {
 				primary: cyan,
+				midNight: {
+					primary: '#2c3e50',
+					secondary: '#34495e',
+				},
 			},
 		},
 	},
 	components: {
+		MuiCssBaseline: {
+			styleOverrides: {
+				body: {
+					'*::-webkit-scrollbar': {
+						width: '8px',
+						height: '8px',
+					},
+					'*::-webkit-scrollbar-thumb': {
+						borderRadius: '8px',
+					},
+				},
+			},
+		},
 		MuiButton: {
 			styleOverrides: {
 				root: {
