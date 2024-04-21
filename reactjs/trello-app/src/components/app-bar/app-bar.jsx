@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import InputAdornment from '@mui/material/InputAdornment';
-import ModeSelect from '../mode-select';
+import ModeSelect from '../mode-select/mode-select';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Profiles from './menus/profiles';
 import Recent from './menus/rencent';
