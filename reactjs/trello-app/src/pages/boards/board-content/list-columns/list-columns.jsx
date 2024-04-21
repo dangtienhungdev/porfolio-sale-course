@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Column from './columns/column';
 
-const ListColumns = () => {
+const ListColumns = ({ columns }) => {
 	return (
 		<Box
 			sx={{
@@ -15,9 +15,9 @@ const ListColumns = () => {
 				height: '100%',
 			}}
 		>
-			{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((_, index) => (
-				<Column key={index} />
-			))}
+			{columns &&
+				columns.length > 0 &&
+				columns.map((column) => <Column column={column} key={column._id} />)}
 
 			<Box
 				sx={{

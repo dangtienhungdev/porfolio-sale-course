@@ -6,6 +6,8 @@ import Chip from '@mui/material/Chip';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Tooltip from '@mui/material/Tooltip';
+import VpnLockIcon from '@mui/icons-material/VpnLock';
+import { capitalizeFirstLetter } from '~/utils/fomatters';
 
 const MENU_STYLES = {
 	color: 'white',
@@ -19,9 +21,10 @@ const MENU_STYLES = {
 	'&:hover': {
 		bgcolor: 'blue.secondary.50',
 	},
+	textTransform: 'capitalize',
 };
 
-const BoardBar = () => {
+const BoardBar = ({ board }) => {
 	return (
 		<Box
 			px={2}
@@ -40,17 +43,22 @@ const BoardBar = () => {
 			}}
 		>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-				{['Boards', 'Templates', 'Home'].map((item) => (
-					<Chip
-						key={item}
-						icon={<DashboardIcon />}
-						label={item}
-						clickable
-						sx={{
-							...MENU_STYLES,
-						}}
-					/>
-				))}
+				<Chip
+					icon={<DashboardIcon />}
+					label={board?.title}
+					clickable
+					sx={{
+						...MENU_STYLES,
+					}}
+				/>
+				<Chip
+					icon={<VpnLockIcon />}
+					label={capitalizeFirstLetter(board?.type)}
+					clickable
+					sx={{
+						...MENU_STYLES,
+					}}
+				/>
 			</Box>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 				<Button
