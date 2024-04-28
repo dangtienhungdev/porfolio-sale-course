@@ -8,39 +8,51 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
-import {
-	RegisterBody,
-	RegisterBodyType,
-} from '@/schemaValidations/auth.schema';
+import { LoginBody, LoginBodyType } from '@/schemaValidations/auth.schema';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import envConfig from '@/config';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-const RegisterForm = () => {
-	const form = useForm<RegisterBodyType>({
-		resolver: zodResolver(RegisterBody),
+const LoginForm = () => {
+	const { toast } = useToast();
+
+	const form = useForm<LoginBodyType>({
+		resolver: zodResolver(LoginBody),
 		defaultValues: {
-			name: '',
 			email: '',
 			password: '',
-			confirmPassword: '',
 		},
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: RegisterBodyType) {
-		fetch(`${envConfig.NEXT_PUBLIC_API_URL}/auth/register`, {
+	function onSubmit(values: LoginBodyType) {
+		fetch(`${envConfig.NEXT_PUBLIC_API_URL}/auth/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(values),
 		})
-			.then((res) => res.json())
+			.then(async (res) => {
+				const payload = await res.json();
+				const data = {
+					status: res.status,
+					payload,
+				};
+				if (!res.ok) {
+					throw data;
+				}
+				toast({
+					title: 'Login success',
+					description: 'You have successfully logged in',
+				});
+				return data;
+			})
 			.then((data) => {
 				console.log(data);
 			})
@@ -48,26 +60,13 @@ const RegisterForm = () => {
 				console.error('🚀 ~ onSubmit ~ error', error);
 			});
 	}
+
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="space-y-8 mx-auto w-full max-w-[500px]"
 			>
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tên người dùng</FormLabel>
-							<FormControl>
-								<Input placeholder="Tên người dùng" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
 				<FormField
 					control={form.control}
 					name="email"
@@ -96,25 +95,12 @@ const RegisterForm = () => {
 					)}
 				/>
 
-				<FormField
-					control={form.control}
-					name="confirmPassword"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Xác nhận mật khẩu người dùng</FormLabel>
-							<FormControl>
-								<Input placeholder="Xác nhận mật khẩu người dùng" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
 				<Button type="submit" className="w-full">
-					Đăng ký
+					Đăng nhập
 				</Button>
 			</form>
 		</Form>
 	);
 };
 
-export default RegisterForm;
+export default LoginForm;
