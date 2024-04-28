@@ -1,6 +1,7 @@
 import AddCardIcon from '@mui/icons-material/AddCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { CSS } from '@dnd-kit/utilities';
 import Cloud from '@mui/icons-material/Cloud';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentCut from '@mui/icons-material/ContentCut';
@@ -17,6 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { mapOrder } from '~/utils/sort';
+import { useSortable } from '@dnd-kit/sortable';
 import { useState } from 'react';
 
 const Column = ({ column }) => {
@@ -29,7 +31,17 @@ const Column = ({ column }) => {
 		setAnchorEl(null);
 	};
 
+	// sort cards by orderIds
 	const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id');
+
+	// logic for drag and drop
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({ id: column._id, data: { ...column } });
+
+	const dndKitColumnStyle = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+	};
 
 	return (
 		<Box
@@ -46,6 +58,10 @@ const Column = ({ column }) => {
 				maxHeight: (theme) =>
 					`calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
 			}}
+			ref={setNodeRef}
+			style={dndKitColumnStyle}
+			{...attributes}
+			{...listeners}
 		>
 			<Box
 				sx={{
