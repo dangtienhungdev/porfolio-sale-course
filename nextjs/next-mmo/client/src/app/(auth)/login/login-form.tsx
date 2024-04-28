@@ -53,8 +53,14 @@ const LoginForm = () => {
 				});
 				return data;
 			})
-			.then((data) => {
-				console.log(data);
+			.then(async (data) => {
+				await fetch(`/api/auth`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				});
 			})
 			.catch((error) => {
 				console.error('🚀 ~ onSubmit ~ error', error);
