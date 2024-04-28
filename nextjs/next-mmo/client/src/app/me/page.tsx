@@ -13,7 +13,7 @@ const ProfilePage = async () => {
 		},
 	}).then((res) => res.json());
 
-	console.log('🚀 ~ ProfilePage ~ result:', result);
+	// console.log('🚀 ~ ProfilePage ~ result:', result);
 	return (
 		<div>
 			name: {result.data.email}
