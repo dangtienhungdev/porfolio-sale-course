@@ -1,8 +1,10 @@
 import './globals.css';
 
+import AppProvider from './app-provider';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,10 +18,15 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const cookieStore = cookies();
+	const sessionToken = cookieStore.get('sessionToken');
+
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				{children}
+				<AppProvider initialSessionToken={sessionToken?.value}>
+					{children}
+				</AppProvider>
 				<Toaster />
 			</body>
 		</html>

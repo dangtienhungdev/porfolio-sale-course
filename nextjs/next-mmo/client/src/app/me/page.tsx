@@ -1,3 +1,4 @@
+import Profile from './profile';
 import React from 'react';
 import { cookies } from 'next/headers';
 import envConfig from '@/config';
@@ -13,7 +14,12 @@ const ProfilePage = async () => {
 	}).then((res) => res.json());
 
 	console.log('🚀 ~ ProfilePage ~ result:', result);
-	return <div>ProfilePage</div>;
+	return (
+		<div>
+			name: {result.data.email}
+			<Profile />
+		</div>
+	);
 };
 
 export default ProfilePage;

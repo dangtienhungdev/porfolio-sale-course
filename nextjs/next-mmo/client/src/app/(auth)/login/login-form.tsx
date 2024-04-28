@@ -14,12 +14,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import envConfig from '@/config';
+import { useAppContext } from '@/app/app-provider';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const LoginForm = () => {
 	const { toast } = useToast();
+	const { setSessionToken } = useAppContext();
 
 	const form = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),
@@ -30,7 +32,7 @@ const LoginForm = () => {
 	});
 
 	// 2. Define a submit handler.
-	function onSubmit(values: LoginBodyType) {
+	const onSubmit = (values: LoginBodyType) => {
 		fetch(`${envConfig.NEXT_PUBLIC_API_URL}/auth/login`, {
 			method: 'POST',
 			headers: {
@@ -54,6 +56,7 @@ const LoginForm = () => {
 				return data;
 			})
 			.then(async (data) => {
+				setSessionToken(data.payload.data.token);
 				await fetch(`/api/auth`, {
 					method: 'POST',
 					headers: {
@@ -65,7 +68,7 @@ const LoginForm = () => {
 			.catch((error) => {
 				console.error('🚀 ~ onSubmit ~ error', error);
 			});
-	}
+	};
 
 	return (
 		<Form {...form}>

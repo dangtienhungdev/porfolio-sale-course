@@ -10,15 +10,10 @@ export const POST = async (req: Request) => {
 		});
 	}
 
-	return Response.json(
-		{
-			res,
+	return Response.json(res.payload, {
+		status: 200,
+		headers: {
+			'Set-Cookie': `sessionToken=${sessionToken}; Path=/; HttpOnly`,
 		},
-		{
-			status: 200,
-			headers: {
-				'Set-Cookie': `sessionToken=${sessionToken}; Path=/`,
-			},
-		}
-	);
+	});
 };
