@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
-    <footer className='bg-neutral-100 py-16'>
-      <div className='max-w-7xl mx-auto px-4'>
+    <footer className='py-16 bg-neutral-100'>
+      <div className='container'>
         <div className='grid grid-cols-1 gap-4 lg:grid-cols-3'>
           <div className='lg:col-span-1'>
             <div>© 2022 Shopee. Tất cả các quyền được bảo lưu.</div>
@@ -13,7 +13,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className='mt-10 text-center text-sm'>
+        <div className='mt-10 text-sm text-center'>
           <div>Công ty TNHH Shopee</div>
           <div className='mt-6'>
             Địa chỉ: Tầng 4-5-6, Tòa nhà Capital Place, số 29 đường Liễu Giai, Phường Ngọc Khánh, Quận Ba Đình, Thành
