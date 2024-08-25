@@ -47,6 +47,7 @@ const Register = () => {
       }
     })
   }
+
   return (
     <div className='bg-orange'>
       <div className='container'>
