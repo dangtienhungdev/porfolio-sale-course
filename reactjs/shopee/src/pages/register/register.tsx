@@ -2,7 +2,9 @@ import { Schema, schema } from '../../utils/rules.util'
 
 import Input from '../../components/input'
 import { Link } from 'react-router-dom'
+import { ResponseApi } from '../../types/utils.type'
 import _ from 'lodash'
+import { isAxiosUnprocessableEntity } from '../../utils/utils'
 import { registerAccount } from '../../apis/auth.api'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
@@ -14,6 +16,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema)
@@ -28,6 +31,19 @@ const Register = () => {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log('🚀 ~ onSubmit ~ data:', data)
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntity<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
+              setError(key as keyof FormData, {
+                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+                type: 'Server'
+              })
+            })
+          }
+        }
       }
     })
   }
