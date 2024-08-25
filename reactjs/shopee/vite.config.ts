@@ -9,5 +9,11 @@ export default defineConfig({
   },
   css: {
     devSourcemap: true
+  },
+  // alias config
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
   }
 })

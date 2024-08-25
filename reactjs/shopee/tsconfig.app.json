@@ -23,5 +23,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "baseUrl": ".",
+  // alias
+  "paths": {
+    "@/*": ["src/*"]
+  }
 }

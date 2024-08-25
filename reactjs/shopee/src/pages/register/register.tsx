@@ -1,60 +1,66 @@
-import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { rules } from '../../utils/rules.util'
+import { Schema, schema } from '../../utils/rules.util'
 
-interface FormData {
-  email: string
-  password: string
-  confirm_password: string
-}
+import Input from '../../components/input'
+import { Link } from 'react-router-dom'
+import _ from 'lodash'
+import { registerAccount } from '../../apis/auth.api'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+type FormData = Schema
 
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
+  })
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+  })
+
+  const onSubmit = (data: FormData) => {
+    const body = _.omit(data, 'confirm_password')
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        console.log('🚀 ~ onSubmit ~ data:', data)
+      }
+    })
   }
   return (
     <div className='bg-orange'>
       <div className='container'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
-            <form className='p-10 bg-white rounded shadow-sm' onSubmit={handleSubmit(onSubmit)}>
+            <form className='flex flex-col gap-6 p-10 bg-white rounded shadow-sm' onSubmit={handleSubmit(onSubmit)}>
               <div className='text-2xl'>Đăng ký</div>
-              <div className='mt-8'>
-                <input
-                  type='text'
-                  id='email'
-                  placeholder='Email'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
-                  {...register('email', rules.email)}
-                />
-                <div className='mt-1 text-sm text-red-600'>{errors.email?.message}</div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  id='password'
-                  placeholder='Password'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
-                  {...register('password', rules.password)}
-                />
-                <div className='mt-1 text-sm text-red-600'>{errors.password?.message}</div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  id='confirm_password'
-                  placeholder='Confirm password'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
-                  {...register('confirm_password', rules.confirm_password)}
-                />
-                <div className='mt-1 text-sm text-red-600'>{errors.confirm_password?.message}</div>
-              </div>
+              <Input
+                name='email'
+                type='email'
+                placeholder='Email'
+                errorMessage={errors.email?.message}
+                register={register}
+              />
+
+              <Input
+                name='password'
+                type='password'
+                placeholder='Password'
+                errorMessage={errors.password?.message}
+                register={register}
+              />
+
+              <Input
+                name='confirm_password'
+                type='password'
+                placeholder='Confirm Password'
+                errorMessage={errors.confirm_password?.message}
+                register={register}
+              />
 
               <div className='mt-3'>
                 <button className='w-full px-2 py-4 text-center text-white uppercase bg-red-500 rounded-sm'>
