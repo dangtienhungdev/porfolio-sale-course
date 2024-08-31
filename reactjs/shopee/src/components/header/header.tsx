@@ -50,7 +50,7 @@ const Header = () => {
             renderPopover={
               <div className='relative bg-white border border-gray-200 rounded-sm shadow-md'>
                 <Link
-                  to={''}
+                  to={'/profile'}
                   className='block w-full px-4 py-3 text-left bg-white hover:bg-slate-100 hover:text-cyan-500'
                 >
                   Tài khoản của tôi
