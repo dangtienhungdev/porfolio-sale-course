@@ -114,61 +114,69 @@ const Header = () => {
           </form>
 
           <div className='col-span-1 justify-self-end'>
-            <div className='relative  max-w-[400px] rounded-sm  text-sm'>
-              {/* <div className='p-2'>
-                <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
-                <div className='mt-5'>
-                  {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
-                    <div className='flex py-2 mt-2 hover:bg-gray-100' key={index}>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src={'https://picsum.photos/id/237/536/354'}
-                          alt={'image'}
-                          className='object-cover h-11 w-11'
-                        />
+            <div className='relative  max-w-[400px] rounded-sm text-sm'>
+              <Popover
+                renderPopover={
+                  <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+                    <div className='p-2'>
+                      <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
+                          <div className='flex py-2 mt-2 hover:bg-gray-100' key={index}>
+                            <div className='flex-shrink-0'>
+                              <img
+                                src={'https://picsum.photos/id/237/536/354'}
+                                alt={'image'}
+                                className='object-cover h-11 w-11'
+                              />
+                            </div>
+                            <div className='flex-grow ml-2 overflow-hidden'>
+                              <div className='truncate'>Áo thun nam cổ tròn in hình chữ nhật đen</div>
+                            </div>
+                            <div className='flex-shrink-0 ml-2'>
+                              <span className='text-orange'>₫1.000.000</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>Áo thun nam cổ tròn in hình chữ nhật đen</div>
-                      </div>
-                      <div className='flex-shrink-0 ml-2'>
-                        <span className='text-orange'>₫1.000.000</span>
+                      <div className='flex items-center justify-between mt-6'>
+                        <div className='text-xs text-gray-500 capitalize'>6 Thêm hàng vào giỏ</div>
+                        <Link
+                          to={'/cart'}
+                          className='px-4 py-2 text-white capitalize rounded-sm bg-orange hover:bg-opacity-90'
+                        >
+                          Xem giỏ hàng
+                        </Link>
                       </div>
                     </div>
-                  ))}
-                </div>
-                <div className='flex items-center justify-between mt-6'>
-                  <div className='text-xs text-gray-500 capitalize'>6 Thêm hàng vào giỏ</div>
-                  <Link
-                    to={'/cart'}
-                    className='px-4 py-2 text-white capitalize rounded-sm bg-orange hover:bg-opacity-90'
+                  </div>
+                }
+              >
+                <Link to='/' className='relative'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='w-8 h-8'
                   >
-                    Xem giỏ hàng
-                  </Link>
-                </div>
-              </div> */}
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                    />
+                  </svg>
+                  <span className='absolute top-[-5px] left-[17px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange '>
+                    10
+                  </span>
+                </Link>
+              </Popover>
+
               {/* <div className='flex h-[300px] w-[300px] flex-col items-center justify-center p-2'>
                 <img src='https://picsum.photos/id/237/536/354' alt='no purchase' className='w-24 h-24' />
                 <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
               </div> */}
-              <Link to='/' className='relative'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                  className='w-8 h-8'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-                  />
-                </svg>
-                <span className='absolute top-[-5px] left-[17px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange '>
-                  10
-                </span>
-              </Link>
             </div>
           </div>
         </div>
