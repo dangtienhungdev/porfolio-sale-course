@@ -1,11 +1,13 @@
+import { Link, useNavigate } from 'react-router-dom'
 import { Schema, schema } from '../../utils/rules.util'
 
+import { AppContext } from '../../contexts/app.context'
+import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
-import { Link } from 'react-router-dom'
-import { ResponseApi } from '../../types/utils.type'
 import _ from 'lodash'
 import { isAxiosUnprocessableEntity } from '../../utils/utils'
 import { registerAccount } from '../../apis/auth.api'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,6 +15,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 type FormData = Schema
 
 const Register = () => {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -29,11 +34,12 @@ const Register = () => {
   const onSubmit = (data: FormData) => {
     const body = _.omit(data, 'confirm_password')
     registerAccountMutation.mutate(body, {
-      onSuccess: (data) => {
-        console.log('🚀 ~ onSubmit ~ data:', data)
+      onSuccess: () => {
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntity<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntity<ErrorResponse<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
