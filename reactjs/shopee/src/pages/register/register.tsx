@@ -7,6 +7,7 @@ import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
 import _ from 'lodash'
 import { isAxiosUnprocessableEntity } from '../../utils/utils'
+import path from '../../constants/path'
 import { registerAccount } from '../../apis/auth.api'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 type FormData = Schema
 
 const Register = () => {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
 
   const {
@@ -35,8 +36,9 @@ const Register = () => {
   const onSubmit = (data: FormData) => {
     const body = _.omit(data, 'confirm_password')
     registerAccountMutation.mutate(body, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setIsAuthenticated(true)
+        setProfile(data.data.data.user)
         navigate('/')
       },
       onError: (error) => {
@@ -98,7 +100,7 @@ const Register = () => {
 
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản hay chưa? </span>
-                <Link to={'/login'} className='ml-1 text-orange'>
+                <Link to={path.login} className='ml-1 text-orange'>
                   Đăng nhập
                 </Link>
               </div>
