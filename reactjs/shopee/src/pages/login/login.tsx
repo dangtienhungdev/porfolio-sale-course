@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Schema, loginSchema } from '../../utils/rules.util'
 
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/button'
 import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
 import { isAxiosUnprocessableEntity } from '../../utils/utils'
@@ -75,9 +76,13 @@ const Login = () => {
               />
 
               <div className='mt-3'>
-                <button className='w-full px-2 py-4 text-center text-white uppercase bg-red-500 rounded-sm'>
+                <Button
+                  isLoading={loginAccountMutation.isLoading}
+                  disabled={loginAccountMutation.isLoading}
+                  className='flex items-center justify-center w-full px-2 py-4 text-sm text-white uppercase bg-red-500 hover:bg-red-600'
+                >
                   Đăng nhập
-                </button>
+                </Button>
               </div>
 
               <div className='flex items-center justify-center mt-8'>

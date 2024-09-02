@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Schema, schema } from '../../utils/rules.util'
 
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/button'
 import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
 import _ from 'lodash'
@@ -86,9 +87,13 @@ const Register = () => {
               />
 
               <div className='mt-3'>
-                <button className='w-full px-2 py-4 text-center text-white uppercase bg-red-500 rounded-sm'>
+                <Button
+                  isLoading={registerAccountMutation.isLoading}
+                  disabled={registerAccountMutation.isLoading}
+                  className='flex items-center justify-center w-full px-2 py-4 text-sm text-white uppercase bg-red-500 hover:bg-red-600'
+                >
                   Đăng ký
-                </button>
+                </Button>
               </div>
 
               <div className='flex items-center justify-center mt-8'>
