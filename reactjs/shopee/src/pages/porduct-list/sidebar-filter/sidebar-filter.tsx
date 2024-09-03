@@ -1,12 +1,28 @@
+import { Link, createSearchParams } from 'react-router-dom'
+
 import Button from '../../../components/button'
-import { Link } from 'react-router-dom'
+import { Category } from '../../../types/category.type'
+import { QueryConfig } from '../product-list'
 import RatingStar from '../rating-start/rating-start'
+import classNames from 'classnames'
 import path from '../../../constants/path'
 
-const SidebarFillter = () => {
+interface SidebarFillterProps {
+  categories: Category[]
+  queryConfig: QueryConfig
+}
+
+const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
+  const { category } = queryConfig
+  console.log('🚀 ~ SidebarFillter ~ category:', category)
   return (
     <div className='py-4'>
-      <Link to={path.home} className={'flex items-center font-bold'}>
+      <Link
+        to={path.home}
+        className={classNames('flex items-center font-bold', {
+          'text-orange': !category
+        })}
+      >
         <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-current'>
           <g fillRule='evenodd' stroke='none' strokeWidth={1}>
             <g transform='translate(-373 -208)'>
@@ -26,13 +42,32 @@ const SidebarFillter = () => {
       <div className='my-4 h-[1px] bg-gray-300' />
 
       <ul>
-        <li className='py-2 pl-2'>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <Link to={''} key={index} className={'relative px-2'}>
-              Sản phẩm mới {index}
-            </Link>
-          ))}
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = categoryItem._id === category
+          return (
+            <li className='py-2 pl-2' key={categoryItem._id}>
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={classNames('relative px-2', {
+                  'font-semibold text-orange': isActive
+                })}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className='absolute top-1 left-[-10px] h-2 w-2 fill-orange'>
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                )}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
 
       <Link to={path.home} className='flex items-center mt-4 font-bold uppercase'>
@@ -64,7 +99,7 @@ const SidebarFillter = () => {
         <form className='mt-2'>
           <div className='flex items-start'></div>
 
-          <Button className='flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white hover:bg-orange/80'>
+          <Button className='flex items-center justify-center w-full p-2 text-sm text-white uppercase bg-orange hover:bg-orange/80'>
             Áp dụng
           </Button>
         </form>
@@ -76,7 +111,7 @@ const SidebarFillter = () => {
       <RatingStar />
 
       <div className='my-4 h-[1px] bg-gray-300' />
-      <Button className='flex w-full items-center justify-center bg-orange p-2 text-sm uppercase text-white hover:bg-orange/80'>
+      <Button className='flex items-center justify-center w-full p-2 text-sm text-white uppercase bg-orange hover:bg-orange/80'>
         Xóa tất cả
       </Button>
     </div>
