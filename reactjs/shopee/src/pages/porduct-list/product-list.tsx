@@ -26,9 +26,9 @@ const ProductList = () => {
             <SortProductList />
 
             <div className='grid grid-cols-2 gap-3 mt-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
-              {Array.from({ length: 10 }).map((_, index) => (
-                <div className='col-span-1' key={index}>
-                  <Product />
+              {data?.data?.data?.products?.map((product) => (
+                <div className='col-span-1' key={product._id}>
+                  <Product product={product} />
                 </div>
               ))}
             </div>
