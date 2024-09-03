@@ -5,8 +5,8 @@ import { AppContext } from '../../contexts/app.context'
 import Button from '../../components/button'
 import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
+import authApi from '../../apis/auth.api'
 import { isAxiosUnprocessableEntity } from '../../utils/utils'
-import { loginAccount } from '../../apis/auth.api'
 import path from '../../constants/path'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
@@ -29,7 +29,7 @@ const Login = () => {
   })
 
   const loginAccountMutation = useMutation({
-    mutationFn: (body: FormData) => loginAccount(body)
+    mutationFn: (body: FormData) => authApi.loginAccount(body)
   })
 
   const onSubmit = (data: FormData) => {

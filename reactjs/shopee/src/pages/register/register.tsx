@@ -6,9 +6,9 @@ import Button from '../../components/button'
 import { ErrorResponse } from '../../types/utils.type'
 import Input from '../../components/input'
 import _ from 'lodash'
+import authApi from '../../apis/auth.api'
 import { isAxiosUnprocessableEntity } from '../../utils/utils'
 import path from '../../constants/path'
-import { registerAccount } from '../../apis/auth.api'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
@@ -30,7 +30,7 @@ const Register = () => {
   })
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   })
 
   const onSubmit = (data: FormData) => {
