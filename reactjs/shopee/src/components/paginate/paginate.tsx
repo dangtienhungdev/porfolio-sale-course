@@ -1,13 +1,18 @@
+import { Link, createSearchParams } from 'react-router-dom'
+
+import { QueryConfig } from '../../pages/porduct-list/product-list'
 import classNames from 'classnames'
+import path from '../../constants/path'
 
 interface PaginateProps {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryConfig
   pageSize: number
 }
 
 const RANGE = 2
-const Paginate = ({ page, setPage, pageSize }: PaginateProps) => {
+const Paginate = ({ queryConfig, pageSize }: PaginateProps) => {
+  const page = Number(queryConfig.page) || 1
+
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
@@ -16,9 +21,9 @@ const Paginate = ({ page, setPage, pageSize }: PaginateProps) => {
       if (!dotBefore) {
         dotBefore = true
         return (
-          <button key={index} className='px-3 py-2 mx-2 border rounded shadow-sm bg-white/60'>
+          <span key={index} className='px-3 py-2 mx-2 border rounded shadow-sm bg-white/60'>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -28,9 +33,9 @@ const Paginate = ({ page, setPage, pageSize }: PaginateProps) => {
       if (!dotAfter) {
         dotAfter = true
         return (
-          <button key={index} className='px-3 py-2 mx-2 border rounded shadow-sm bg-white/60'>
+          <span key={index} className='px-3 py-2 mx-2 border rounded shadow-sm bg-white/60'>
             ...
-          </button>
+          </span>
         )
       }
       return null
@@ -52,28 +57,64 @@ const Paginate = ({ page, setPage, pageSize }: PaginateProps) => {
         }
 
         return (
-          <button
+          <Link
+            to={{
+              pathname: path.home,
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
             key={index}
             className={classNames(
               'px-3 py-2 mx-2 border rounded shadow-sm bg-white/60',
               { 'border-cyan-500': pageNumber === page },
               { 'border-transparent': pageNumber !== page }
             )}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
 
   return (
     <div className='flex flex-wrap justify-center mt-6'>
-      <span className='px-3 py-2 mx-2 border rounded shadow-sm cursor-not-allowed bg-white/60'>Prev</span>
+      {page === 1 ? (
+        <span className='px-3 py-2 mx-2 border rounded shadow-sm cursor-not-allowed bg-white/60'>Prev</span>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString()
+            }).toString()
+          }}
+          className='px-3 py-2 mx-2 bg-white border rounded shadow-sm cursor-pointer'
+        >
+          Prev
+        </Link>
+      )}
 
       {renderPagination()}
 
-      <span className='px-3 py-2 mx-2 border rounded shadow-sm cursor-not-allowed bg-white/60'>Next</span>
+      {page === pageSize ? (
+        <span className='px-3 py-2 mx-2 border rounded shadow-sm cursor-not-allowed bg-white/60'>Next</span>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString()
+            }).toString()
+          }}
+          className='px-3 py-2 mx-2 bg-white border rounded shadow-sm cursor-pointer'
+        >
+          Next
+        </Link>
+      )}
     </div>
   )
 }
