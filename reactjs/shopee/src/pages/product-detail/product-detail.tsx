@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { formatCurrency, formatNumberToSocialStyle, rateSale } from '../../utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
 
 import { useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
@@ -9,12 +9,13 @@ import ProductRating from '../../components/product-rating'
 import { Product } from '../../types/product.type'
 
 const ProductDetail = () => {
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
 
   // call api để lấy thông tin sản phẩm
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
-    queryFn: () => productApi.getProductDetail(id as string)
+    queryFn: () => productApi.getProductDetail(id)
   })
 
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])

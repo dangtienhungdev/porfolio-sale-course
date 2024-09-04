@@ -7,7 +7,7 @@ const path = {
   historyPurchase: '/history-purchase',
   cart: '/cart',
   logout: '/logout',
-  productDetail: '/:id'
+  productDetail: '/:nameId'
 }
 
 export default path
