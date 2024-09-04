@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react'
 import { formatCurrency, formatNumberToSocialStyle, rateSale } from '../../utils/utils'
 
 import { useQuery } from '@tanstack/react-query'
@@ -5,16 +6,47 @@ import DOMPurify from 'dompurify'
 import { useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import ProductRating from '../../components/product-rating'
+import { Product } from '../../types/product.type'
 
 const ProductDetail = () => {
   const { id } = useParams()
 
+  // call api để lấy thông tin sản phẩm
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
   })
 
+  const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
+  const [isActiveImage, setIsActiveImage] = useState('')
+
+  // lấy thông tin sản phẩm
   const product = productDetailData?.data.data
+  const currentImages = useMemo(() => {
+    return product ? product.images.slice(...currentIndexImages) : []
+  }, [product, currentIndexImages])
+
+  useEffect(() => {
+    if (product && product.images.length > 0) {
+      setIsActiveImage(product.images[0])
+    }
+  }, [product])
+
+  const chooseImage = (img: string) => {
+    setIsActiveImage(img)
+  }
+
+  const next = () => {
+    if (currentIndexImages[1] < (product as Product).images.length) {
+      setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
+    }
+  }
+
+  const prev = () => {
+    if (currentIndexImages[0] > 0) {
+      setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
+    }
+  }
 
   if (!product) return null
 
@@ -26,13 +58,16 @@ const ProductDetail = () => {
             <div className='col-span-5'>
               <div className='relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow'>
                 <img
-                  src={product?.images[0]}
+                  src={isActiveImage}
                   alt={product?.name}
                   className='absolute top-0 left-0 object-cover w-full h-full bg-white'
                 />
               </div>
               <div className='relative grid grid-cols-5 gap-1 mt-4'>
-                <button className='absolute left-0 z-10 w-5 text-white -translate-y-1/2 top-1/2 h-9 bg-black/20'>
+                <button
+                  onClick={next}
+                  className='absolute left-0 z-10 w-5 text-white -translate-y-1/2 top-1/2 h-9 bg-black/20'
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -44,10 +79,15 @@ const ProductDetail = () => {
                     <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
                   </svg>
                 </button>
-                {product.images.slice(0, 5).map((img: string, index: number) => {
+                {currentImages.map((img: string, index: number) => {
                   const isActive = index === 0
                   return (
-                    <div className='relative w-full pt-[100%]' key={img}>
+                    <div
+                      className='relative w-full pt-[100%]'
+                      key={img}
+                      onMouseEnter={() => chooseImage(img)}
+                      aria-hidden={true}
+                    >
                       <img
                         src={img}
                         alt={product?.name}
@@ -57,7 +97,10 @@ const ProductDetail = () => {
                     </div>
                   )
                 })}
-                <button className='absolute right-0 z-10 w-5 text-white -translate-y-1/2 top-1/2 h-9 bg-black/20'>
+                <button
+                  onClick={prev}
+                  className='absolute right-0 z-10 w-5 text-white -translate-y-1/2 top-1/2 h-9 bg-black/20'
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
