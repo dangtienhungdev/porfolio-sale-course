@@ -9,6 +9,7 @@ import { NoUndefinedField } from '../../../types/utils.type'
 import { QueryConfig } from '../product-list'
 import RatingStar from '../rating-start/rating-start'
 import classNames from 'classnames'
+import { omit } from 'lodash'
 import path from '../../../constants/path'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -37,8 +38,6 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
     resolver: yupResolver(priceSchema) as Resolver<FormData>
   })
 
-  console.log('🚀 ~ SidebarFillter ~ errors:', errors)
-
   const onSubmit = handleSubmit((data) => {
     navigate({
       pathname: path.home,
@@ -49,6 +48,13 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
       }).toString()
     })
   })
+
+  const handleRemoteAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_max', 'price_min', 'rating_filter', 'category'])).toString()
+    })
+  }
 
   return (
     <div className='py-4'>
@@ -185,10 +191,13 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
       <div className='my-4 h-[1px] bg-gray-300' />
       <div className='text-sm'>Đánh giá</div>
 
-      <RatingStar />
+      <RatingStar queryConfig={queryConfig} />
 
       <div className='my-4 h-[1px] bg-gray-300' />
-      <Button className='flex items-center justify-center w-full p-2 text-sm text-white uppercase bg-orange hover:bg-orange/80'>
+      <Button
+        onClick={handleRemoteAll}
+        className='flex items-center justify-center w-full p-2 text-sm text-white uppercase bg-orange hover:bg-orange/80'
+      >
         Xóa tất cả
       </Button>
     </div>

@@ -1,17 +1,44 @@
-const RatingStar = () => {
+import { createSearchParams, useNavigate } from 'react-router-dom'
+
+import { QueryConfig } from '../product-list'
+import path from '../../../constants/path'
+
+interface RatingStarProps {
+  queryConfig: QueryConfig
+}
+
+const RatingStar = ({ queryConfig }: RatingStarProps) => {
+  const navigate = useNavigate()
+
+  const handleFilterStart = (ratingFilter: number) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        rating_filter: ratingFilter.toString()
+      }).toString()
+    })
+  }
+
   return (
     <ul className='my-3'>
       {Array(5)
         .fill(0)
         .map((_, index) => (
           <li className='py-1 pl-2' key={index}>
-            <div className='flex cursor-pointer items-center text-sm' tabIndex={0} role='button' aria-hidden='true'>
+            <div
+              className='flex items-center text-sm cursor-pointer'
+              tabIndex={0}
+              role='button'
+              aria-hidden={undefined}
+              onClick={() => handleFilterStart(5 - index)}
+            >
               {Array(5)
                 .fill(0)
                 .map((_, indexStar) => {
                   if (indexStar < 5 - index) {
                     return (
-                      <svg viewBox='0 0 9.5 8' className='mr-1 h-4 w-4' key={indexStar}>
+                      <svg viewBox='0 0 9.5 8' className='w-4 h-4 mr-1' key={indexStar}>
                         <defs>
                           <linearGradient id='ratingStarGradient' x1='50%' x2='50%' y1='0%' y2='100%'>
                             <stop offset={0} stopColor='#ffca11' />
@@ -39,7 +66,7 @@ const RatingStar = () => {
                     )
                   }
                   return (
-                    <svg viewBox='0 0 30 30' className='mr-1 h-4 w-4' key={indexStar}>
+                    <svg viewBox='0 0 30 30' className='w-4 h-4 mr-1' key={indexStar}>
                       <defs>
                         <linearGradient id='star__hollow' x1='50%' x2='50%' y1='0%' y2='99.0177926%'>
                           <stop offset='0%' stopColor='#FFD211' />
