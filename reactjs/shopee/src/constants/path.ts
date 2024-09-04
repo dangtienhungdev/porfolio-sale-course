@@ -6,7 +6,8 @@ const path = {
   changePassword: '/change-password',
   historyPurchase: '/history-purchase',
   cart: '/cart',
-  logout: '/logout'
+  logout: '/logout',
+  productDetail: '/:id'
 }
 
 export default path

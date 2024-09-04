@@ -3,6 +3,7 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { AppContext } from './contexts/app.context'
 import Login from './pages/login'
 import MainLayout from './layouts/main-layout'
+import ProductDetail from './pages/product-detail'
 import ProductList from './pages/porduct-list'
 import ProfilePage from './pages/profile'
 import Register from './pages/register'
@@ -30,6 +31,14 @@ export default function useRouterElement() {
       element: (
         <MainLayout>
           <ProductList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.productDetail,
+      element: (
+        <MainLayout>
+          <ProductDetail />
         </MainLayout>
       )
     },

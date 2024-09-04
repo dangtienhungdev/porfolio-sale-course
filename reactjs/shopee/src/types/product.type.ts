@@ -26,6 +26,7 @@ export interface Product {
   image: string
   createdAt: Date
   updatedAt: Date
+  description: string
 }
 
 export interface ProductListConfig {
