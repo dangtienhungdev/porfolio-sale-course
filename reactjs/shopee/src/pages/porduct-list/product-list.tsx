@@ -1,13 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
-import categoryApi from '../../apis/category.api'
-import productApi from '../../apis/product.api'
 import Paginate from '../../components/paginate'
-import useQueryConfig from '../../hooks/useQueryConfig'
-import { useQueryParams } from '../../hooks/useQueryParams'
-import { ProductListConfig } from '../../types/product.type'
 import Product from './product'
+import { ProductListConfig } from '../../types/product.type'
 import SidebarFillter from './sidebar-filter'
 import SortProductList from './sort-product-list'
+import categoryApi from '../../apis/category.api'
+import productApi from '../../apis/product.api'
+import { useQuery } from '@tanstack/react-query'
+import useQueryConfig from '../../hooks/useQueryConfig'
+import { useQueryParams } from '../../hooks/useQueryParams'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
@@ -27,7 +27,8 @@ const ProductList = () => {
   const { data: categoryData } = useQuery({
     queryKey: ['categories'],
     queryFn: () => categoryApi.getCategories(),
-    keepPreviousData: true
+    keepPreviousData: true,
+    staleTime: 3 * 60 * 1000
   })
 
   return (

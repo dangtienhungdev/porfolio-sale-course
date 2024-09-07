@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { ProductListConfig, Product as ProductType } from '../../types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
+import { useEffect, useMemo, useState } from 'react'
 
-import { useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
-import { useParams } from 'react-router-dom'
-import productApi from '../../apis/product.api'
+import Product from '../porduct-list/product'
 import ProductRating from '../../components/product-rating'
-import { Product } from '../../types/product.type'
+import productApi from '../../apis/product.api'
+import { useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 
 const ProductDetail = () => {
   const { nameId } = useParams()
@@ -27,6 +28,15 @@ const ProductDetail = () => {
     return product ? product.images.slice(...currentIndexImages) : []
   }, [product, currentIndexImages])
 
+  const queryConfig: ProductListConfig = { limit: 20, page: 1, category: product?.category?._id }
+
+  const { data: productsData } = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => productApi.getProducts(queryConfig),
+    enabled: !!product,
+    staleTime: 3 * 60 * 1000
+  })
+
   useEffect(() => {
     if (product && product.images.length > 0) {
       setIsActiveImage(product.images[0])
@@ -38,7 +48,7 @@ const ProductDetail = () => {
   }
 
   const next = () => {
-    if (currentIndexImages[1] < (product as Product).images.length) {
+    if (currentIndexImages[1] < (product as ProductType).images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }
   }
@@ -204,7 +214,7 @@ const ProductDetail = () => {
       <div className='mt-8'>
         <div className='container'>
           <div className='text-gray-400 uppercase'>CÓ THỂ BẠN CŨNG THÍCH</div>
-          {/* {productsData && (
+          {productsData && (
             <div className='grid grid-cols-2 gap-3 mt-6 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
               {productsData.data.data.products.map((product) => (
                 <div className='col-span-1' key={product._id}>
@@ -212,7 +222,7 @@ const ProductDetail = () => {
                 </div>
               ))}
             </div>
-          )} */}
+          )}
         </div>
       </div>
     </div>
