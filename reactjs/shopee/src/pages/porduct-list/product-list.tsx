@@ -1,14 +1,13 @@
-import { isUndefined, omitBy } from 'lodash'
-
-import Paginate from '../../components/paginate'
-import Product from './product'
-import { ProductListConfig } from '../../types/product.type'
-import SidebarFillter from './sidebar-filter'
-import SortProductList from './sort-product-list'
+import { useQuery } from '@tanstack/react-query'
 import categoryApi from '../../apis/category.api'
 import productApi from '../../apis/product.api'
-import { useQuery } from '@tanstack/react-query'
+import Paginate from '../../components/paginate'
+import useQueryConfig from '../../hooks/useQueryConfig'
 import { useQueryParams } from '../../hooks/useQueryParams'
+import { ProductListConfig } from '../../types/product.type'
+import Product from './product'
+import SidebarFillter from './sidebar-filter'
+import SortProductList from './sort-product-list'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
@@ -17,19 +16,7 @@ export type QueryConfig = {
 const ProductList = () => {
   const queryParams: QueryConfig = useQueryParams()
 
-  const queryConfig: QueryConfig = omitBy(
-    {
-      page: queryParams.page ?? '1',
-      limit: queryParams.limit ?? 20,
-      sort_by: queryParams.sort_by,
-      order: queryParams.order,
-      price_max: queryParams.price_max,
-      price_min: queryParams.price_min,
-      rating_filter: queryParams.rating_filter,
-      category: queryParams.category
-    },
-    isUndefined
-  )
+  const queryConfig = useQueryConfig()
 
   const { data: productData } = useQuery({
     queryKey: ['products', queryParams],

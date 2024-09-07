@@ -1,15 +1,31 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
+import { Schema, schema } from '../../utils/rules.util'
 
-import { AppContext } from '../../contexts/app.context'
-import Popover from '../popover'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { omit } from 'lodash'
+import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import authApi from '../../apis/auth.api'
 import path from '../../constants/path'
-import { useContext } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { AppContext } from '../../contexts/app.context'
+import useQueryConfig from '../../hooks/useQueryConfig'
+import Popover from '../popover'
+
+type FormData = Pick<Schema, 'name'>
+const nameSchema = schema.pick(['name'])
 
 const Header = () => {
   const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
+  const queryConfig = useQueryConfig()
+
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
 
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logoutAccount(),
@@ -23,6 +39,17 @@ const Header = () => {
     logoutMutation.mutate()
     navigate(path.login)
   }
+
+  const onSubmit = handleSubmit((data) => {
+    const config = queryConfig.order ? omit(queryConfig, ['order', 'sort_by']) : queryConfig
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...config,
+        name: data.name
+      }).toString()
+    })
+  })
 
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
@@ -126,12 +153,13 @@ const Header = () => {
             </svg>
           </Link>
 
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmit}>
             <div className='flex p-1 bg-white rounded-sm'>
               <input
                 type='text'
                 className='flex-grow px-3 py-2 text-black bg-transparent border-none outline-none'
                 placeholder='Free Ship Đơn Từ 0Đ'
+                {...register('name')}
               />
               <button className='flex-shrink-0 px-6 py-2 rounded-sm bg-orange hover:opacity-90'>
                 <svg

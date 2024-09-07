@@ -89,7 +89,8 @@ export const schema = yup.object({
     name: 'price-not-allowed',
     message: 'Giá không hợp lệ',
     test: testPriceMinMax
-  })
+  }),
+  name: yup.string().trim().required('Tên sản phẩm không được để trống')
 })
 
 export const loginSchema = schema.omit(['confirm_password'])
