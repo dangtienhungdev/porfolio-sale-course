@@ -1,21 +1,27 @@
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { Schema, schema } from '../../utils/rules.util'
 
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
+import { AppContext } from '../../contexts/app.context'
+import Popover from '../popover'
+import authApi from '../../apis/auth.api'
+import { formatCurrency } from '../../utils/utils'
+import noproduct from '../../assets/images/image.png'
 import { omit } from 'lodash'
+import path from '../../constants/path'
+import purchaseApi from '../../apis/purchase.api'
+import { purchasesStatus } from '../../constants/purchase'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import authApi from '../../apis/auth.api'
-import path from '../../constants/path'
-import { AppContext } from '../../contexts/app.context'
 import useQueryConfig from '../../hooks/useQueryConfig'
-import Popover from '../popover'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
+const MAX_PURCHASES = 5
 
 const Header = () => {
+  const queryClient = new QueryClient()
   const { setIsAuthenticated, isAuthenticated, profile, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const queryConfig = useQueryConfig()
@@ -32,6 +38,7 @@ const Header = () => {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
     }
   })
 
@@ -39,6 +46,12 @@ const Header = () => {
     logoutMutation.mutate()
     navigate(path.login)
   }
+
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchaseList({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
+  })
 
   const onSubmit = handleSubmit((data) => {
     const config = queryConfig.order ? omit(queryConfig, ['order', 'sort_by']) : queryConfig
@@ -50,6 +63,8 @@ const Header = () => {
       }).toString()
     })
   })
+
+  const purchasesInCart = purchasesInCartData?.data.data
 
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-2 text-white'>
@@ -185,37 +200,48 @@ const Header = () => {
               <Popover
                 renderPopover={
                   <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                    <div className='p-2'>
-                      <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
-                      <div className='mt-5'>
-                        {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
-                          <div className='flex py-2 mt-2 hover:bg-gray-100' key={index}>
-                            <div className='flex-shrink-0'>
-                              <img
-                                src={'https://picsum.photos/id/237/536/354'}
-                                alt={'image'}
-                                className='object-cover h-11 w-11'
-                              />
+                    {purchasesInCart && purchasesInCart?.length > 0 ? (
+                      <div className='p-2'>
+                        <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+                        <div className='mt-5'>
+                          {purchasesInCart.slice(0, MAX_PURCHASES).map((purchase) => (
+                            <div className='flex py-2 mt-2 hover:bg-gray-100' key={purchase._id}>
+                              <div className='flex-shrink-0'>
+                                <img
+                                  src={purchase.product.image}
+                                  alt={purchase.product.name}
+                                  className='object-cover h-11 w-11'
+                                />
+                              </div>
+                              <div className='flex-grow ml-2 overflow-hidden'>
+                                <div className='truncate'>{purchase.product.name}</div>
+                              </div>
+                              <div className='flex-shrink-0 ml-2'>
+                                <span className='text-orange'>₫{formatCurrency(purchase.product.price)}</span>
+                              </div>
                             </div>
-                            <div className='flex-grow ml-2 overflow-hidden'>
-                              <div className='truncate'>Áo thun nam cổ tròn in hình chữ nhật đen</div>
-                            </div>
-                            <div className='flex-shrink-0 ml-2'>
-                              <span className='text-orange'>₫1.000.000</span>
-                            </div>
+                          ))}
+                        </div>
+                        <div className='flex items-center justify-between mt-6'>
+                          <div className='text-xs text-gray-500 capitalize'>
+                            {' '}
+                            {purchasesInCart.length > MAX_PURCHASES ? purchasesInCart.length - MAX_PURCHASES : ''} Thêm
+                            hàng vào giỏ
                           </div>
-                        ))}
+                          <Link
+                            to={'/cart'}
+                            className='px-4 py-2 text-white capitalize rounded-sm bg-orange hover:bg-opacity-90'
+                          >
+                            Xem giỏ hàng
+                          </Link>
+                        </div>
                       </div>
-                      <div className='flex items-center justify-between mt-6'>
-                        <div className='text-xs text-gray-500 capitalize'>6 Thêm hàng vào giỏ</div>
-                        <Link
-                          to={'/cart'}
-                          className='px-4 py-2 text-white capitalize rounded-sm bg-orange hover:bg-opacity-90'
-                        >
-                          Xem giỏ hàng
-                        </Link>
+                    ) : (
+                      <div className='flex h-[300px] w-[300px] flex-col items-center justify-center p-2'>
+                        <img src={noproduct} alt='no purchase' className='w-24 h-24' />
+                        <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 }
               >
@@ -235,7 +261,7 @@ const Header = () => {
                     />
                   </svg>
                   <span className='absolute top-[-5px] left-[17px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange '>
-                    10
+                    {purchasesInCart?.length ?? 0}
                   </span>
                 </Link>
               </Popover>

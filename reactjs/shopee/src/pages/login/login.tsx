@@ -13,7 +13,8 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-type FormData = Omit<Schema, 'confirm_password'>
+// type FormData = Omit<Schema, 'confirm_password'>
+type FormData = Pick<Schema, 'email' | 'password'>
 
 const Login = () => {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
