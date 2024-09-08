@@ -1,6 +1,6 @@
 import { ProductListConfig, Product as ProductType } from '../../types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from '../../utils/utils'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import DOMPurify from 'dompurify'
 import Product from '../porduct-list/product'
@@ -24,6 +24,7 @@ const ProductDetail = () => {
 
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [isActiveImage, setIsActiveImage] = useState('')
+  const imageRef = useRef<HTMLImageElement>(null)
 
   // lấy thông tin sản phẩm
   const product = productDetailData?.data.data
@@ -62,6 +63,30 @@ const ProductDetail = () => {
     }
   }
 
+  const handleZoom = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const react = e.currentTarget.getBoundingClientRect()
+
+    const image = imageRef.current as HTMLImageElement
+    const { naturalHeight, naturalWidth } = image
+
+    const { clientX, clientY } = e.nativeEvent
+    const top = clientY * (1 - naturalHeight / react.height)
+    const left = clientX * (1 - naturalWidth / react.width)
+
+    // set width and height of image to natural width and height
+    image.style.width = `${naturalWidth}px`
+    image.style.height = `${naturalHeight}px`
+    image.style.maxWidth = 'unset'
+    image.style.top = `${top}px`
+    image.style.left = `${left}px`
+
+    // event bubble
+  }
+
+  const handleRemoveZoom = () => {
+    imageRef?.current?.removeAttribute('style')
+  }
+
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
   }
@@ -74,11 +99,18 @@ const ProductDetail = () => {
         <div className='p-4 bg-white shadow'>
           <div className='grid grid-cols-12 gap-9'>
             <div className='col-span-5'>
-              <div className='relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow'>
+              <div
+                className='relative w-full cursor-zoom-in overflow-hidden pt-[100%] shadow'
+                onMouseMove={handleZoom}
+                aria-label='Ảnh sản phẩm'
+                aria-hidden={true}
+                onMouseLeave={handleRemoveZoom}
+              >
                 <img
+                  ref={imageRef}
                   src={isActiveImage}
                   alt={product?.name}
-                  className='absolute top-0 left-0 object-cover w-full h-full bg-white'
+                  className='absolute top-0 left-0 object-cover w-full h-full bg-white pointer-events-none'
                 />
               </div>
               <div className='relative grid grid-cols-5 gap-1 mt-4'>
