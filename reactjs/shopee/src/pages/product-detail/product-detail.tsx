@@ -5,11 +5,14 @@ import { useEffect, useMemo, useState } from 'react'
 import DOMPurify from 'dompurify'
 import Product from '../porduct-list/product'
 import ProductRating from '../../components/product-rating'
+import QuantityController from '../../components/quantity-controller/quantity-controller'
 import productApi from '../../apis/product.api'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 const ProductDetail = () => {
+  const [buyCount, setBuyCount] = useState(1)
+
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
 
@@ -57,6 +60,10 @@ const ProductDetail = () => {
     if (currentIndexImages[0] > 0) {
       setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
     }
+  }
+
+  const handleBuyCount = (value: number) => {
+    setBuyCount(value)
   }
 
   if (!product) return null
@@ -151,14 +158,14 @@ const ProductDetail = () => {
               </div>
               <div className='flex items-center mt-8'>
                 <div className='text-gray-500 capitalize'>Số lượng</div>
-                {/* <QuantityController
+                <QuantityController
                   onDecrease={handleBuyCount}
                   onIncrease={handleBuyCount}
                   onType={handleBuyCount}
                   value={buyCount}
                   max={product.quantity}
-                /> */}
-                <div className='ml-6 text-sm text-gray-500'>Còn 10 sản phẩm</div>
+                />
+                <div className='ml-6 text-sm text-gray-500'>Còn {product.quantity} sản phẩm</div>
               </div>
               <div className='flex items-center mt-8'>
                 <button className='flex items-center justify-center h-12 px-5 capitalize border rounded-sm shadow-sm border-orange bg-orange/10 text-orange hover:bg-orange/5'>
