@@ -5,6 +5,7 @@ import { Schema, schema } from '../../../utils/rules.util'
 import Button from '../../../components/button'
 import { Category } from '../../../types/category.type'
 import InputNumber from '../../../components/input-number'
+import InputV2 from '../../../components/input-v2'
 import { NoUndefinedField } from '../../../types/utils.type'
 import { QueryConfig } from '../product-list'
 import RatingStar from '../rating-start/rating-start'
@@ -29,6 +30,7 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
   const {
     control,
     handleSubmit,
+    trigger,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
@@ -139,7 +141,7 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
 
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Controller
+            {/* <Controller
               control={control}
               name='price_min'
               render={({ field }) => {
@@ -156,6 +158,16 @@ const SidebarFillter = ({ categories, queryConfig }: SidebarFillterProps) => {
                   />
                 )
               }}
+            /> */}
+            <InputV2
+              control={control}
+              name='price_min'
+              type='number'
+              className='grow'
+              placeholder='₫ TỪ'
+              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+              classNameError='hidden'
+              onChange={() => trigger('price_min')}
             />
 
             <div className='mx-2 mt-2 shrink-0'>-</div>
