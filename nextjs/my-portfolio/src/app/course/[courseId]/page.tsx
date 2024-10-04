@@ -10,14 +10,14 @@ export default function CourseLandingPage() {
 	const [activeTab, setActiveTab] = useState('overview');
 
 	return (
-		<div className="min-h-screen bg-gray-100">
+		<div className="min-h-screen bg-gray-100 dark:bg-gray-800">
 			{/* Header */}
 			<Header />
 
 			{/* Breadcrumbs */}
-			<nav className="bg-gray-200 py-3">
+			<nav className="bg-gray-200 py-3 dark:bg-gray-700">
 				<div className="container mx-auto px-4">
-					<div className="flex items-center text-sm text-gray-600">
+					<div className="flex items-center text-sm text-gray-600 dark:text-white">
 						<Home className="h-4 w-4 mr-2" />
 						<span>Home</span>
 						<ChevronRight className="h-4 w-4 mx-2" />
@@ -35,7 +35,7 @@ export default function CourseLandingPage() {
 				<div className="flex flex-col lg:flex-row">
 					{/* Left Side - 80% width on large screens */}
 					<div className="lg:w-[75%] lg:pr-8">
-						<h2 className="text-3xl font-bold text-gray-800 mb-6">
+						<h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-6">
 							50 HTML CSS JavaScript Projects - HTML5, CSS3, vanilla JS
 						</h2>
 
@@ -46,7 +46,7 @@ export default function CourseLandingPage() {
 									<button
 										className={`mr-8 py-4 px-1 border-b-2 font-medium text-sm ${
 											activeTab === 'overview'
-												? 'border-blue-500 text-blue-600'
+												? 'border-blue-500 dark:border-white text-blue-600 dark:text-white'
 												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
 										}`}
 										onClick={() => setActiveTab('overview')}
@@ -57,8 +57,8 @@ export default function CourseLandingPage() {
 									<button
 										className={`py-4 px-1 border-b-2 font-medium text-sm ${
 											activeTab === 'content'
-												? 'border-blue-500 text-blue-600'
-												: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+												? 'border-blue-500 dark:border-white text-blue-600 dark:text-white'
+												: 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-white hover:border-gray-300'
 										}`}
 										onClick={() => setActiveTab('content')}
 									>
@@ -71,14 +71,14 @@ export default function CourseLandingPage() {
 
 						{/* Tab Content */}
 						{activeTab === 'overview' ? (
-							<div className="prose max-w-none">
+							<div className="prose max-w-none dark:text-white">
 								<h3 className="text-xl font-semibold mb-4">Description</h3>
 								<p className="mb-4">
 									50 HTML CSS JavaScript ENTERTAINING & NEW PROJECTS
 								</p>
 								<p className="mb-4">
-									Hello, and thank you for visiting the web's premier tutorial
-									for mastering HTML, CSS, and JavaScript through the
+									Hello, and thank you for visiting the web&apos;s premier
+									tutorial for mastering HTML, CSS, and JavaScript through the
 									development of user-friendly and entertaining projects.
 								</p>
 								<p className="mb-4">
@@ -123,7 +123,7 @@ export default function CourseLandingPage() {
 								<p className="mb-4">
 									If you are as excited as I am about learning HTML, CSS, and
 									JavaScript in order to create truly spectacular websites, then
-									let's get started.
+									let&apos;s get started.
 								</p>
 
 								<h3 className="text-xl font-semibold mt-8 mb-4">
@@ -136,7 +136,7 @@ export default function CourseLandingPage() {
 										plugins.
 									</li>
 									<li>
-										You'll learn HTML, CSS, JavaScript, and responsive web
+										You&apos;ll learn HTML, CSS, JavaScript, and responsive web
 										design.
 									</li>
 									<li>
@@ -189,13 +189,15 @@ export default function CourseLandingPage() {
 							</div>
 						) : (
 							<div>
-								<h3 className="text-xl font-semibold mb-4">Course Content</h3>
-								<div className="bg-white shadow overflow-hidden sm:rounded-md">
+								<h3 className="text-xl font-semibold mb-4 dark:text-white">
+									Course Content
+								</h3>
+								<div className="bg-white dark:bg-gray-700 shadow overflow-hidden sm:rounded-md">
 									<ul className="divide-y divide-gray-200">
 										<li>
 											<div className="px-4 py-4 sm:px-6">
 												<div className="flex items-center justify-between">
-													<p className="text-sm font-medium text-blue-600 truncate">
+													<p className="text-sm font-medium text-blue-600 dark:text-white truncate">
 														Project 1 - Digital Clock (5 lectures)
 													</p>
 												</div>
