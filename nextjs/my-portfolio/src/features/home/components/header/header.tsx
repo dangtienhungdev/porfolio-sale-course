@@ -2,9 +2,10 @@
 
 import { Globe, Menu, Moon, Sun, X } from 'lucide-react';
 
+import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useTheme } from 'next-themes';
 
 export default function Header() {
 	const { setTheme, resolvedTheme } = useTheme();
@@ -24,7 +25,12 @@ export default function Header() {
 	};
 
 	return (
-		<header className="bg-white dark:bg-gray-800 shadow-md z-10">
+		<motion.header
+			className="bg-white dark:bg-gray-800 shadow-md z-10"
+			initial={{ opacity: 0, y: -20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.5 }}
+		>
 			<div className="container mx-auto px-4 py-4 flex items-center justify-between">
 				<Link
 					href="/"
@@ -48,7 +54,7 @@ export default function Header() {
 					</button>
 					<button
 						onClick={toggleLanguage}
-						className="flex items-center space-x-2 px-3 py-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+						className="hidden items-center space-x-2 px-3 py-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
 						aria-label="Change language"
 					>
 						<Globe className="h-5 w-5" />
@@ -87,7 +93,7 @@ export default function Header() {
 						</button>
 						<button
 							onClick={toggleLanguage}
-							className="flex items-center space-x-2 px-3 py-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+							className="hidden items-center space-x-2 px-3 py-2 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
 							aria-label="Change language"
 						>
 							<Globe className="h-5 w-5" />
@@ -96,6 +102,6 @@ export default function Header() {
 					</div>
 				</nav>
 			</div>
-		</header>
+		</motion.header>
 	);
 }

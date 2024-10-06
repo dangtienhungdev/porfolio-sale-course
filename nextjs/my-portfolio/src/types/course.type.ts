@@ -5,4 +5,13 @@ export type Course = {
 	roadmap: string;
 	practical: string;
 	id: number;
+	images?: string[];
+	overview?: OverviewCourse;
+	content?: [];
+};
+
+export type OverviewCourse = {
+	desc: string[];
+	learning: string[];
+	requirements: string[];
 };

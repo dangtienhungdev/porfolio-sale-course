@@ -6,8 +6,8 @@ import Banner from '@/features/home/components/banner';
 import Courses from '@/features/home/components/courses';
 import Header from '@/features/home/components/header';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -64,7 +64,7 @@ export default function LandingPage() {
 			{/* Testimonial Section */}
 			<section className="px-4 py-16">
 				<div className="mx-auto max-w-4xl text-center">
-					<h2 className="mb-12 text-3xl font-bold">What Our Students Say</h2>
+					<h2 className="mb-12 text-3xl font-bold">My Favorites Quote</h2>
 					<motion.div
 						className="rounded-lg bg-white dark:bg-gray-700 p-8 shadow-lg"
 						initial={{ opacity: 0, scale: 0.9 }}
@@ -72,9 +72,11 @@ export default function LandingPage() {
 						transition={{ duration: 0.5 }}
 					>
 						<p className="mb-4 text-xl italic text-gray-600 dark:text-gray-300">
-							&quot;These courses have been a game-changer for my career. I went
-							from a complete beginner to landing my dream job as a full-stack
-							developer in just 6 months!&quot;
+							&quot;Learning new everyday not the copy cat of yesterday!&quot;
+						</p>
+						<p className="mb-4 text-sm italic text-gray-600 dark:text-gray-300">
+							&quot;Qua một ngày, chúng ta học thêm được gì mới? Hay trở thành
+							bản sao của ngày hôm qua!&quot;
 						</p>
 						<div className="flex items-center justify-center">
 							<Star className="mr-1 h-5 w-5 text-yellow-500" />
@@ -83,7 +85,6 @@ export default function LandingPage() {
 							<Star className="mr-1 h-5 w-5 text-yellow-500" />
 							<Star className="h-5 w-5 text-yellow-500" />
 						</div>
-						<p className="mt-2 font-semibold">Jane Doe, Full-Stack Developer</p>
 					</motion.div>
 				</div>
 			</section>

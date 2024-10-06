@@ -3,9 +3,9 @@
 import { ArrowRight, Code } from 'lucide-react';
 
 import { PinContainer } from '@/components/ui/3d-pin';
-import { Slugify } from '@/utils/slugify.util';
 import { cn } from '@/lib/utils';
 import { courses } from '@/mocks/courses.mock';
+import { Slugify } from '@/utils/slugify.util';
 import { motion } from 'framer-motion';
 
 const Courses = () => {
@@ -35,6 +35,7 @@ const Courses = () => {
 										course.color === 'bg-blue-500' ? 'bg-blue-500' : '',
 										course.color === 'bg-green-500' ? 'bg-green-500' : '',
 										course.color === 'bg-purple-500' ? 'bg-purple-500' : '',
+										course.color === 'bg-black' ? 'bg-black' : '',
 										course.color
 									)}
 								>
