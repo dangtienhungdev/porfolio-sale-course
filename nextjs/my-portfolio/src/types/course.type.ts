@@ -4,4 +4,5 @@ export type Course = {
 	color: string;
 	roadmap: string;
 	practical: string;
+	id: number;
 };

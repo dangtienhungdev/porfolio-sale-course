@@ -7,8 +7,11 @@ import Courses from '@/features/home/components/courses';
 import Header from '@/features/home/components/header';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LandingPage() {
+	const router = useRouter();
+
 	useEffect(() => {
 		// Add the custom-scrollbar class to the body when the component mounts
 		document.body.classList.add('custom-scrollbar');
@@ -98,6 +101,7 @@ export default function LandingPage() {
 						className="rounded-full bg-white px-8 py-3 font-semibold text-blue-600 transition hover:bg-gray-100"
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
+						onClick={() => router.push(`/course/123`)}
 					>
 						Enroll Now
 					</motion.button>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const Banner = () => {
@@ -22,13 +23,15 @@ const Banner = () => {
 				From beginner to pro: Comprehensive courses to boost your development
 				career
 			</motion.p>
-			<motion.button
-				className="rounded-full bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700"
-				whileHover={{ scale: 1.05 }}
-				whileTap={{ scale: 0.95 }}
-			>
-				Get Started
-			</motion.button>
+			<Link href={`#courses`}>
+				<motion.button
+					className="rounded-full bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700"
+					whileHover={{ scale: 1.05 }}
+					whileTap={{ scale: 0.95 }}
+				>
+					Get Started
+				</motion.button>
+			</Link>
 		</section>
 	);
 };
