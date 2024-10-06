@@ -4,14 +4,17 @@ import { Globe, Menu, Moon, Sun, X } from 'lucide-react';
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useTheme } from 'next-themes';
 
 export default function Header() {
-	const [isDarkMode, setIsDarkMode] = useState(false);
+	const { setTheme, resolvedTheme } = useTheme();
+	const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 	const [currentLanguage, setCurrentLanguage] = useState('EN');
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
 	const toggleDarkMode = () => {
 		setIsDarkMode(!isDarkMode);
+		setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
 		document.documentElement.classList.toggle('dark');
 	};
 
@@ -29,28 +32,6 @@ export default function Header() {
 				>
 					CodeMaster
 				</Link>
-
-				{/* Desktop Navigation */}
-				<nav className="hidden md:flex items-center space-x-6">
-					<Link
-						href="/"
-						className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Home
-					</Link>
-					<Link
-						href="/courses"
-						className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Courses
-					</Link>
-					<Link
-						href="/contact"
-						className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Contact
-					</Link>
-				</nav>
 
 				{/* Desktop Buttons */}
 				<div className="hidden md:flex items-center space-x-4">
@@ -92,24 +73,6 @@ export default function Header() {
 			{/* Mobile Menu */}
 			<div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
 				<nav className="px-4 pt-2 pb-4 space-y-2">
-					<Link
-						href="/"
-						className="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Home
-					</Link>
-					<Link
-						href="/courses"
-						className="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Courses
-					</Link>
-					<Link
-						href="/contact"
-						className="block py-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-					>
-						Contact
-					</Link>
 					<div className="flex items-center space-x-4 pt-2">
 						<button
 							onClick={toggleDarkMode}

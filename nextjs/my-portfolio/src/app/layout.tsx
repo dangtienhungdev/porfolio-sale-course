@@ -2,6 +2,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
+import { ThemeProviderContext } from '@/contexts/theme-provider.context';
 
 export const metadata: Metadata = {
 	title: 'DangTienHung',
@@ -20,8 +21,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className={poppins.className}>{children}</body>
+		<html lang="en" suppressHydrationWarning>
+			<body className={poppins.className}>
+				<ThemeProviderContext>{children}</ThemeProviderContext>
+			</body>
 		</html>
 	);
 }
