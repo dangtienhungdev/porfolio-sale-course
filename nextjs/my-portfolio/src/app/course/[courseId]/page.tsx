@@ -1,9 +1,11 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, Book, ChevronRight, Home, List } from 'lucide-react';
+import { Book, ChevronRight, Home, List } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import CourseContent from '@/features/course/[courseId]/components/course-content';
+import CourseOverview from '@/features/course/[courseId]/components/course-overview';
 import Header from '@/features/home/components/header';
 import { courses } from '@/mocks/courses.mock';
 import { getICourse } from '@/utils/slugify.util';
@@ -53,7 +55,7 @@ export default function CourseLandingPage() {
 						<ChevronRight className="h-4 w-4 mx-2" />
 						<span>Courses</span>
 						<ChevronRight className="h-4 w-4 mx-2" />
-						<span className="font-semibold">{course?.title}</span>
+						<span className="font-semibold truncate">{course?.title}</span>
 					</div>
 				</div>
 			</motion.nav>
@@ -133,115 +135,13 @@ export default function CourseLandingPage() {
 									later.
 								</motion.div>
 							)}
+
 							{activeTab === 'overview' && overview && (
-								<motion.div
-									initial={{ opacity: 0, y: -20 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ duration: 0.5, delay: 0.3 }}
-									exit={{ opacity: 0, y: -20 }}
-									className="prose max-w-none dark:text-white"
-								>
-									{course?.overview?.desc &&
-										course?.overview?.desc.length > 0 && (
-											<>
-												<h3 className="text-xl font-semibold mb-4">
-													Description
-												</h3>
-												{course?.overview?.desc?.map((item) => {
-													return (
-														<p
-															className="mb-4"
-															key={item}
-															dangerouslySetInnerHTML={{
-																__html: item,
-															}}
-														></p>
-													);
-												})}
-											</>
-										)}
-
-									{overview?.learning && overview?.learning.length > 0 && (
-										<>
-											<h3 className="text-xl font-semibold mt-8 mb-4">
-												What will you learn?
-											</h3>
-											<ul className="list-disc pl-5 space-y-2">
-												{overview?.learning?.map((item) => {
-													return (
-														<li
-															key={item}
-															dangerouslySetInnerHTML={{
-																__html: item,
-															}}
-														></li>
-													);
-												})}
-											</ul>
-										</>
-									)}
-
-									{overview?.requirements &&
-										overview?.requirements.length > 0 && (
-											<>
-												<h3 className="text-xl font-semibold mt-8 mb-4">
-													Requirements
-												</h3>
-												<ul className="list-disc pl-5 space-y-2">
-													{overview?.requirements?.map((item) => {
-														return (
-															<li
-																key={item}
-																dangerouslySetInnerHTML={{
-																	__html: item,
-																}}
-															></li>
-														);
-													})}
-												</ul>
-											</>
-										)}
-								</motion.div>
+								<CourseOverview course={course} />
 							)}
 
 							{activeTab === 'content' && (
-								<motion.div
-									initial={{ opacity: 0, y: -20 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ duration: 0.5, delay: 0.3 }}
-									exit={{ opacity: 0, y: -20 }}
-								>
-									<h3 className="text-xl font-semibold mb-4 dark:text-white">
-										Course Content
-									</h3>
-									<div className="bg-white dark:bg-gray-700 shadow overflow-hidden sm:rounded-md">
-										{courseContent && courseContent?.length > 0 ? (
-											<ul className="divide-y divide-gray-200">
-												<li>
-													<div className="px-4 py-4 sm:px-6">
-														<div className="flex items-center justify-between">
-															<p className="text-sm font-medium text-blue-600 dark:text-white truncate">
-																Project 1 - Digital Clock (5 lectures)
-															</p>
-														</div>
-														<div className="mt-2 sm:flex sm:justify-between">
-															<div className="sm:flex">
-																<p className="flex items-center text-sm text-gray-500">
-																	Preview - Digital Clock
-																</p>
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										) : (
-											<div className="p-4 text-center text-gray-500 dark:text-white">
-												Course content is currently being updated. Please check
-												back later.
-											</div>
-										)}
-									</div>
-								</motion.div>
+								<CourseContent courseContent={courseContent} />
 							)}
 						</div>
 
@@ -269,7 +169,7 @@ export default function CourseLandingPage() {
 										height={200}
 										className="w-full h-auto rounded-lg mb-4"
 									/>
-									<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+									{/* <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
 										<div className="flex">
 											<div className="flex-shrink-0">
 												<AlertCircle className="h-5 w-5 text-yellow-400" />
@@ -281,7 +181,7 @@ export default function CourseLandingPage() {
 												</p>
 											</div>
 										</div>
-									</div>
+									</div> */}
 								</motion.div>
 							</motion.div>
 						</motion.div>

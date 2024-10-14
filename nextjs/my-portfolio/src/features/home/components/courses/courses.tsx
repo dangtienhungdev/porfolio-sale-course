@@ -36,6 +36,7 @@ const Courses = () => {
 										course.color === 'bg-green-500' ? 'bg-green-500' : '',
 										course.color === 'bg-purple-500' ? 'bg-purple-500' : '',
 										course.color === 'bg-black' ? 'bg-black' : '',
+										course.color === 'bg-red-500' ? 'bg-red-500' : '',
 										course.color
 									)}
 								>
