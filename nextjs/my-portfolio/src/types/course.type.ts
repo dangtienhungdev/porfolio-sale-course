@@ -7,11 +7,17 @@ export type Course = {
 	id: number;
 	images?: string[];
 	overview?: OverviewCourse;
-	content?: [];
+	content?: CourseContent[];
 };
 
 export type OverviewCourse = {
 	desc: string[];
 	learning: string[];
 	requirements: string[];
+};
+
+export type CourseContent = {
+	id: number;
+	title: string;
+	children?: CourseContent[];
 };
