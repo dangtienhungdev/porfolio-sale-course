@@ -8,6 +8,7 @@ export type Course = {
 	images?: string[];
 	overview?: OverviewCourse;
 	content?: CourseContent[];
+	projects?: Project[];
 };
 
 export type OverviewCourse = {
@@ -20,4 +21,11 @@ export type CourseContent = {
 	id: number;
 	title: string;
 	children?: CourseContent[];
+	linkDemo?: string;
+};
+
+export type Project = {
+	id: number;
+	title: string;
+	linkDemo?: string;
 };
