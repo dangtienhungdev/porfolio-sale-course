@@ -1,23 +1,24 @@
-'use client';
+"use client";
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { Book, ChevronRight, Home, List } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import { Book, ChevronRight, Home, List } from "lucide-react";
+import { useMemo, useState } from "react";
 
-import CourseContent from '@/features/course/[courseId]/components/course-content';
-import CourseOverview from '@/features/course/[courseId]/components/course-overview';
-import Header from '@/features/home/components/header';
-import { courses } from '@/mocks/courses.mock';
-import { getICourse } from '@/utils/slugify.util';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import CourseContent from "@/features/course/[courseId]/components/course-content";
+import CourseOverview from "@/features/course/[courseId]/components/course-overview";
+import ProjectList from "@/features/course/[courseId]/components/project-list";
+import Header from "@/features/home/components/header";
+import { courses } from "@/mocks/courses.mock";
+import { getICourse } from "@/utils/slugify.util";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export default function CourseLandingPage() {
 	const { courseId } = useParams();
 	const courseIdParam = getICourse(courseId as string);
 
-	const [activeTab, setActiveTab] = useState('overview');
+	const [activeTab, setActiveTab] = useState("overview");
 
 	const course = useMemo(() => {
 		if (courseIdParam) {
@@ -41,7 +42,7 @@ export default function CourseLandingPage() {
 			>
 				<div className="container mx-auto px-4">
 					<div className="flex items-center text-sm text-gray-600 dark:text-white">
-						<Link href={'/'} className="flex items-center gap-2">
+						<Link href={"/"} className="flex items-center gap-2">
 							<Home className="h-4 w-4 mr-2" />
 							<motion.span
 								className="cursor-pointer"
@@ -92,11 +93,11 @@ export default function CourseLandingPage() {
 											whileTap={{ scale: 0.95 }}
 											exit={{ opacity: 0 }}
 											className={`mr-8 py-4 px-1 border-b-2 font-medium text-sm ${
-												activeTab === 'overview'
-													? 'border-blue-500 dark:border-white text-blue-600 dark:text-white'
-													: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+												activeTab === "overview"
+													? "border-blue-500 dark:border-white text-blue-600 dark:text-white"
+													: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
 											}`}
-											onClick={() => setActiveTab('overview')}
+											onClick={() => setActiveTab("overview")}
 										>
 											<Book className="h-5 w-5 mr-2 inline" />
 											Overview
@@ -108,22 +109,39 @@ export default function CourseLandingPage() {
 											whileHover={{ scale: 1.05 }}
 											whileTap={{ scale: 0.95 }}
 											exit={{ opacity: 0 }}
-											className={`py-4 px-1 border-b-2 font-medium text-sm ${
-												activeTab === 'content'
-													? 'border-blue-500 dark:border-white text-blue-600 dark:text-white'
-													: 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-white hover:border-gray-300'
+											className={`mr-8 py-4 px-1 border-b-2 font-medium text-sm ${
+												activeTab === "content"
+													? "border-blue-500 dark:border-white text-blue-600 dark:text-white"
+													: "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-white hover:border-gray-300"
 											}`}
-											onClick={() => setActiveTab('content')}
+											onClick={() => setActiveTab("content")}
 										>
 											<List className="h-5 w-5 mr-2 inline" />
 											Course Content
+										</motion.button>
+										<motion.button
+											initial={{ opacity: 0, y: -20 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{ duration: 0.5, delay: 0.7 }}
+											whileHover={{ scale: 1.05 }}
+											whileTap={{ scale: 0.95 }}
+											exit={{ opacity: 0 }}
+											className={`py-4 px-1 border-b-2 font-medium text-sm ${
+												activeTab === "projects"
+													? "border-blue-500 dark:border-white text-blue-600 dark:text-white"
+													: "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-white hover:border-gray-300"
+											}`}
+											onClick={() => setActiveTab("projects")}
+										>
+											<List className="h-5 w-5 mr-2 inline" />
+											Projects
 										</motion.button>
 									</nav>
 								</div>
 							</motion.div>
 
 							{/* Tab Content */}
-							{activeTab === 'overview' && !overview && (
+							{activeTab === "overview" && !overview && (
 								<motion.div
 									initial={{ opacity: 0, y: -20 }}
 									animate={{ opacity: 1, y: 0 }}
@@ -136,12 +154,16 @@ export default function CourseLandingPage() {
 								</motion.div>
 							)}
 
-							{activeTab === 'overview' && overview && (
+							{activeTab === "overview" && overview && (
 								<CourseOverview course={course} />
 							)}
 
-							{activeTab === 'content' && (
+							{activeTab === "content" && courseContent && (
 								<CourseContent courseContent={courseContent} />
+							)}
+
+							{activeTab === "projects" && course?.projects && (
+								<ProjectList projects={course.projects} />
 							)}
 						</div>
 
@@ -162,7 +184,7 @@ export default function CourseLandingPage() {
 									<Image
 										src={course?.images?.[0] as string}
 										onError={() => {
-											return 'https://res.cloudinary.com/dcwdrvxdg/image/upload/v1728202497/cs-portal/html-css-js-course-intro_bss5fu.jpg';
+											return "https://res.cloudinary.com/dcwdrvxdg/image/upload/v1728202497/cs-portal/html-css-js-course-intro_bss5fu.jpg";
 										}}
 										alt="Course Image"
 										width={300}
